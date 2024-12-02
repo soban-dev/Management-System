@@ -77,12 +77,12 @@ const FormBox = styled(Box)({
 });
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({ username: "", password: "" }); // State for form data
+  const [formData, setFormData] = useState({ username: "", password: "" }); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value }); // Update state on input change
+    setFormData({ ...formData, [name]: value }); 
   };
 
   const handleSubmit = async (e) => {
@@ -101,10 +101,10 @@ export default function SignIn() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-        credentials: 'include',  // Important: This sends cookies with the request
+        credentials: 'include',
       },
       {
-        withCredentials: true, // Ensure cookies are sent
+        withCredentials: true,
       });
   
       const result = await response.json();
