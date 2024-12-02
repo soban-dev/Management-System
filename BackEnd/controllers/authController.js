@@ -107,9 +107,7 @@ exports.signin = async (req, res) => {
     res.cookie("Authorization", "Bearer " + token, {
       expires: new Date(Date.now() + 8 * 3600000),
       httpOnly: false,
-      // secure: process.env.NODE_ENV === 'production',
-      secure: false,
-      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
     });
 
     return res.status(200).json({

@@ -46,7 +46,10 @@ const CreateProduct = () => {
         selling_price_per_unit :newProduct.selling_price_per_unit,
 
 
-        Authorization:token
+        // Authorization:token
+      },
+      {
+        withCredentials: true, // Ensure cookies are sent
       });
 
       // Log the response from the backend

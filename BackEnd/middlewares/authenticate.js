@@ -3,27 +3,23 @@ const jwt = require("jsonwebtoken");
 // So this is my Identifier, My identifier will do three things, it will check if the user is logged-in(Authenticated), it will check if the user is Admin or Employee, and it will check if the Employee is verified
 
 exports.identifier = (req, res, next) => {
-  const token = req.body.Authorization;
-  console.log("The token is ", token);
-  //   let token;
-  //   console.log("THe cookeis are ", req.cookies);
+  let token;
 
-  //   if (req.headers.client === "not-browser") {
-  //     token = req.headers.authorization;
-  //   } else {
-  //     // token = req.cookies['Authorization'];
-  //     req.cookies.Authorization;
-  //   }
+  console.log(req);
+  if (req.headers.client === "not-browser") {
+    token = req.headers.authorization;
+  } else {
+    token = req.cookies["Authorization"];
+  }
 
   if (!token) {
     return res
       .status(403)
       .json({ success: false, message: "Please log in first" });
   }
-
+  console.log(token);
   try {
-    // const userToken = token.split(" ")[1];
-    const userToken = token;
+    const userToken = token.split(" ")[1];
     const jwtVerified = jwt.verify(userToken, process.env.TOKEN_SECRET);
     if (jwtVerified) {
       req.user = jwtVerified;

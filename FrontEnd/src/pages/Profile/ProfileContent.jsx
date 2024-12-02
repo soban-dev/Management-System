@@ -29,10 +29,12 @@ const ProfileComponent = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/profile/profile`);
+        const response = await axios.get(`${BASE_URL}/profile/profile` ,
+          Authentication = token
+        ),
+        ;
         const data = response.data;
         setProfileData(data); // Store the response in state
-        console.log("Profile Data:", data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }

@@ -10,16 +10,12 @@ const inventoryRouter = require("./routes/inventoryRoutes");
 const profileRouter = require("./routes/profileRoutes");
 
 const app = express();
+const corsoptions = {
+  origin: ["http://localhost:5173", "https://management-system-dun.vercel.app"], // Specify the frontend URL
+  credentials: true, // Allow credentials to be sent
+};
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://management-system-dun.vercel.app",
-    ], // Specify the frontend URL
-    credentials: true, // Allow credentials to be sent
-  })
-);
+app.use(cors(corsoptions));
 
 // app.use(helmet());
 app.use(express.json());

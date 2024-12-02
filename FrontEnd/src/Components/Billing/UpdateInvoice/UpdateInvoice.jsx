@@ -50,7 +50,10 @@ const token = localStorage.getItem("token")
       } else if (query.length > 1) {
         const response = await axios.post(`${BASE_URL}/inventory/searchitem`, {
           name: query,
-          Authorization:token
+          // Authorization:token
+        },
+        {
+          withCredentials: true, // Ensure cookies are sent
         });
         setSuggestions(response.data);
       }
@@ -77,7 +80,10 @@ const token = localStorage.getItem("token")
     try {
       const response = await axios.post(`${BASE_URL}/inventory/fetchitem`, {
         name: itemName,
-        Authorization:token
+        // Authorization:token
+      },
+      {
+        withCredentials: true, // Ensure cookies are sent
       });
       setItemData(response.data);
     } catch (error) {

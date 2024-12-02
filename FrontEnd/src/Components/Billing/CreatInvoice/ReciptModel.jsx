@@ -54,7 +54,9 @@ const token = localStorage.getItem("token")
       const response = await axios.post(`${BASE_URL}/inventory/invoice`,
         {
           data,
-          Authorization:token
+          // Authorization:token
+        },{
+          withCredentials: true, // Ensure cookies are sent
         }
       );
 

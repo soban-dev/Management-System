@@ -43,8 +43,11 @@ const CreateInvoice = ({ onClose }) => {
     // Make the API request
     const response = await axios.post(`${BASE_URL}/inventory/updateitem`, {
       updateData,
-        Authorization:token
+        // Authorization:token
       },
+      {
+        withCredentials: true, // Ensure cookies are sent
+      }
     );
 
     // Log the response from the server
@@ -66,8 +69,11 @@ const CreateInvoice = ({ onClose }) => {
       } else if (query.length > 1) {
         const response = await axios.post(`${BASE_URL}/inventory/searchitem`, {
           name: query,
-          Authorization:token
+          // Authorization:token
         },
+        {
+          withCredentials: true, // Ensure cookies are sent
+        }
         );
         setSuggestions(response.data);
       }
@@ -94,9 +100,12 @@ const CreateInvoice = ({ onClose }) => {
     try {
       const response = await axios.post(`${BASE_URL}/inventory/fetchitem`, {
         name: itemName,
-        credentials: "include",
-        Authorization: token, // Important: This sends cookies with the request
-      });
+        // credentials: "include",
+        // Authorization: token, // Important: This sends cookies with the request
+      },
+    {
+      withCredentials : true
+    });
   
       console.log("Fetched Item Details:", response.data);
   

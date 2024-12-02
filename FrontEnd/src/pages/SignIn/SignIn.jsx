@@ -102,6 +102,9 @@ export default function SignIn() {
         },
         body: JSON.stringify(formData),
         credentials: 'include',  // Important: This sends cookies with the request
+      },
+      {
+        withCredentials: true, // Ensure cookies are sent
       });
   
       const result = await response.json();

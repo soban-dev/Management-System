@@ -44,7 +44,7 @@ const CreateInvoice = ({ onClose }) => {
       } else if (query.length > 1) {
         const response = await axios.post(`${BASE_URL}/inventory/searchitem`, {
           name: query,
-          Authorization:token
+          // Authorization:token
         },
         {
           withCredentials: true, // Ensure cookies are sent
@@ -75,10 +75,12 @@ const CreateInvoice = ({ onClose }) => {
     try {
       // console.log(credentials)
       const response = await axios.post(`${BASE_URL}/inventory/fetchitem`, {
-        name: itemName,
-        credentials: 'include', 
-        Authorization:token // Important: This sends cookies with the request
+        name: itemName, 
+        // Authorization:token // Important: This sends cookies with the request
 
+      },
+      {
+        withCredentials: true, // Ensure cookies are sent
       });
       setItemData(response.data);
     } catch (error) {

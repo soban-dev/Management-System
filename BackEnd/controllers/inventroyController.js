@@ -84,7 +84,6 @@ exports.read = async (req, res) => {
 };
 
 exports.searchItem = async (req, res) => {
-  console.log("I received a request");
   try {
     const { name } = req.body; // Name typed by the user
     const results = await Item.find(
@@ -234,8 +233,9 @@ exports.generatereceipts = async (req, res) => {
 //Since its Update Route it is best practice to make it a patch route.
 exports.updateItem = async (req, res) => {
   const userId = req.user.userId;
+  console.log(userId);
   const { updateData } = req.body;
-
+  console.log(updateData);
   if (!updateData || !Array.isArray(updateData) || updateData.length === 0) {
     return res.status(400).json({
       success: false,
@@ -326,7 +326,7 @@ exports.updateItem = async (req, res) => {
     console.error("Error during bulk update or logging:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: error,
     });
   }
 };
