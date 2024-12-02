@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Table,
@@ -14,6 +14,8 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { useTheme } from "@mui/material/styles";
+import { BASE_URL } from "../../config";
+import axios from "axios";
 
 // Styled Table Container with Vibrant Glass Effect
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
@@ -61,16 +63,40 @@ const ProgressBar = styled(Box)(({ progress }) => ({
 
 const TableProduct = () => {
   const theme = useTheme();
+  const [cardData, setCardData] = useState( {result: []});
 
-  // Sales data
-  const rows = [
-    { product: "Smartphone", revenue: "$12,500", status: "434", progress: 100 },
-    { product: "Laptop", revenue: "$8,000", status: "534", progress: 60 },
-    { product: "Headphones", revenue: "$3,400", status: "345", progress: 20 },
-    { product: "Smartwatch", revenue: "$6,000", status: "4532", progress: 100 },
-    { product: "Camera", revenue: "$4,500", status: "4534", progress: 75 },
-    { product: "Gaming Console", revenue: "$10,000", status: "5343", progress: 50 },
-  ];
+  useEffect(() => {
+    // Fetch data from backend
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/inventory/read`, {
+          withCredentials: true,
+        });
+        console.log("Backend Response mera:", response.data);
+        setCardData({
+         result: response.data.result
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData(); // Call the fetchData function
+  }, []);
+
+
+  const rows = [];
+  if (cardData.result.length > 0) {
+    for (const item of cardData.result) {
+      // Assuming you want to map the item properties to the rows
+      rows.push({
+        product: item.name || "Smartphone", // Replace with your actual data
+        revenue: item.selling_price_per_unit || "$12,500", // Replace with actual revenue if available
+        status: item.quantity || "434", // Replace with actual status if available
+        progress: item.sold_percentage ? parseFloat(item.sold_percentage).toFixed(0) : 0 || 100, // Replace with actual progress if 
+      });
+    }
+  }
 
   // Icons for each product category
   const icons = {

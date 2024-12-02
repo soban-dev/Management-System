@@ -11,14 +11,12 @@ import {
   TableRow,
   MenuItem,
   List,
-  IconButton ,
   Paper,
 } from "@mui/material";
 import axios from "axios";
 import ReceiptModal from "./ReciptModel";
 import backgroundImage from "../../../assets/background.jpg";
 import { BASE_URL } from "../../../config";
-import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const CreateInvoice = ({ onClose }) => {
@@ -34,71 +32,15 @@ const CreateInvoice = ({ onClose }) => {
   const [clientName, setClientName] = useState(""); // State for client name
   const [openReceiptModal, setOpenReceiptModal] = useState(false); // State to manage modal visibility
   const [invoiceId, setInvoiceId] = useState("");
-  const [invoiceData, setInvoiceData] = useState(null);
-
-
-  const handleKeyPress1 = async (event, invoiceItems) => {
+const token = localStorage.getItem("token")
+  // Fetch suggestions as the user types
+  const handleKeyPress1 = (event) => {
     if (event.key === "Enter") {
-      event.preventDefault(); // Prevent form submission on Enter key press
-      event.target.blur(); // Remove focus from the input field
-  
-      // Ensure invoiceItems is an array
-      const items = Array.isArray(invoiceItems) ? invoiceItems : [];
-  
-      if (invoiceId.trim() !== "") {
-        try {
-          // Dummy response
-          const response = {
-            data: [
-              {
-                name: "Laptop", // Example item name
-                quantity: 5, // Example quantity
-                selling_price_per_unit: 750, // Example price per unit
-              },
-              {
-                name: "Mouse", // Example item name
-                quantity: 20, // Example quantity
-                selling_price_per_unit: 25, // Example price per unit
-              }
-            ]
-          };
-  
-          // Loop through the fetched items and add them to the invoiceItems
-          response.data.forEach((fetchedItem) => {
-            // Check if the item already exists in the invoiceItems list
-            const existingItemIndex = items.findIndex(
-              (item) => item.name === fetchedItem.name
-            );
-  
-            if (existingItemIndex !== -1) {
-              // If item exists, update its quantity and totalAmount
-              const updatedInvoiceItems = [...items];
-              updatedInvoiceItems[existingItemIndex].quantity = fetchedItem.quantity;
-              updatedInvoiceItems[existingItemIndex].totalAmount =
-                fetchedItem.quantity * updatedInvoiceItems[existingItemIndex].price;
-              setInvoiceItems(updatedInvoiceItems);
-            } else {
-              // If item does not exist, add it to the list
-              const newItem = {
-                name: fetchedItem.name,
-                price: fetchedItem.selling_price_per_unit,
-                quantity: fetchedItem.quantity,
-                totalAmount: fetchedItem.quantity * fetchedItem.selling_price_per_unit,
-              };
-              setInvoiceItems((prevItems) => [...prevItems, newItem]);
-            }
-          });
-  
-        } catch (error) {
-          console.error("Error fetching invoice data:", error);
-        }
-      }
+      event.preventDefault(); 
+      event.target.blur(); 
     }
   };
-  
-  
-  
-  
+
 
 
   const fetchSuggestions = async (query) => {
@@ -108,9 +50,10 @@ const CreateInvoice = ({ onClose }) => {
       } else if (query.length > 1) {
         const response = await axios.post(`${BASE_URL}/inventory/searchitem`, {
           name: query,
+          // Authorization:token
         },
         {
-          withCredentials: true, 
+          withCredentials: true, // Ensure cookies are sent
         });
         setSuggestions(response.data);
       }
@@ -214,14 +157,6 @@ const CreateInvoice = ({ onClose }) => {
     if (inputRef.current && !inputRef.current.contains(event.target)) {
       setIsInputVisible(false);
     }
-  };
-  const handleDelete = (index) => {
-    // Create a copy of the invoiceItems and remove the item at the given index
-    const updatedItems = [...invoiceItems];
-    updatedItems.splice(index, 1); // Remove the item from the array
-
-    // Update the state with the new items
-    setInvoiceItems(updatedItems);
   };
 
   console.log(invoiceId)
@@ -428,8 +363,7 @@ const CreateInvoice = ({ onClose }) => {
                 <TableCell sx={{ color: "white" }}>{item.name}</TableCell>
                 <TableCell sx={{ color: "white" }}>{item.price}</TableCell>
                 <TableCell sx={{ color: "white" }}>{item.quantity}</TableCell>
-                <TableCell sx={{ color: "white" }}>{item.totalAmount}<IconButton onClick={() => handleDelete(index)} color="error"><DeleteIcon />
-                </IconButton></TableCell>
+                <TableCell sx={{ color: "white" }}>{item.totalAmount}</TableCell>
               </TableRow>
             ))
           )}
