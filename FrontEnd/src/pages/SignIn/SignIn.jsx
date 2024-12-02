@@ -15,6 +15,7 @@ import GoogleIcon from "@mui/icons-material/Person";
 import { styled } from "@mui/system";
 import backgroundImage from "../../assets/bg-sign-in-basic.jpeg";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../config";
 
 const BackgroundBox = styled(Box)({
   backgroundImage: `url(${backgroundImage})`,
@@ -95,7 +96,7 @@ export default function SignIn() {
   
     // Send data to backend
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

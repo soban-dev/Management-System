@@ -20,17 +20,17 @@ import { BASE_URL } from "../../../config";
 
 
 const CreateInvoice = ({ onClose }) => {
-  const [searchValue, setSearchValue] = useState(""); // Search input value
-  const [suggestions, setSuggestions] = useState([]); // Suggestions fetched from API
-  const [selectedItem, setSelectedItem] = useState(null); // Selected item details
-  const [itemData, setItemData] = useState(null); // State to store fetched item data
-  const [quantity, setQuantity] = useState(""); // State for input value
-  const [enteredQuantity, setEnteredQuantity] = useState(""); // State for the quantity entered
-  const [invoiceItems, setInvoiceItems] = useState([]); // State to store the list of items in the invoice
-  const [discount, setDiscount] = useState(0); // Discount percentage
-  const inputRef = useRef(null); // Reference to the input field
-  const [clientName, setClientName] = useState(""); // State for client name
-  const [openReceiptModal, setOpenReceiptModal] = useState(false); // State to manage modal visibility
+  const [searchValue, setSearchValue] = useState(""); 
+  const [suggestions, setSuggestions] = useState([]); 
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [itemData, setItemData] = useState(null); 
+  const [quantity, setQuantity] = useState(""); 
+  const [enteredQuantity, setEnteredQuantity] = useState(""); 
+  const [invoiceItems, setInvoiceItems] = useState([]); 
+  const [discount, setDiscount] = useState(0); 
+  const inputRef = useRef(null); 
+  const [clientName, setClientName] = useState(""); 
+  const [openReceiptModal, setOpenReceiptModal] = useState(false);
 
   const token = localStorage.getItem("token")
   // Fetch suggestions as the user types
@@ -47,7 +47,7 @@ const CreateInvoice = ({ onClose }) => {
           // Authorization:token
         },
         {
-          withCredentials: true, // Ensure cookies are sent
+          withCredentials: true, 
         }
       );
         setSuggestions(response.data);
@@ -80,7 +80,7 @@ const CreateInvoice = ({ onClose }) => {
 
       },
       {
-        withCredentials: true, // Ensure cookies are sent
+        withCredentials: true, 
       });
       setItemData(response.data);
     } catch (error) {
@@ -105,7 +105,6 @@ const CreateInvoice = ({ onClose }) => {
         );
   
         if (existingItemIndex !== -1) {
-          // If item exists, replace its quantity and totalAmount
           const updatedInvoiceItems = [...invoiceItems];
           updatedInvoiceItems[existingItemIndex].quantity = parseInt(quantity);
           updatedInvoiceItems[existingItemIndex].totalAmount =
@@ -113,7 +112,6 @@ const CreateInvoice = ({ onClose }) => {
   
           setInvoiceItems(updatedInvoiceItems);
         } else {
-          // If item does not exist, add it to the list
           const newItem = {
             name: selectedItem.name,
             price: itemData.selling_price_per_unit,
@@ -132,7 +130,7 @@ const CreateInvoice = ({ onClose }) => {
   
   // Handle discount change
   const handleDiscountChange = (event) => {
-    const discountValue = Math.max(0, Math.min(100, event.target.value)); // Ensure between 0 and 100
+    const discountValue = Math.max(0, Math.min(100, event.target.value)); 
     setDiscount(discountValue);
   };
 
@@ -143,7 +141,6 @@ const CreateInvoice = ({ onClose }) => {
   };
 
   useEffect(() => {
-    // Add event listener for outside click to hide input
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -159,10 +156,10 @@ const CreateInvoice = ({ onClose }) => {
   return (
     <Box
     sx={{
-      backgroundImage: `url(${backgroundImage})`, // Add background image
-      backgroundSize: "cover", // Make it cover the entire box
-      backgroundPosition: "center", // Center the image
-      backgroundRepeat: "no-repeat", // Prevent the image from repeating
+      backgroundImage: `url(${backgroundImage})`, 
+      backgroundSize: "cover", 
+      backgroundPosition: "center", 
+      backgroundRepeat: "no-repeat", 
       width: "800px",
       margin: "auto",
       mt: 5,
@@ -171,23 +168,23 @@ const CreateInvoice = ({ onClose }) => {
       border:'2px solid #444',
       borderRadius:'10px',
       color: "white",
-      position: "relative", // For positioning the close button
+      position: "relative", 
     }}
   >
     {/* Close Button */}
     <Button
-      onClick={onClose} // Trigger the onClose function
+      onClick={onClose} 
       sx={{
-        position: "absolute", // Position it inside the Box
-        top: "10px", // Adjust top position
-        right: "10px", // Adjust right position
-        backgroundColor: "red", // Red color for the button
-        color: "white", // White icon color
-        minWidth: "40px", // Button size
+        position: "absolute", 
+        top: "10px", 
+        right: "10px", 
+        backgroundColor: "red", 
+        color: "white", 
+        minWidth: "40px", 
         minHeight: "40px",
-        borderRadius: "50%", // Circular shape
+        borderRadius: "50%", 
         ':hover': {
-          backgroundColor: "darkred", // Darker red on hover
+          backgroundColor: "darkred", 
         },
       }}
     >
@@ -335,7 +332,7 @@ const CreateInvoice = ({ onClose }) => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end", // Centering the elements horizontally
+          justifyContent: "flex-end", 
           alignItems: "center",
           mt: 3,
           gap: 2,
@@ -343,27 +340,27 @@ const CreateInvoice = ({ onClose }) => {
       >
         <TextField
   variant="outlined"
-  label="Discount:" // Label for the input
+  label="Discount:" 
   placeholder="Enter Discount"
-  value={discount} // Bind discount state
-  onChange={(e) => setDiscount(e.target.value)} // Update discount state on change
+  value={discount} 
+  onChange={(e) => setDiscount(e.target.value)} 
   onKeyPress={(event) => {
     if (event.key === "Enter") {
-      event.preventDefault(); // Prevent default Enter behavior
-      event.target.blur(); // Remove focus from the TextField
-      console.log("Discount value updated:", discount); // Debug or handle value
+      event.preventDefault(); 
+      event.target.blur(); 
+      console.log("Discount value updated:", discount); 
     }
   }}
   sx={{
-    backgroundColor: "#424242", // Dark background for the field
-    borderRadius: "4px", // Optional rounded edges for the input
+    backgroundColor: "#424242", 
+    borderRadius: "4px", 
     input: {
-      color: "white", // Text color inside the field
-      padding: "13.5px 14px", // Padding to match your button height
+      color: "white", 
+      padding: "13.5px 14px", 
     },
-    label: { color: "white" }, // Optional: Adjust label color
-    width: 180, // Consistent width
-    height: "50px", // Matching height with buttons
+    label: { color: "white" }, 
+    width: 180, 
+    height: "50px", 
   }}
 />
 
@@ -372,16 +369,16 @@ const CreateInvoice = ({ onClose }) => {
           sx={{
             backgroundColor: "#1976d2",
             ":hover": { backgroundColor: "#115293" },
-            height: "50px", // Matching height with discount field
+            height: "50px",
           }}
-          onClick={() => setOpenReceiptModal(true)} // Open modal on click
+          onClick={() => setOpenReceiptModal(true)} 
         >
           Generate Receipt
         </Button>
         {/* Receipt Modal */}
       <ReceiptModal
         open={openReceiptModal}
-        onClose={() => setOpenReceiptModal(false)} // Close modal on close
+        onClose={() => setOpenReceiptModal(false)} 
         discount={discount}
         inventory={invoiceItems}
         clientName={clientName}

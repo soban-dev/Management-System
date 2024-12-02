@@ -181,18 +181,18 @@ const token = localStorage.getItem("token")
   >
     {/* Close Button */}
     <Button
-      onClick={onClose} // Trigger the onClose function
+      onClick={onClose} 
       sx={{
-        position: "absolute", // Position it inside the Box
-        top: "10px", // Adjust top position
-        right: "10px", // Adjust right position
-        backgroundColor: "red", // Red color for the button
-        color: "white", // White icon color
-        minWidth: "40px", // Button size
+        position: "absolute", 
+        top: "10px", 
+        right: "10px", 
+        backgroundColor: "red", 
+        color: "white", 
+        minWidth: "40px", 
         minHeight: "40px",
-        borderRadius: "50%", // Circular shape
+        borderRadius: "50%", 
         ':hover': {
-          backgroundColor: "darkred", // Darker red on hover
+          backgroundColor: "darkred", 
         },
       }}
     >
@@ -202,9 +202,9 @@ const token = localStorage.getItem("token")
     <Box 
   sx={{
     display: "flex",
-    justifyContent: "space-between", // Align elements at opposite sides
-    alignItems: "center", // Center vertically
-    mb: 3, // Margin-bottom for spacing
+    justifyContent: "space-between", 
+    alignItems: "center", 
+    mb: 3, 
   }}
 >
   {/* Left side TextField */}
@@ -213,8 +213,8 @@ const token = localStorage.getItem("token")
         placeholder="Old Invoice#ID"
         size="small"
         value={invoiceId}
-        onChange={(e) => setInvoiceId(e.target.value)} // Update state on change
-        onKeyPress={handleKeyPress1} // Handle Enter key
+        onChange={(e) => setInvoiceId(e.target.value)}
+        onKeyPress={handleKeyPress1} 
         sx={{
           backgroundColor: "#424242",
           input: { color: "white" },
@@ -227,7 +227,7 @@ const token = localStorage.getItem("token")
     variant="h4" 
     textAlign="left" 
     sx={{
-      flex: 1, // Take up available space to center the text
+      flex: 1, 
       color: "white",
       paddingLeft:'120px',
     }}
