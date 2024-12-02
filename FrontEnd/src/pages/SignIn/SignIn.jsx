@@ -115,7 +115,7 @@ export default function SignIn() {
           if (result.role === "employee") {
             localStorage.setItem("role", "user");  // Agar role "employee" hai toh "user" store karo
             } else {
-             localStorage.setItem("userRole", result.role);  // Agar "employee" nahi hai toh original role store karo
+             localStorage.setItem("role", result.role);  // Agar "employee" nahi hai toh original role store karo
                  } // Store the role
             // result.role='admin'
         // Use role to determine the navigation path

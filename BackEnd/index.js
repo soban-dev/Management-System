@@ -13,7 +13,10 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:5173"], // Specify the frontend URL
+    origin: [
+      "http://localhost:5173",
+      "https://management-system-dun.vercel.app",
+    ], // Specify the frontend URL
     credentials: true, // Allow credentials to be sent
   })
 );
