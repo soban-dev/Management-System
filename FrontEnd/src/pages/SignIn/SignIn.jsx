@@ -103,9 +103,7 @@ export default function SignIn() {
         body: JSON.stringify(formData),
         credentials: 'include',
       },
-      {
-        withCredentials: true,
-      });
+      );
   
       const result = await response.json();
       console.log("Response from backend213:", result);
