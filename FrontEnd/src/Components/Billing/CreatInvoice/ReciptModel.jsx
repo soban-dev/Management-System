@@ -43,18 +43,20 @@ const token = localStorage.getItem("token")
       return;
     }
 
-    const data = {
-      percentdiscount: discount ,
-      customername: clientName,
-      items: inventory,
-      total: calculateTotalAmount(),
-    };
+    // const data = {
+    //   percentdiscount: discount ,
+    //   customername: clientName,
+    //   items: inventory,
+    //   total: calculateTotalAmount(),
+    // };
 
     try {
       const response = await axios.post(`${BASE_URL}/inventory/invoice`,
         {
-          data,
-          // Authorization:token
+          percentdiscount: discount ,
+          customername: clientName,
+          items: inventory,
+          total: calculateTotalAmount(),
         },{
           withCredentials: true, // Ensure cookies are sent
         }
