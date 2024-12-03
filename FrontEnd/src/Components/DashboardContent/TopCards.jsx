@@ -5,36 +5,44 @@ import { BASE_URL } from "../../config";
 
 
 
-export default function TopCards({dateValue,}) {
+export default function TopCards({datevalue,datevalue2}) {
   const [cardData, setCardData] = useState({
     totalProfit: null,
     itemSold: null,
     numberOfProducts: null,
     totalStock: null,
   });
-  console.log("meri datee ",dateValue);
+ 
   
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/admin/dashboard`, {
-         
-        });
-        console.log("Backend Response:", response.data);
-        setCardData({
-          totalProfit: response.data.totalProfit,
-          itemSold: response.data.totalSoldQuantity,
-          numberOfProducts: response.data.ItemsinStock,
-          totalStock: response.data.ItemsQuantity,
-        });
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      console.log("startdate ",datevalue);
+      console.log("enddate ",datevalue2);
+      if (datevalue && datevalue2) {
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/admin/dashboard?startDate=${datevalue}&endDate=${datevalue2}`
+          );
+          console.log("Backend Response:", response.data);
+
+          setCardData({
+            totalProfit: response.data?.totalProfit || 0,
+            itemSold: response.data?.totalSoldQuantity || 0,
+            numberOfProducts: response.data?.ItemsinStock || 0,
+            totalStock: response.data?.ItemsQuantity || 0,
+          });
+          
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      } else {
+        console.log("Start and end dates are required.");
       }
     };
 
-    fetchData(); 
-  }, []);
+    fetchData(); // Trigger fetch when dates change
+  }, [datevalue, datevalue2]);
   const defaultCards = [
     { title: "Total Profit", value: cardData.totalProfit || "$281", percent: "+55%", description: "than last week", color: "#1E90FF" },
     { title: "Item Sold", value: cardData.itemSold || "360", percent: "+3%", description: "than last month", color: "#36A2EB" },

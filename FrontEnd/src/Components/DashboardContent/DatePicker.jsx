@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-export default function CustomDateRangePicker({dateValue,setDateValue}) {
+export default function CustomDateRangePicker({dateValue,setDateValue,setDateValue2}) {
   const [startDate, setStartDate] = React.useState(dayjs()); 
   const [endDate, setEndDate] = React.useState(dayjs().add(1, 'day')); 
 
@@ -24,10 +24,11 @@ export default function CustomDateRangePicker({dateValue,setDateValue}) {
   const startDateFormatted = new Date(startDate.$d).toISOString().split('T')[0];
   const endDateFormatted = new Date(endDate.$d).toISOString().split('T')[0];
   
-  const dateRange = `${startDateFormatted} to ${endDateFormatted}`;
-  setDateValue(dateRange);
+  const dateRange = `${startDateFormatted} ${endDateFormatted}`;
+  setDateValue(startDateFormatted);
+  setDateValue2(endDateFormatted);
   
-  console.log("Date Range:", dateRange);  // Output: 2024-12-03 to 2024-12-10
+  console.log("Date Range:", dateRange);  
   
   
 

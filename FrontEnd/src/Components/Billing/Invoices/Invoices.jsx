@@ -34,30 +34,24 @@ function Invoices() {
   })) || [];
 
   
-  const viewAll = () => {
+  const viewAll = async () => {
     console.log("View All button clicked");
-    const fetchProfileData = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/inventory/read`, {
-          withCredentials: true,
-        });
-        const data = response.data;
-        setInvoiceData(data); // Set data after fetching
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
-    };
-  
-    fetchProfileData();
-
-    const invoices = invoiceData?.receipts?.map(item => ({
-      date: item.createdAt,
-      id: item._id,
-      amount: item.total,
-    })) || [];
-    // Add any functionality here, like navigation or displaying all invoices
+    try {
+      const response = await axios.get(`${BASE_URL}/inventory/read`, {
+        withCredentials: true,
+      });
+      
+      const data = response.data;
+      // Update invoiceData with the correct structure
+      setInvoiceData({
+        receipts: data.result || [],  // Assuming the API returns the data in `result`
+      });
+      setShowAllInvoices(true); // Show all invoices
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
   };
-
+  
 
   return (
     <Box
@@ -96,7 +90,7 @@ function Invoices() {
               borderColor: "#1E90FF",
             },
           }}
-          onClick={viewAll} // onClick event added here
+          // onClick={viewAll} // onClick event added here
         >
           View All
         </Button>
@@ -126,7 +120,7 @@ function Invoices() {
             </Box>
 
             {/* Amount and PDF */}
-            <ListItemSecondaryAction sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <ListItemSecondaryAction sx={{ display: "flex", alignItems: "center", gap: 2, }}>
               <Typography variant="body1" fontWeight="bold">
                 ${invoice.amount}
               </Typography>

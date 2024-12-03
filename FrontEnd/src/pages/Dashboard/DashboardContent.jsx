@@ -9,8 +9,8 @@ import CustomDateRangePicker from "../../Components/DashboardContent/DatePicker"
 
 
 function DashboardContent() {
-  const [datevalue, setDateValue] = useState();
-  const [datevalue2, setDateValue2] = useState();
+  const [datevalue, setDateValue] = useState(null);
+  const [datevalue2, setDateValue2] = useState(null);
   // setDateValue2(datevalue);
   console.log("mera asad",datevalue);
   
@@ -18,11 +18,13 @@ function DashboardContent() {
     <Box>
       {/* Top Row Cards */}
       <CustomDateRangePicker
-      datevalue={datevalue}
+      // datevalue={datevalue}
       setDateValue={setDateValue}
+      setDateValue2={setDateValue2}
       />
       <TopCards
       datevalue={datevalue}
+      datevalue2={datevalue2}
       />
        {/* Charts */}
        <Charts/>
