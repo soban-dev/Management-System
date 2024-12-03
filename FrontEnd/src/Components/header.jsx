@@ -16,8 +16,6 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useLocation } from "react-router-dom";
-
-// Custom styles for the search bar
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -27,9 +25,9 @@ const Search = styled("div")(({ theme }) => ({
   },
   marginLeft: theme.spacing(1),
   width: "100%",
-  maxWidth: "200px", // Restrict maximum width for all views
+  maxWidth: "200px", 
   [theme.breakpoints.up("sm")]: {
-    maxWidth: "250px", // Slightly larger on tablet and above
+    maxWidth: "250px", 
   },
 }));
 
@@ -56,8 +54,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 function Header({ toggleSidebar }) {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-
-  // Map routes to page titles
   const pageTitles = {
     "/": "Dashboard",
     "/billing": "Billing",
@@ -67,7 +63,7 @@ function Header({ toggleSidebar }) {
     "/sign-up": "Sign Up",
   };
 
-  const title = pageTitles[location.pathname] || "Dashboard"; // Default title
+  const title = pageTitles[location.pathname] || "Dashboard";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -86,7 +82,7 @@ function Header({ toggleSidebar }) {
   }, []);
     
   
-    const navigate = useNavigate(); // useNavigate hook to navigate
+    const navigate = useNavigate(); 
 
   return (
     <AppBar
@@ -107,7 +103,7 @@ function Header({ toggleSidebar }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          flexWrap: { xs: "wrap", md: "nowrap" }, // Wrap content on mobile view
+          flexWrap: { xs: "wrap", md: "nowrap" }, 
         }}
       >
         {/* Left Section: Logo and Breadcrumbs */}
@@ -117,7 +113,7 @@ function Header({ toggleSidebar }) {
             alignItems: "center",
             width: { xs: "100%", md: "auto" },
             justifyContent: { xs: "space-between", md: "flex-start" },
-            mb: { xs: 1, md: 0 }, // Add margin for spacing in mobile view
+            mb: { xs: 1, md: 0 }, 
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -159,7 +155,7 @@ function Header({ toggleSidebar }) {
       {/* Person Icon */}
       <IconButton
         sx={{ color: "#AAA" }}
-        onClick={() => navigate("/profile")} // Navigate to /profile
+        onClick={() => navigate("/profile")} 
       >
         <PersonIcon />
       </IconButton>
@@ -167,7 +163,7 @@ function Header({ toggleSidebar }) {
       {/* Settings Icon */}
       <IconButton
         sx={{ color: "#AAA" }}
-        onClick={() => navigate("/profile")} // Navigate to /profile
+        onClick={() => navigate("/profile")} 
       >
         <SettingsIcon />
       </IconButton>
@@ -175,7 +171,7 @@ function Header({ toggleSidebar }) {
       {/* Notifications Icon */}
       <IconButton
         sx={{ color: "#AAA" }}
-        onClick={() => navigate("/notifications")} // Navigate to /notifications
+        onClick={() => navigate("/notifications")} 
       >
         <NotificationsIcon />
       </IconButton>          

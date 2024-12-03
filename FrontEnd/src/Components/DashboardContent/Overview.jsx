@@ -14,7 +14,6 @@ export default function Overview() {
       });
     
       useEffect(() => {
-        // Fetch data from backend
         const fetchData = async () => {
           try {
             const response = await axios.get(`${BASE_URL}/admin/dashboard`, {
@@ -34,7 +33,7 @@ export default function Overview() {
           }
         };
     
-        fetchData(); // Call the fetchData function
+        fetchData(); 
       }, []);
       console.log(cardData);
       

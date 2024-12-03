@@ -26,15 +26,15 @@ const ReceiptModal = ({
   clientName,
   setClientName,
 }) => {
-  const [message, setMessage] = useState(""); // To store error or success messages
+  const [message, setMessage] = useState(""); 
 const token = localStorage.getItem("token")
   const calculateTotalAmount = () => {
     return inventory.reduce((total, row) => total + row.totalAmount, 0);
   };
   const calculateTotalAmountWithDiscount = () => {
-    const total = inventory.reduce((total, row) => total + row.totalAmount, 0); // Sum up all totalAmount values
-    const discountedTotal = total - (total * discount) / 100; // Apply the discount
-    return discountedTotal.toFixed(2); // Round to two decimal places
+    const total = inventory.reduce((total, row) => total + row.totalAmount, 0); 
+    const discountedTotal = total - (total * discount) / 100; 
+    return discountedTotal.toFixed(2); 
   };
 
   const handleGenerateReceipt = async () => {
@@ -42,14 +42,6 @@ const token = localStorage.getItem("token")
       setMessage("Please fill in the 'Client Name' field.");
       return;
     }
-
-    // const data = {
-    //   percentdiscount: discount ,
-    //   customername: clientName,
-    //   items: inventory,
-    //   total: calculateTotalAmount(),
-    // };
-
     try {
       const response = await axios.post(`${BASE_URL}/inventory/invoice`,
         {
@@ -58,7 +50,7 @@ const token = localStorage.getItem("token")
           items: inventory,
           total: calculateTotalAmount(),
         },{
-          withCredentials: true, // Ensure cookies are sent
+          withCredentials: true, 
         }
       );
 
@@ -85,13 +77,12 @@ const token = localStorage.getItem("token")
       <Box
         sx={{
           width: { xs: "90%", sm: "90%", md: "500px" },
-          marginTop:{ md: "40px" }, // Full width for mobile, fixed width for tablet/desktop
-          maxHeight: "90vh", // Limit height for scrollable content
+          marginTop:{ md: "40px" }, 
+          maxHeight: "90vh", 
           bgcolor: "#424242",
           boxShadow: 24,
           p: { xs: 2, md: 4 },
-          // borderRadius: 2,
-          overflowY: "auto", // Enable scrolling for long content
+          overflowY: "auto", 
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",

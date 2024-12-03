@@ -14,9 +14,10 @@ import FacebookIcon from "@mui/icons-material/Book";
 import GitHubIcon from "@mui/icons-material/Badge";
 import GoogleIcon from "@mui/icons-material/Person";
 import { styled } from "@mui/system";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
+import { Link, useNavigate } from "react-router-dom"; 
 import backgroundImage from "../../assets/bg-sign-up-cover.jpeg";
-import axios from "axios"; // Import axios for API request
+import axios from "axios"; 
+import { BASE_URL } from "../../config";
 
 const BackgroundBox = styled(Box)({
   backgroundImage: `url(${backgroundImage})`,
@@ -54,7 +55,7 @@ const HeaderBox = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  padding: "13px 75px", // Default padding for larger screens (PC, 4K)
+  padding: "13px 75px", 
 
   [theme.breakpoints.down("lg")]: {
     padding: "36px 62px",
@@ -71,12 +72,10 @@ const SocialButtonsBox = styled(Box)(({ theme }) => ({
   gap: "16px",
   marginTop: "10px",
 
-  // Show icons for screens 1200px and above, hide below
-  [theme.breakpoints.up("lg")]: { // This targets screens larger than 1200px
+ 
+  [theme.breakpoints.up("lg")]: { 
     display: "flex",
   },
-
-  // Hide social icons for screens smaller than 1200px
   [theme.breakpoints.down("lg")]: {
     display: "none",
   },
@@ -113,7 +112,7 @@ export default function EmployRegistration() {
     cnic: "",
   });
 
-  const navigate = useNavigate(); // Initialize the useNavigate hook to handle navigation
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -127,11 +126,11 @@ export default function EmployRegistration() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/signup", formData);
-      console.log("Server Response:", response.data); // Console log server response
+      const response = await axios.post(`${BASE_URL}/auth/signup`, formData);
+      console.log("Server Response:", response.data); 
 
       if (response.data.success) {
-        // If signup is successful, navigate to /signup
+       
         navigate("/sign-in");
       } else {
         alert("Signup failed. Please try again.");

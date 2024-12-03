@@ -36,7 +36,6 @@ export default function Charts() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    // Fetch data from backend
     const fetchData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/admin/dashboard`, {
@@ -46,13 +45,9 @@ export default function Charts() {
         });
 
         console.log("Backend Response:", response.data);
-
-        // Check if sevendayStats exists and is an array
         if (response.data?.sevendaysStats?.length > 0) {
           const array = response.data.sevendaysStats;
             console.log(array);
-            
-          // Extract data separately from the backend and set the state
           const salesData = array.map(item => item.perdaySales || 0);
           const revenueData = array.map(item => item.perdayRevenue || 0);
           const itemsSoldData = array.map(item => item.perdaySaleAmount || 0);
@@ -68,16 +63,14 @@ export default function Charts() {
       }
     };
 
-    fetchData(); // Call the fetchData function
+    fetchData(); 
   }, []);
-
-  // Data for charts using fetched data
   const barChartData = {
     labels: ["6 Days Ago", "5", "4", "3", "2", "1", "Today"],
     datasets: [
       {
         label: "Sales",
-        data: cardData.sales.length > 0 ? cardData.sales : 0,//[10, 20, 30, 15, 40, 55, 60],
+        data: cardData.sales.length > 0 ? cardData.sales : 0,
         backgroundColor: "#36A2EB",
         borderRadius: 4,
       },

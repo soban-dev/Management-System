@@ -17,7 +17,6 @@ import { useTheme } from "@mui/material/styles";
 import { BASE_URL } from "../../config";
 import axios from "axios";
 
-// Styled Table Container with Vibrant Glass Effect
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   maxWidth: "100%",
   overflowX: "auto",
@@ -27,7 +26,6 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   borderRadius: "16px",
 }));
 
-// Styled Table Rows
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: "rgba(255, 255, 255, 0.07)",
   "&:hover": {
@@ -35,12 +33,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-// Styled Table Header Row
 const StyledTableHead = styled(TableRow)(({ theme }) => ({
   backgroundColor: "rgba(255, 255, 255, 0.15)",
 }));
-
-// Progress Bar Styling
 const ProgressBar = styled(Box)(({ progress }) => ({
   position: "relative",
   width: "100%",
@@ -66,7 +61,6 @@ const TableProduct = () => {
   const [cardData, setCardData] = useState( {result: []});
 
   useEffect(() => {
-    // Fetch data from backend
     const fetchData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/inventory/read`, {
@@ -81,24 +75,21 @@ const TableProduct = () => {
       }
     };
 
-    fetchData(); // Call the fetchData function
+    fetchData(); 
   }, []);
 
 
   const rows = [];
   if (cardData.result.length > 0) {
     for (const item of cardData.result) {
-      // Assuming you want to map the item properties to the rows
       rows.push({
-        product: item.name || "Smartphone", // Replace with your actual data
-        revenue: item.selling_price_per_unit || "$12,500", // Replace with actual revenue if available
-        status: item.quantity || "434", // Replace with actual status if available
-        progress: item.sold_percentage ? parseFloat(item.sold_percentage).toFixed(0) : 0 || 100, // Replace with actual progress if 
+        product: item.name || "Smartphone", 
+        revenue: item.selling_price_per_unit || "$12,500", 
+        status: item.quantity || "434", 
+        progress: item.sold_percentage ? parseFloat(item.sold_percentage).toFixed(0) : 0 || 100, 
       });
     }
   }
-
-  // Icons for each product category
   const icons = {
     Smartphone: <ShoppingCartIcon sx={{ color: "#00bcd4" }} />,
     Laptop: <MonetizationOnIcon sx={{ color: "#ffc107" }} />,

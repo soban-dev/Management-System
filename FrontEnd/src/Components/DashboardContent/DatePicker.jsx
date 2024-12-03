@@ -28,6 +28,21 @@ export default function CustomDateRangePicker() {
       <Box sx={{ marginBottom: '30px', display: 'flex', justifyContent: 'flex-end' }}>
         {/* Start Date Picker */}
         <DatePicker
+        sx={{
+          '& .MuiInputBase-root': {
+                  color:'white !important', 
+                  borderColor:'white !important',     
+                },
+               '& .MuiFormLabel-root' :{
+                color:'white !important',
+               },
+               '& .MuiButtonBase-root' :{
+                color:'white !important', 
+               },
+               '& .MuiOutlinedInput-notchedOutline ' :{
+                borderColor:'white !important',  
+               },
+        }}
           label="Start Date"
           value={startDate}
           onChange={handleStartDateChange}
@@ -36,21 +51,6 @@ export default function CustomDateRangePicker() {
               {...params}
               fullWidth
               sx={{
-                '& .MuiOutlinedInput-root': {
-                  backgroundColor: 'white !important', // Force white background for the input
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#fff !important', // Force white border color
-                  },
-                },
-                '& .MuiInputBase-input': {
-                  color: 'white !important', // Force white text color inside the input field
-                },
-                '& .MuiFormLabel-root': {
-                  color: 'white !important', // Force white label color
-                },
-                '& .MuiInputAdornment-root': {
-                  color: 'white !important', // Force white color for the calendar icon
-                },
                 mb: 2,
               }}
             />
@@ -61,30 +61,27 @@ export default function CustomDateRangePicker() {
         <DatePicker
           label="End Date"
           value={endDate}
+          sx={{
+            '& .MuiInputBase-root': {
+                    color:'white !important', 
+                    borderColor:'white !important',     
+                  },
+                 '& .MuiFormLabel-root' :{
+                  color:'white !important',
+                 },
+                 '& .MuiButtonBase-root' :{
+                  color:'white !important', 
+                 },
+                 '& .MuiOutlinedInput-notchedOutline ' :{
+                  borderColor:'white !important',  
+                 },
+          }}
           onChange={handleEndDateChange}
           minDate={startDate} // Ensure that end date can't be before start date
           renderInput={(params) => (
             <TextField
               {...params}
               fullWidth
-              sx={{
-                '& .css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input': {
-                  backgroundColor: 'white !important',
-                  Color: '#4444 !important', 
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#fff !important', // Force white border color
-                  },
-                },
-                '& .MuiInputBase-input': {
-                  color: 'white !important', // Force white text color inside the input field
-                },
-                '& .MuiFormLabel-root': {
-                  color: 'white !important', // Force white label color
-                },
-                '& .MuiInputAdornment-root': {
-                  color: 'white !important', // Force white color for the calendar icon
-                },
-              }}
             />
           )}
         />

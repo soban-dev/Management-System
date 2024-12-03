@@ -3,7 +3,7 @@ import { Box, Grid, Card, Typography } from "@mui/material";
 import axios from "axios";
 import { BASE_URL } from "../../config";
 
-const token = localStorage.getItem("token");
+
 
 export default function TopCards() {
   const [cardData, setCardData] = useState({
@@ -14,13 +14,10 @@ export default function TopCards() {
   });
 
   useEffect(() => {
-    // Fetch data from backend
     const fetchData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/admin/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+         
         });
         console.log("Backend Response:", response.data);
         setCardData({
@@ -34,10 +31,8 @@ export default function TopCards() {
       }
     };
 
-    fetchData(); // Call the fetchData function
+    fetchData(); 
   }, []);
-
-  // Default fallback data (Descriptions & colors)
   const defaultCards = [
     { title: "Total Profit", value: cardData.totalProfit || "$281", percent: "+55%", description: "than last week", color: "#1E90FF" },
     { title: "Item Sold", value: cardData.itemSold || "360", percent: "+3%", description: "than last month", color: "#36A2EB" },

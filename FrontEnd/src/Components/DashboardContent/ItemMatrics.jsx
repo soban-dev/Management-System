@@ -3,11 +3,11 @@ import axios from 'axios';
 import { Box, Grid, Card, Typography, LinearProgress, } from "@mui/material";
 import {
   Chart as ChartJS,
-  CategoryScale,    // Register "category" scale
-  LinearScale,      // Register linear scale for numeric axes
-  BarElement,       // For bar charts
-  PointElement,     // For line charts
-  LineElement,      // For line charts
+  CategoryScale,    
+  LinearScale,    
+  BarElement,       
+  PointElement,   
+  LineElement,      
   Title,
   Tooltip,
   Legend,
@@ -34,7 +34,6 @@ const token = localStorage.getItem("token");
         totalStock: null,
       });
       useEffect(() => {
-        // Fetch data from backend
         const fetchData = async () => {
           try {
             const response = await axios.get(`${BASE_URL}/admin/dashboard`, {
@@ -56,7 +55,7 @@ const token = localStorage.getItem("token");
           }
         };
     
-        fetchData(); // Call the fetchData function
+        fetchData();
       }, []);
     
 

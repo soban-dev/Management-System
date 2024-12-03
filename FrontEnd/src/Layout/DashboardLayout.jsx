@@ -23,15 +23,15 @@ function DashboardLayout() {
         display: "flex",
         justifyContent:"space-between",
         gap:'20px',
-        backgroundColor: "rgb(26 32 53)", // Main layout background
+        backgroundColor: "rgb(26 32 53)", 
         minHeight: "100vh",
         height:'100%',
       }}
     >
       {/* Sidebar */}
       <Sidebar
-        isOpen={isSidebarOpen} // Pass the state to Sidebar
-        toggleSidebar={toggleSidebar} // Pass toggle function to Sidebar
+        isOpen={isSidebarOpen} 
+        toggleSidebar={toggleSidebar} 
       />
 
       {/* Main Content Area */}
@@ -39,23 +39,20 @@ function DashboardLayout() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          // minHeight: "auto",
           width:'calc(100% - 250px)'
         }}
       >
         {/* Header */}
         <Box
           sx={{
-            position: "sticky", // Keep the header at the top
+            position: "sticky", 
             top: 0,
-            // backgroundColor: "rgb(52, 71, 103)", // Solid background color
             zIndex: 10,
-            height: "64px", // Standard header height
+            height: "64px", 
             display: "flex",
             alignItems: "center",
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
             borderRadius:'10px',
-            // Optional shadow
           }}
         >
           <Header toggleSidebar={toggleSidebar} /> {/* Pass toggleSidebar to Header */}
@@ -64,14 +61,9 @@ function DashboardLayout() {
         {/* Routes for the Content */}
         <Box 
           sx={{
-            // backgroundColor: "rgb(52, 71, 103)",
             color: "#FFF",
-            // overflowY: "auto", // Scrollable content
             padding: 3,
             marginTop: { xs: 5, },
-            // height:'auto',
-        
-          
           }}
         >
           <Routes>

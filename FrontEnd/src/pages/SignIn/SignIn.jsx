@@ -66,11 +66,9 @@ const SocialButtonsBox = styled(Box)({
 const SocialButton = styled(Avatar)({
   backgroundColor: "white",
   color: "#1976d2",
-  // cursor: "pointer",
   border: "1px solid #1976d2",
   width: "40px",
   height: "40px",
-  // opacity:'0',
 });
 
 const FormBox = styled(Box)({
@@ -88,13 +86,9 @@ export default function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Save username and password to array (optional step)
     const usersArray = [];
     usersArray.push({ username: formData.username, password: formData.password });
     console.log("Saved User:", usersArray);
-  
-    // Send data to backend
     try {
       const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
@@ -108,9 +102,7 @@ export default function SignIn() {
   
       const result = await response.json();
       console.log("Response from backend213:", result);
-      localStorage.setItem("token", result.token) // Console log response
-  
-      // Check if the login was successful based on response from backend
+      localStorage.setItem("token", result.token) 
       if (result.success === true) {
         // Store the role in localStorage or sessionStorage
         // Role set karna localStorage mein condition ke sath
@@ -120,26 +112,19 @@ export default function SignIn() {
              localStorage.setItem("role", result.role);  // Agar "employee" nahi hai toh original role store karo
                  } // Store the role
             // result.role='admin'
-        // Use role to determine the navigation path
         if (result.role === "admin") {
-          // Navigate to the homepage if the user is admin
           navigate("/dashboard");
           console.log(result.role)
         } else if(result.role === "employee"){
-          // Navigate to billing if the user is not admin
           navigate("/billing");
         }
       } else {
-        // Handle failed login (optional: display message, etc.)
         console.log("Login failed", result.message);
       }
     } catch (error) {
-      console.error("Error:", error); // Handle errors during the fetch
+      console.error("Error:", error); 
     }
   };
-  console.log(localStorage.getItem("userRole"))
-  // console.log(result.role)
-
   return (
     <BackgroundBox>
       <CssBaseline />
@@ -172,7 +157,7 @@ export default function SignIn() {
               autoComplete="username"
               autoFocus
               value={formData.username}
-              onChange={handleChange} // Handle input change
+              onChange={handleChange} 
             />
             <TextField
               margin="normal"
@@ -184,7 +169,7 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
               value={formData.password}
-              onChange={handleChange} // Handle input change
+              onChange={handleChange} 
             />
             <FormControlLabel
               control={<Switch color="primary" />}
@@ -198,10 +183,8 @@ export default function SignIn() {
               sx={{
                 marginTop: 2,
                 marginBottom: 2,
-                
                 backgroundColor: "#1976d2",
                 fontWeight: "bold",
-                // borderRadius: "10px",
               }}
             >
               SIGN IN
@@ -210,7 +193,7 @@ export default function SignIn() {
               variant="body2"
               align="center"
               sx={{ color: "#1976d2", cursor: "pointer" }}
-              onClick={() => navigate("/sign-up")} // Redirect to sign-up page
+              onClick={() => navigate("/sign-up")} 
             >
               Don’t have an account? Sign up
             </Typography>

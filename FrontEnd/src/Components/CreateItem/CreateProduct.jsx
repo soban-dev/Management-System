@@ -1,17 +1,16 @@
 import React, { useState, useRef } from "react";
 import { Box, TextField, Typography, Button } from "@mui/material";
-import axios from "axios"; // Import axios
+import axios from "axios"; 
 import { BASE_URL } from "../../config";
 const token = localStorage.getItem("token")
 const CreateProduct = () => {
-  const [clientName, setClientName] = useState(""); // State for client name
-  const [price, setPrice] = useState(""); // State for price
-  const [quantity, setQuantity] = useState(""); // State for available quantity
-  const [buyingPrice, setBuyingPrice] = useState(""); // State for buying price
-  const [requiredQuantity, setRequiredQuantity] = useState(""); // State for required quantity
-  const [productData, setProductData] = useState([]); // Array to store product data
-  
-  // Create refs for the inputs
+  const [clientName, setClientName] = useState("");
+  const [price, setPrice] = useState(""); 
+  const [quantity, setQuantity] = useState(""); 
+  const [buyingPrice, setBuyingPrice] = useState(""); 
+  const [requiredQuantity, setRequiredQuantity] = useState(""); 
+  const [productData, setProductData] = useState([]); 
+
   const priceInput = useRef(null);
   const quantityInput = useRef(null);
   const buyingPriceInput = useRef(null);
@@ -24,7 +23,6 @@ const CreateProduct = () => {
   };
 
   const handleSubmit = async () => {
-    // Create a product object to send
     const newProduct = {
       name: clientName,
       quantity: quantity,
@@ -33,11 +31,9 @@ const CreateProduct = () => {
       selling_price_per_unit: price,
     };
 
-    // Add the new product to the array
     setProductData((prevData) => [...prevData, newProduct]);
 
     try {
-      // Send the data to the backend
       const response = await axios.post(`${BASE_URL}/inventory/createitem`,{ name :newProduct.name, 
 
         quantity :newProduct.quantity,
@@ -45,14 +41,10 @@ const CreateProduct = () => {
         buying_price_per_unit:newProduct.buying_price_per_unit,
         selling_price_per_unit :newProduct.selling_price_per_unit,
 
-
-        // Authorization:token
       },
       {
-        withCredentials: true, // Ensure cookies are sent
+        withCredentials: true, 
       });
-
-      // Log the response from the backend
       console.log("Backend Response:", response.data);
     } catch (error) {
       console.error("Error sending data:", error);

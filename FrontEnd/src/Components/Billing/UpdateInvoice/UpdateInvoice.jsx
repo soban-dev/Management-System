@@ -22,76 +22,69 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const CreateInvoice = ({ onClose }) => {
-  const [searchValue, setSearchValue] = useState(""); // Search input value
-  const [suggestions, setSuggestions] = useState([]); // Suggestions fetched from API
-  const [selectedItem, setSelectedItem] = useState(null); // Selected item details
-  const [itemData, setItemData] = useState(null); // State to store fetched item data
-  const [quantity, setQuantity] = useState(""); // State for input value
-  const [enteredQuantity, setEnteredQuantity] = useState(""); // State for the quantity entered
-  const [invoiceItems, setInvoiceItems] = useState([]); // State to store the list of items in the invoice
-  const [discount, setDiscount] = useState(0); // Discount percentage
-  const inputRef = useRef(null); // Reference to the input field
-  const [clientName, setClientName] = useState(""); // State for client name
-  const [openReceiptModal, setOpenReceiptModal] = useState(false); // State to manage modal visibility
+  const [searchValue, setSearchValue] = useState(""); 
+  const [suggestions, setSuggestions] = useState([]); 
+  const [selectedItem, setSelectedItem] = useState(null); 
+  const [itemData, setItemData] = useState(null); 
+  const [quantity, setQuantity] = useState(""); 
+  const [enteredQuantity, setEnteredQuantity] = useState(""); 
+  const [invoiceItems, setInvoiceItems] = useState([]);
+  const [discount, setDiscount] = useState(0); 
+  const inputRef = useRef(null); 
+  const [clientName, setClientName] = useState(""); 
+  const [openReceiptModal, setOpenReceiptModal] = useState(false); 
   const [invoiceId, setInvoiceId] = useState("");
+  const [oldtotal, setOldTotal] = useState("");
   const [invoiceData, setInvoiceData] = useState(null);
 
 
-  const handleKeyPress1 = async (event, invoiceItems) => {
+  const handleKeyPress1 = async (event, invoiceItems, ) => {
     if (event.key === "Enter") {
       event.preventDefault(); // Prevent form submission on Enter key press
       event.target.blur(); // Remove focus from the input field
   
       // Ensure invoiceItems is an array
       const items = Array.isArray(invoiceItems) ? invoiceItems : [];
+      console.log("Invoice ID:", invoiceId);
+
   
-      if (invoiceId.trim() !== "") {
+      // Null ya undefined check for invoiceId
+      if (invoiceId && invoiceId.trim() !== "") {
         try {
-          // Dummy response
-          const response = {
-            data: [
-              {
-                name: "Laptop", // Example item name
-                quantity: 5, // Example quantity
-                selling_price_per_unit: 750, // Example price per unit
-              },
-              {
-                name: "Mouse", // Example item name
-                quantity: 20, // Example quantity
-                selling_price_per_unit: 25, // Example price per unit
-              }
-            ]
-          };
+          // Backend se GET request
+          const response = await fetch(`${BASE_URL}/inventory/invoiceid/${invoiceId}`);
+          const data = await response.json(); // JSON response ko parse karna
+  
+          const updatedInvoiceItems = [...items];
   
           // Loop through the fetched items and add them to the invoiceItems
-          response.data.forEach((fetchedItem) => {
-            // Check if the item already exists in the invoiceItems list
-            const existingItemIndex = items.findIndex(
+          data.forEach((fetchedItem) => {
+            const existingItemIndex = updatedInvoiceItems.findIndex(
               (item) => item.name === fetchedItem.name
             );
   
             if (existingItemIndex !== -1) {
-              // If item exists, update its quantity and totalAmount
-              const updatedInvoiceItems = [...items];
-              updatedInvoiceItems[existingItemIndex].quantity = fetchedItem.quantity;
+              updatedInvoiceItems[existingItemIndex].quantity += fetchedItem.quantity;
               updatedInvoiceItems[existingItemIndex].totalAmount =
-                fetchedItem.quantity * updatedInvoiceItems[existingItemIndex].price;
-              setInvoiceItems(updatedInvoiceItems);
+                updatedInvoiceItems[existingItemIndex].quantity *
+                updatedInvoiceItems[existingItemIndex].price;
             } else {
-              // If item does not exist, add it to the list
               const newItem = {
                 name: fetchedItem.name,
                 price: fetchedItem.selling_price_per_unit,
                 quantity: fetchedItem.quantity,
                 totalAmount: fetchedItem.quantity * fetchedItem.selling_price_per_unit,
               };
-              setInvoiceItems((prevItems) => [...prevItems, newItem]);
+              updatedInvoiceItems.push(newItem);
             }
           });
   
+          setInvoiceItems(updatedInvoiceItems);
         } catch (error) {
           console.error("Error fetching invoice data:", error);
         }
+      } else {
+        console.error("Invoice ID is undefined or empty.");
       }
     }
   };
@@ -216,11 +209,8 @@ const CreateInvoice = ({ onClose }) => {
     }
   };
   const handleDelete = (index) => {
-    // Create a copy of the invoiceItems and remove the item at the given index
     const updatedItems = [...invoiceItems];
-    updatedItems.splice(index, 1); // Remove the item from the array
-
-    // Update the state with the new items
+    updatedItems.splice(index, 1); 
     setInvoiceItems(updatedItems);
   };
 
@@ -229,10 +219,10 @@ const CreateInvoice = ({ onClose }) => {
   return (
     <Box
     sx={{
-      backgroundImage: `url(${backgroundImage})`, // Add background image
-      backgroundSize: "cover", // Make it cover the entire box
-      backgroundPosition: "center", // Center the image
-      backgroundRepeat: "no-repeat", // Prevent the image from repeating
+      backgroundImage: `url(${backgroundImage})`, 
+      backgroundSize: "cover", 
+      backgroundPosition: "center", 
+      backgroundRepeat: "no-repeat", 
       width: "800px",
       margin: "auto",
       mt: 5,
@@ -241,7 +231,7 @@ const CreateInvoice = ({ onClose }) => {
       border:'2px solid #444',
       borderRadius:'10px',
       color: "white",
-      position: "relative", // For positioning the close button
+      position: "relative", 
     }}
   >
     {/* Close Button */}

@@ -12,8 +12,8 @@ import {
   TextField,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import backgroundImage from "../../assets/bg-reset-cover.jpeg"; // Import your background image
-import avatarImage from "../../assets/team-4.jpg"; // Replace with your avatar image path
+import backgroundImage from "../../assets/bg-reset-cover.jpeg"; 
+import avatarImage from "../../assets/team-4.jpg";
 import { BASE_URL } from "../../config";
 
 const ProfileComponent = () => {
@@ -24,18 +24,16 @@ const ProfileComponent = () => {
   const [profileData, setProfileData] = useState({});
 
   const textFieldRef = useRef(null);
-
-  // Fetch data from backend on component mount
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/profile/profile` ,
           {
-            withCredentials: true, // Ensure cookies are sent
+            withCredentials: true, 
           }
         );
         const data = response.data;
-        setProfileData(data); // Store the response in state
+        setProfileData(data); 
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -43,29 +41,20 @@ const ProfileComponent = () => {
 
     fetchProfileData();
   }, []);
- // Empty dependency array ensures the effect runs only once on mount
  console.log(profileData)
-  // Toggle edit mode
   const handleEditClick = () => {
     setIsEditing(true);
   };
-
-  // Handle Enter key press to save and exit edit mode
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       setIsEditing(false);
-      // Save logic goes here (like an API call or state update)
     }
   };
-
-  // Close edit mode when clicked outside
   const handleClickOutside = (event) => {
     if (textFieldRef.current && !textFieldRef.current.contains(event.target)) {
       setIsEditing(false);
     }
   };
-
-  // Add event listener for click outside
   React.useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -105,7 +94,7 @@ const ProfileComponent = () => {
           width: "85%",
           maxWidth: "900px",
           backgroundColor: "#2D3748",
-          borderRadius: "22px", // Border radius applied to the profile card
+          borderRadius: "22px", 
           p: 5,
           mt: -10,
           display: "flex",
@@ -125,7 +114,7 @@ const ProfileComponent = () => {
                 backgroundPosition: "center",
                 border: "4px solid #1A202C",
                 boxShadow: "0px 4px 20px rgba(0,0,0,0.5)",
-                objectFit: "cover", // Ensures proper image fit
+                objectFit: "cover",
               }}
               src={avatarImage}
               alt="Richard Davis"
@@ -204,7 +193,7 @@ const ProfileComponent = () => {
                 variant="filled"
                 multiline
                 rows={4}
-                onKeyPress={handleKeyPress} // Detect Enter key
+                onKeyPress={handleKeyPress} 
               />
             ) : (
               <Typography variant="body2" sx={{ color: "white" }}>

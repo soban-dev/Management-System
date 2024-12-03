@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Box, Alert, IconButton, Paper, Typography, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useLocation } from "react-router-dom"; // To check current route
-import axios from "axios"; // Import axios
+import { useLocation } from "react-router-dom"; 
+import axios from "axios"; 
+import { BASE_URL } from "../../config";
 
 const NotificationComponent = () => {
-  const [notifications, setNotifications] = useState([]); // State to store fetched notifications
-  const location = useLocation(); // Get current route location
+  const [notifications, setNotifications] = useState([]); 
+  const location = useLocation(); 
 
   const handleClose = (index) => {
-    setNotifications((prev) => prev.filter((_, i) => i !== index)); // Close specific notification
+    setNotifications((prev) => prev.filter((_, i) => i !== index)); 
   };
 
   const handleVerify = async (id, username) => {
     try {
-      // Sending POST request with id to verify route
       const response = await axios.post("http://localhost:3000/api/admin/verify", { employeeId: id });
-
-      // Check if the response is successful
       if (response.status === 200) {
         alert(`Verification Successful for ${username}`);
       } else {
@@ -28,19 +26,15 @@ const NotificationComponent = () => {
       alert("An error occurred while verifying the user.");
     }
   };
-
-  // Fetch notifications when the component is on /notifications route
   useEffect(() => {
     if (location.pathname === "/notifications") {
       fetchNotifications();
     }
   }, [location]);
-
-  // Function to fetch notifications from the API
   const fetchNotifications = async () => {
     try {
       console.log("Fetching notifications...");
-      const response = await fetch("http://localhost:3000/api/admin/employees");
+      const response = await fetch(`${BASE_URL}/admin/employees`,);
 
       console.log("Response Status:", response.status);
       console.log("Response Headers:", response.headers);
@@ -51,16 +45,14 @@ const NotificationComponent = () => {
 
       const data = await response.json();
       console.log("Fetched Notifications Data:", data);
-
-      // Check if the response has 'unverified' property and it's an array
       if (data.unverified && Array.isArray(data.unverified)) {
         const notifications = data.unverified.map((user) => ({
-          id: user._id, // Include user id
+          id: user._id, 
           username: user.username,
-          message: `Click to verify ${user.username}`, // Custom message
+          message: `Click to verify ${user.username}`, 
         }));
 
-        setNotifications(notifications); // Update state with notifications
+        setNotifications(notifications); 
       } else {
         console.error("Fetched data is not in expected array format.");
       }
@@ -121,9 +113,9 @@ const NotificationComponent = () => {
     fontWeight: "bold",
     boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
     display: "flex",
-    justifyContent: "space-between", // Space between message and button
+    justifyContent: "space-between", 
     alignItems: "center",
-    position: "relative", // For positioning close button
+    position: "relative", 
   }}
   action={
     <IconButton
@@ -164,9 +156,8 @@ const NotificationComponent = () => {
         borderRadius: "8px",
         textTransform: "none",
         marginLeft:'190px',
-        // border:'1px solid #000000',
       }}
-      onClick={() => handleVerify(notification.id, notification.username)} // Pass id and username to handleVerify
+      onClick={() => handleVerify(notification.id, notification.username)} 
     >
       Verify
     </Button>

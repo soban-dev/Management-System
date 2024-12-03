@@ -20,48 +20,40 @@ import { data } from "react-router-dom";
 
 
 const CreateInvoice = ({ onClose }) => {
-  const [searchValue, setSearchValue] = useState(""); // Search input value
-  const [suggestions, setSuggestions] = useState([]); // Suggestions fetched from API
-  const [selectedItem, setSelectedItem] = useState(null); // Selected item details
-  const [itemData, setItemData] = useState([]); // State to store fetched item data
-  const [quantity, setQuantity] = useState(""); // State for input value
-  const [enteredQuantity, setEnteredQuantity] = useState(""); // State for the quantity entered
-  const [invoiceItems, setInvoiceItems] = useState([]); // State to store the list of items in the invoice
-  const inputRef = useRef(null); // Reference to the input field
+  const [searchValue, setSearchValue] = useState(""); 
+  const [suggestions, setSuggestions] = useState([]); 
+  const [selectedItem, setSelectedItem] = useState(null); 
+  const [itemData, setItemData] = useState([]); 
+  const [quantity, setQuantity] = useState(""); 
+  const [enteredQuantity, setEnteredQuantity] = useState(""); 
+  const [invoiceItems, setInvoiceItems] = useState([]); 
+  const inputRef = useRef(null); 
   
-  const [editingIndex, setEditingIndex] = useState(null); // Index of the item being edited
-  const [editingQuantity, setEditingQuantity] = useState(""); // The new quantity to update
+  const [editingIndex, setEditingIndex] = useState(null); 
+  const [editingQuantity, setEditingQuantity] = useState(""); 
   const token= localStorage.getItem('token');
  const handleUpdateItems = async () => {
-  // Create the payload to send to the backend
+ 
   const updateData = invoiceItems.map((item) => ({
     name: item.name,
     quantity: item.quantity,
   }));
   
   try {
-    // Make the API request
     const response = await axios.post(`${BASE_URL}/inventory/updateitem`, {
       updateData,
-        // Authorization:token
       },
       {
-        withCredentials: true, // Ensure cookies are sent
+        withCredentials: true, 
       }
     );
-
-    // Log the response from the server
     console.log("Server Response:", response.data);
-
-    // Optionally, show a success message or refresh the list
     alert("Items updated successfully!");
   } catch (error) {
-    // Log any errors
     console.error("Error updating items:", error);
     alert("Failed to update items. Please try again.");
   }
 };
-  // Fetch suggestions as the user types
   const fetchSuggestions = async (query) => {
     try {
       if (query.length === 0) {
@@ -69,10 +61,9 @@ const CreateInvoice = ({ onClose }) => {
       } else if (query.length > 1) {
         const response = await axios.post(`${BASE_URL}/inventory/searchitem`, {
           name: query,
-          // Authorization:token
         },
         {
-          withCredentials: true, // Ensure cookies are sent
+          withCredentials: true, 
         }
         );
         setSuggestions(response.data);
@@ -86,68 +77,49 @@ const CreateInvoice = ({ onClose }) => {
     setSearchValue(event.target.value);
     fetchSuggestions(event.target.value);
   };
-
-  // Handle suggestion click
   const handleSuggestionClick = (suggestion) => {
     setSearchValue(suggestion.name);
     setSelectedItem(suggestion);
     setSuggestions([]);
     fetchItemDetails(suggestion.name);
   };
-
-  // Fetch item details
   const fetchItemDetails = async (itemName) => {
     try {
       const response = await axios.post(`${BASE_URL}/inventory/fetchitem`, {
         name: itemName,
-        // credentials: "include",
-        // Authorization: token, // Important: This sends cookies with the request
       },
     {
       withCredentials : true
     });
   
       console.log("Fetched Item Details:", response.data);
-  
-      // Add the fetched item to the invoiceItems
       setInvoiceItems((prevItems) => [...prevItems, response.data]);
     } catch (error) {
       console.error("Error fetching item details:", error);
     }
   };
 
-  // Handle the item quantity edit
   const handleEditQuantity = (index, currentQuantity) => {
     setEditingIndex(index);
     setEditingQuantity(currentQuantity);
   };
-
-  // Handle quantity input change
   const handleQuantityChange = (event) => {
     setEditingQuantity(event.target.value);
   };
-
-  // Update the item quantity when "Enter" is pressed
   const handleKeyPress = (event, index) => {
     if (event.key === "Enter") {
       const updatedItems = [...invoiceItems];
       updatedItems[index].quantity = parseInt(editingQuantity);
       setInvoiceItems(updatedItems);
-      setEditingIndex(null); // Exit editing mode
-      setEditingQuantity(""); // Clear input field
+      setEditingIndex(null); 
+      setEditingQuantity("");
     }
   };
-
-  // Toggle visibility of input field to enter quantity
-  // const [isInputVisible, setIsInputVisible] = useState(false);
-
-  // Handle button click to toggle input visibility
   const handleButtonClick = () => {
     setIsInputVisible(true);
   };
 
   useEffect(() => {
-    // Add event listener for outside click to hide input
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -277,7 +249,7 @@ const CreateInvoice = ({ onClose }) => {
     color: "white",
     cursor: "pointer",
     backgroundColor: editingIndex === index ? "#424242" : "transparent",
-    ":hover": { backgroundColor: "#424242" }, // Optional hover effect
+    ":hover": { backgroundColor: "#424242" }, 
   }}
   onClick={() => handleEditQuantity(index, item.quantity)}
 >
@@ -290,14 +262,14 @@ const CreateInvoice = ({ onClose }) => {
       size="small"
       variant="outlined"
       sx={{
-        width: "100px", // Adjust the width
-        height: "40px", // Adjust the height
-        backgroundColor: "#303030", // Background during edit mode
-        color: "white", // Text color
-        borderRadius: "5px", // Rounded corners
+        width: "100px", 
+        height: "40px", 
+        backgroundColor: "#303030", 
+        color: "white", 
+        borderRadius: "5px", 
         input: {
-          color: "white", // Ensures the input text is white
-          textAlign: "center", // Center the text
+          color: "white", 
+          textAlign: "center", 
         },
       }}
     />

@@ -3,12 +3,11 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import CreateInvoice from "./CreateInvoice";
 
 const CreateInvoiceButton = () => {
-  const [open, setOpen] = useState(false); // Modal open/close state
+  const [open, setOpen] = useState(false); 
 
   const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
   const handleClose = () => {
-    setOpen(false); // Close the invoice component
+    setOpen(false); 
   };
 
   return (
@@ -16,9 +15,8 @@ const CreateInvoiceButton = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center", // Center align the content
+        alignItems: "center", 
         justifyContent: "center",
-         // Optional to vertically center on the page
       }}
     >
       {/* Centered Button and Description */}
@@ -61,7 +59,6 @@ const CreateInvoiceButton = () => {
          onClose={handleClose}
          disableAutoFocus
          disableEnforceFocus
-           // Close the modal when backdrop or cross button is clicked
         sx={{
           display: "flex",
           alignItems: "center",
@@ -72,10 +69,9 @@ const CreateInvoiceButton = () => {
   sx={{
     width: "100%",
     maxWidth: 1000,
-    // marginLeft: { xs: "0", md: "220px" }, // Remove marginLeft on tablet and mobile
-    borderRadius: "10px", // Rounded corners
-    padding: { xs: 0, md: 0 }, // Smaller padding for mobile and tablet
-    height: { xs: "auto", sm: "90vh", md: "auto" }, // Adjust height for smaller screens
+    borderRadius: "10px", 
+    padding: { xs: 0, md: 0 }, 
+    height: { xs: "auto", sm: "90vh", md: "auto" }, 
   }}
 >
   <CreateInvoice onClose={handleClose} />

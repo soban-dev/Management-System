@@ -1,8 +1,8 @@
 import React from "react";
 import { Box } from "@mui/material";
-import CreateInvoiceButton from "../../Components/Billing/CreatInvoice/CreateInvoiceButton"; // Create Invoice Button
-import UpdateInvoiceButton from "../../Components/Billing/UpdateInvoice/UpdateInvoiceButton"; // Update Invoice Button
-import Invoices from "../../Components/Billing/Invoices/Invoices"; // Invoices Component
+import CreateInvoiceButton from "../../Components/Billing/CreatInvoice/CreateInvoiceButton"; 
+import UpdateInvoiceButton from "../../Components/Billing/UpdateInvoice/UpdateInvoiceButton"; 
+import Invoices from "../../Components/Billing/Invoices/Invoices"; 
 import UpdateItemButton from "../../Components/Billing/UpdateItem/UpdateItemButton";
 
 export default function BillingContent() {
@@ -10,8 +10,8 @@ export default function BillingContent() {
     <Box
       sx={{
         display: "flex",
-        flexWrap: "wrap", // Wrap content for responsiveness
-        justifyContent: { xs: "center", md: "space-between" }, // Center on mobile, space between on larger screens
+        flexWrap: "wrap", 
+        justifyContent: { xs: "center", md: "space-between" }, 
         alignItems: "flex-start",
         gap: 3,
         padding: 2,
@@ -21,7 +21,7 @@ export default function BillingContent() {
       <Box
         sx={{
           flex: 1,
-          maxWidth: { xs: "100%", sm: "540px" }, // Full width on mobile, reduced on larger screens
+          maxWidth: { xs: "100%", sm: "540px" }, 
           display: "flex",
           flexDirection: "column",
           gap: 2,
@@ -37,7 +37,7 @@ export default function BillingContent() {
             alignItems: "center",
             justifyContent: "center",
             height: "180px",
-            width: "100%", // Full width for responsiveness
+            width: "100%", 
           }}
         >
           <CreateInvoiceButton />
@@ -52,7 +52,7 @@ export default function BillingContent() {
             alignItems: "center",
             justifyContent: "center",
             height: "180px",
-            width: "100%", // Full width for responsiveness
+            width: "100%", 
           }}
         >
           <UpdateInvoiceButton />
@@ -67,7 +67,7 @@ export default function BillingContent() {
             alignItems: "center",
             justifyContent: "center",
             height: "180px",
-            width: "100%", // Full width for responsiveness
+            width: "100%", 
           }}
         >
           <UpdateItemButton />
@@ -78,9 +78,9 @@ export default function BillingContent() {
       <Box
         sx={{
           flex: 2,
-          width: { xs: "100%", sm: "calc(100% - 560px)" }, // Adjust width based on the left column
-          maxWidth: "100%", // Prevent overflow
-          marginTop: { xs: 0, md: 0 }, // Add top margin for mobile view
+          width: { xs: "100%", sm: "calc(100% - 560px)" }, 
+          maxWidth: "100%",
+          marginTop: { xs: 0, md: 0 }, 
         }}
       >
         <Invoices />

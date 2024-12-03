@@ -33,7 +33,7 @@ const CreateInvoice = ({ onClose }) => {
   const [openReceiptModal, setOpenReceiptModal] = useState(false);
 
   const token = localStorage.getItem("token")
-  // Fetch suggestions as the user types
+  
   const fetchSuggestions = async (query) => {
 
 
@@ -44,7 +44,6 @@ const CreateInvoice = ({ onClose }) => {
       } else if (query.length > 1) {
         const response = await axios.post(`${BASE_URL}/inventory/searchitem`, {
           name: query,
-          // Authorization:token
         },
         {
           withCredentials: true, 
@@ -61,8 +60,6 @@ const CreateInvoice = ({ onClose }) => {
     setSearchValue(event.target.value);
     fetchSuggestions(event.target.value);
   };
-
-  // Handle suggestion click
   const handleSuggestionClick = (suggestion) => {
     setSearchValue(suggestion.name);
     setSelectedItem(suggestion);
@@ -73,11 +70,8 @@ const CreateInvoice = ({ onClose }) => {
   // Fetch item details
   const fetchItemDetails = async (itemName) => {
     try {
-      // console.log(credentials)
       const response = await axios.post(`${BASE_URL}/inventory/fetchitem`, {
         name: itemName, 
-        // Authorization:token // Important: This sends cookies with the request
-
       },
       {
         withCredentials: true, 
@@ -88,15 +82,12 @@ const CreateInvoice = ({ onClose }) => {
     }
   };
 
-  // Toggle visibility of input field to enter quantity
   const [isInputVisible, setIsInputVisible] = useState(false);
 
-  // Handle button click to toggle input visibility
   const handleButtonClick = () => {
     setIsInputVisible(true);
   };
 
-  // Handle quantity entry on "Enter" key press
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       if (quantity && selectedItem) {
@@ -128,13 +119,11 @@ const CreateInvoice = ({ onClose }) => {
     }
   };
   
-  // Handle discount change
   const handleDiscountChange = (event) => {
     const discountValue = Math.max(0, Math.min(100, event.target.value)); 
     setDiscount(discountValue);
   };
 
-  // Calculate total with discount
   const calculateTotalWithDiscount = () => {
     const total = invoiceItems.reduce((acc, item) => acc + item.totalAmount, 0);
     return total - (total * discount) / 100;

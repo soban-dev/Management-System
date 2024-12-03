@@ -20,7 +20,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import { Link, useLocation } from "react-router-dom";
 
 function Sidebar({ isOpen, toggleSidebar }) {
-  const location = useLocation(); // Get the current route
+  const location = useLocation(); 
 
   return (
     <>
@@ -28,16 +28,15 @@ function Sidebar({ isOpen, toggleSidebar }) {
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: "none", md: "block" }, // Hide for smaller screens
+          display: { xs: "none", md: "block" },
           "& .MuiDrawer-paper": {
-            width: "250px", // Explicit fixed width
-            maxWidth: "100%", // Prevent overflow
-            backgroundColor: "rgb(32 41 64)", // Sidebar background color
+            width: "250px",
+            maxWidth: "100%", 
+            backgroundColor: "rgb(32 41 64)", 
             color: "#EDEDED",
-            boxSizing: "border-box", // Include padding and border in width
-            overflow: "auto", // Prevent scrollbars
+            boxSizing: "border-box", 
+            overflow: "auto", 
             padding:'19px',
-            // Margin:'10px',
             borderRadius:'15px',
             margin:'6px',
           },
@@ -50,16 +49,16 @@ function Sidebar({ isOpen, toggleSidebar }) {
       <Drawer
         variant="temporary"
         open={isOpen}
-        onClose={toggleSidebar} // Close on backdrop click or menu selection
+        onClose={toggleSidebar} 
         sx={{
-          display: { xs: "block", md: "none" }, // Show only for small screens
+          display: { xs: "block", md: "none" }, 
           "& .MuiDrawer-paper": {
-            width: "250px", // Explicit fixed width
-            maxWidth: "100%", // Prevent overflow
-            backgroundColor: "rgb(32 41 64)", // Sidebar background color
+            width: "250px", 
+            maxWidth: "100%", 
+            backgroundColor: "rgb(32 41 64)", 
             color: "#EDEDED",
-            boxSizing: "border-box", // Include padding and border in width
-            overflow: "hidden", // Prevent scrollbars
+            boxSizing: "border-box", 
+            overflow: "hidden", 
           },
         }}
       >
@@ -72,7 +71,6 @@ function Sidebar({ isOpen, toggleSidebar }) {
 function SidebarContent({ location, toggleSidebar }) {
   const role = localStorage.getItem('role'); 
 // const role = "admin"
-  // Define the menu items with their respective roles
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard", role: "admin" },
     { text: "Create Item", icon: <TableChartIcon />, path: "/tables",role: "admin" },
@@ -80,26 +78,24 @@ function SidebarContent({ location, toggleSidebar }) {
     { text: "Notifications", icon: <NotificationsIcon />, path: "/notifications", role: "admin" },
     { text: "Profile", icon: <PersonIcon />, path: "/profile", role: "user" },
     { text: "Log Out", icon: <LoginIcon />, path: "/sign-in", role: "user" },
-    // { text: "Sign Up", icon: <AppRegistrationIcon />, path: "/sign-up", role: "admin" },
+    { text: "Registration", icon: <AppRegistrationIcon />, path: "/sign-up", role: "admin" },
     
   ];
-
-  // Filter menu items based on role (show all for admin, show only user-related items for user)
   const filteredMenuItems = menuItems.filter(item => {
     if (role === "admin") {
-      return true; // Show all items for admin
+      return true; 
     } else if (role === "user") {
-      return item.role === "user"; // Show only user-related items for user
+      return item.role === "user"; 
     }
-    return false; // In case the role is not recognized
+    return false; 
   });
 
   return (
     <Box
       sx={{
-        height: "100%", // Fill the entire height of the sidebar
+        height: "100%", 
         display: "flex",
-        flexDirection: "column", // Stack items vertically
+        flexDirection: "column", 
       }}
     >
       {/* Logo Section */}
@@ -122,7 +118,7 @@ function SidebarContent({ location, toggleSidebar }) {
             key={item.text}
             component={Link}
             to={item.path}
-            onClick={toggleSidebar} // Close sidebar after selecting a menu item
+            onClick={toggleSidebar}
             sx={{
               color: location.pathname === item.path ? "#FFF" : "#A9A9A9",
               backgroundColor:
