@@ -1,15 +1,63 @@
-import React from "react";
+import React, { useState, useRef,useEffect } from "react";
 import { Box, Typography, Button, List, ListItem, ListItemText, ListItemSecondaryAction } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import axios from "axios";
+import { BASE_URL } from "../../../config";
+
+
 
 function Invoices() {
-  const invoices = [
-    { date: "March, 01, 2020", id: "#MS-415646", amount: "$180" },
-    { date: "February, 10, 2021", id: "#RV-126749", amount: "$250" },
-    { date: "April, 05, 2020", id: "#QW-103578", amount: "$120" },
-    { date: "June, 25, 2019", id: "#MS-415646", amount: "$180" },
-    { date: "March, 01, 2019", id: "#AR-803481", amount: "$300" },
-  ];
+  const [invoiceData, setInvoiceData] = useState({});
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/inventory/fiveinvoice`, {
+          withCredentials: true,
+        });
+        const data = response.data;
+        setInvoiceData(data); // Set data after fetching
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+  
+    fetchProfileData();
+  }, []);
+  
+  console.log(invoiceData);
+  
+  const invoices = invoiceData?.receipts?.map(item => ({
+    date: item.createdAt,
+    id: item._id,
+    amount: item.total,
+  })) || [];
+
+  
+  const viewAll = () => {
+    console.log("View All button clicked");
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/inventory/read`, {
+          withCredentials: true,
+        });
+        const data = response.data;
+        setInvoiceData(data); // Set data after fetching
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+  
+    fetchProfileData();
+
+    const invoices = invoiceData?.receipts?.map(item => ({
+      date: item.createdAt,
+      id: item._id,
+      amount: item.total,
+    })) || [];
+    // Add any functionality here, like navigation or displaying all invoices
+  };
+
 
   return (
     <Box
@@ -48,6 +96,7 @@ function Invoices() {
               borderColor: "#1E90FF",
             },
           }}
+          onClick={viewAll} // onClick event added here
         >
           View All
         </Button>
@@ -79,7 +128,7 @@ function Invoices() {
             {/* Amount and PDF */}
             <ListItemSecondaryAction sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Typography variant="body1" fontWeight="bold">
-                {invoice.amount}
+                ${invoice.amount}
               </Typography>
               <Button
                 startIcon={<PictureAsPdfIcon />}

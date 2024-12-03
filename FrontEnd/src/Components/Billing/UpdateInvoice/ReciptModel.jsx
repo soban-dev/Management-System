@@ -25,9 +25,14 @@ const ReceiptModal = ({
   inventory = [],
   clientName,
   setClientName,
+  oldtotal,
+  invoiceId,
 }) => {
   const [message, setMessage] = useState(""); // To store error or success messages
 const token = localStorage.getItem("token")
+const calculateDifference = () => {
+  return   (calculateTotalAmountWithDiscount() - oldtotal).toFixed(2) ;
+};
   const calculateTotalAmount = () => {
     return inventory.reduce((total, row) => total + row.totalAmount, 0);
   };
@@ -43,17 +48,15 @@ const token = localStorage.getItem("token")
       return;
     }
 
-    const data = {
+console.log(inventory)
+    try {
+      const response = await axios.patch(`${BASE_URL}/inventory/updatereceipt`,
+        {
+          oldinvoice_id: invoiceId,
       percentdiscount: discount ,
       customername: clientName,
       items: inventory,
-      total: calculateTotalAmount(),
-    };
-
-    try {
-      const response = await axios.post(`${BASE_URL}/inventory/invoice`,
-        {
-          data,
+      total: calculateTotalAmount()
         },
         {
           withCredentials: true, 
@@ -182,6 +185,9 @@ const token = localStorage.getItem("token")
         </Typography>
         <Typography variant="h6" align="right" sx={{ mb: 2, color: "white" }}>
           Total After Discount: ${calculateTotalAmountWithDiscount()}
+        </Typography>
+        <Typography variant="h6" align="right" sx={{ mb: 2, color: "white" }}>
+          Credit: ${calculateDifference()}
         </Typography>
 
         {/* Error/Success Message */}

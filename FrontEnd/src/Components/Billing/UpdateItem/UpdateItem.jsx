@@ -40,7 +40,7 @@ const CreateInvoice = ({ onClose }) => {
   }));
   
   try {
-    const response = await axios.post(`${BASE_URL}/inventory/updateitem`, {
+    const response = await axios.patch(`${BASE_URL}/inventory/updateitem`, {
       updateData,
       },
       {

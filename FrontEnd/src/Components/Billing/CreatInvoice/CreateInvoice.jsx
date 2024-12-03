@@ -87,7 +87,6 @@ const CreateInvoice = ({ onClose }) => {
   const handleButtonClick = () => {
     setIsInputVisible(true);
   };
-
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       if (quantity && selectedItem) {
@@ -215,8 +214,8 @@ const CreateInvoice = ({ onClose }) => {
       </Box>
 
       {/* Buttons Row */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "flex-start", justifyContent: "space-between" }}>
-        <Box sx={{ textAlign: "center", width: "150px" }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "flex-start", justifyContent: "space-between",marginRight:'13px', }}>
+        <Box sx={{ textAlign: "center", width: "150px", }}>
           <Button
             variant="contained"
             sx={{
@@ -251,40 +250,26 @@ const CreateInvoice = ({ onClose }) => {
         </Box>
 
         <Box sx={{ textAlign: "center", width: "150px" }}>
-          <Button
-            variant="contained"
-            onClick={handleButtonClick}
-            sx={{
-              backgroundColor: "#1976d2",
-              ":hover": { backgroundColor: "#115293" },
-              height: "50px",
-              width: "100%",
-            }}
-          >
-            Total Quantity
-          </Button>
-          <Box sx={{ mt: 1 }}>
-            {isInputVisible ? (
-              <TextField
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Enter Quantity"
-                sx={{
-                  width: "100%",
-                  backgroundColor: "#424242",
-                  input: { color: "white" },
-                }}
-                autoFocus
-                ref={inputRef}
-              />
-            ) : (
-              <Typography variant="body2" sx={{ color: "white" }}>
-                {enteredQuantity || "Enter a value"}
-              </Typography>
-            )}
-          </Box>
-        </Box>
+  <TextField
+    value={quantity}
+    onChange={(e) => setQuantity(e.target.value)}
+    onKeyPress={handleKeyPress}
+    placeholder="Enter Quantity"
+    sx={{
+      width: "100%",
+      backgroundColor: "#424242",
+      input: { color: "white" },
+    }}
+    autoFocus
+    ref={inputRef}
+  />
+  {/* <Box sx={{ mt: 1 }}>
+    <Typography variant="body2" sx={{ color: "white" }}>
+      {enteredQuantity || "Enter a value"}
+    </Typography>
+  </Box> */}
+</Box>
+
       </Box>
 
       {/* Invoice Table */}

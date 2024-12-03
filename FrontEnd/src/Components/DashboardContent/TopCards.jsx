@@ -5,13 +5,15 @@ import { BASE_URL } from "../../config";
 
 
 
-export default function TopCards() {
+export default function TopCards({dateValue,}) {
   const [cardData, setCardData] = useState({
     totalProfit: null,
     itemSold: null,
     numberOfProducts: null,
     totalStock: null,
   });
+  console.log("meri datee ",dateValue);
+  
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef,useEffect } from "react";
 import { Box, Grid,} from "@mui/material";
 
 import TopCards from "../../Components/DashboardContent/TopCards";
@@ -9,12 +9,21 @@ import CustomDateRangePicker from "../../Components/DashboardContent/DatePicker"
 
 
 function DashboardContent() {
- 
+  const [datevalue, setDateValue] = useState();
+  const [datevalue2, setDateValue2] = useState();
+  // setDateValue2(datevalue);
+  console.log("mera asad",datevalue);
+  
   return (
     <Box>
       {/* Top Row Cards */}
-      <CustomDateRangePicker/>
-      <TopCards/>
+      <CustomDateRangePicker
+      datevalue={datevalue}
+      setDateValue={setDateValue}
+      />
+      <TopCards
+      datevalue={datevalue}
+      />
        {/* Charts */}
        <Charts/>
       {/* Bottom Section */}

@@ -38,27 +38,24 @@ const CreateInvoice = ({ onClose }) => {
   const [invoiceData, setInvoiceData] = useState(null);
 
 
-  const handleKeyPress1 = async (event, invoiceItems, ) => {
+  const handleKeyPress1 = async (event, invoiceItems) => {
     if (event.key === "Enter") {
-      event.preventDefault(); // Prevent form submission on Enter key press
-      event.target.blur(); // Remove focus from the input field
+      event.preventDefault(); 
+      event.target.blur(); 
   
-      // Ensure invoiceItems is an array
       const items = Array.isArray(invoiceItems) ? invoiceItems : [];
-      console.log("Invoice ID:", invoiceId);
-
   
-      // Null ya undefined check for invoiceId
       if (invoiceId && invoiceId.trim() !== "") {
         try {
           // Backend se GET request
           const response = await fetch(`${BASE_URL}/inventory/invoiceid/${invoiceId}`);
-          const data = await response.json(); // JSON response ko parse karna
-  
+          const data = await response.json();  // JSON response ko parse karna
+          // Invoice items ko access karna
+          const fetchedItems = data.invoice.items;  // Correct path
+          setOldTotal(data.invoice.total);
           const updatedInvoiceItems = [...items];
-  
-          // Loop through the fetched items and add them to the invoiceItems
-          data.forEach((fetchedItem) => {
+          // Loop through the fetched items and update/add them in invoiceItems
+          fetchedItems.forEach((fetchedItem) => {
             const existingItemIndex = updatedInvoiceItems.findIndex(
               (item) => item.name === fetchedItem.name
             );
@@ -70,16 +67,16 @@ const CreateInvoice = ({ onClose }) => {
                 updatedInvoiceItems[existingItemIndex].price;
             } else {
               const newItem = {
-                name: fetchedItem.name,
-                price: fetchedItem.selling_price_per_unit,
-                quantity: fetchedItem.quantity,
-                totalAmount: fetchedItem.quantity * fetchedItem.selling_price_per_unit,
+                name: fetchedItem.name,  // Item ka naam
+                price: fetchedItem.price / fetchedItem.quantity,  // Backend response ka price field
+                quantity: fetchedItem.quantity,  // Quantity of the item
+                totalAmount:  fetchedItem.price,  // Total amount
               };
-              updatedInvoiceItems.push(newItem);
+              updatedInvoiceItems.push(newItem);  // Naye item ko list mein add karna
             }
           });
   
-          setInvoiceItems(updatedInvoiceItems);
+          setInvoiceItems(updatedInvoiceItems);  // Invoice items list ko update karna
         } catch (error) {
           console.error("Error fetching invoice data:", error);
         }
@@ -88,7 +85,7 @@ const CreateInvoice = ({ onClose }) => {
       }
     }
   };
-  
+  console.log(oldtotal)
   
   
   
@@ -213,6 +210,7 @@ const CreateInvoice = ({ onClose }) => {
     updatedItems.splice(index, 1); 
     setInvoiceItems(updatedItems);
   };
+  console.log(invoiceItems)
 
   console.log(invoiceId)
 
@@ -323,7 +321,7 @@ const CreateInvoice = ({ onClose }) => {
       </Box>
 
       {/* Buttons Row */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "flex-start", justifyContent: "space-between" }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "flex-start", justifyContent: "space-between",marginRight:'13px',}}>
         <Box sx={{ textAlign: "center", width: "150px" }}>
           <Button
             variant="contained"
@@ -359,40 +357,26 @@ const CreateInvoice = ({ onClose }) => {
         </Box>
 
         <Box sx={{ textAlign: "center", width: "150px" }}>
-          <Button
-            variant="contained"
-            onClick={handleButtonClick}
-            sx={{
-              backgroundColor: "#1976d2",
-              ":hover": { backgroundColor: "#115293" },
-              height: "50px",
-              width: "100%",
-            }}
-          >
-            Total Quantity
-          </Button>
-          <Box sx={{ mt: 1 }}>
-            {isInputVisible ? (
-              <TextField
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Enter Quantity"
-                sx={{
-                  width: "100%",
-                  backgroundColor: "#424242",
-                  input: { color: "white" },
-                }}
-                autoFocus
-                ref={inputRef}
-              />
-            ) : (
-              <Typography variant="body2" sx={{ color: "white" }}>
-                {enteredQuantity || "Enter a value"}
-              </Typography>
-            )}
-          </Box>
-        </Box>
+  <TextField
+    value={quantity}
+    onChange={(e) => setQuantity(e.target.value)}
+    onKeyPress={handleKeyPress}
+    placeholder="Enter Quantity"
+    sx={{
+      width: "100%",
+      backgroundColor: "#424242",
+      input: { color: "white" },
+    }}
+    autoFocus
+    ref={inputRef}
+  />
+  {/* <Box sx={{ mt: 1 }}>
+    <Typography variant="body2" sx={{ color: "white" }}>
+      {enteredQuantity || "Enter a value"}
+    </Typography>
+  </Box> */}
+</Box>
+
       </Box>
 
       {/* Invoice Table */}
@@ -481,6 +465,7 @@ const CreateInvoice = ({ onClose }) => {
         inventory={invoiceItems}
         clientName={clientName}
         invoiceId={invoiceId}
+        oldtotal={oldtotal}
         setClientName={setClientName}
       />
       </Box>
