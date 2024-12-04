@@ -33,18 +33,18 @@ const NotificationComponent = () => {
   }, [location]);
   const fetchNotifications = async () => {
     try {
-      console.log("Fetching notifications...");
+      // console.log("Fetching notifications...");
       const response = await fetch(`${BASE_URL}/admin/employees`,);
 
-      console.log("Response Status:", response.status);
-      console.log("Response Headers:", response.headers);
+      // console.log("Response Status:", response.status);
+      // console.log("Response Headers:", response.headers);
 
       if (!response.ok) {
         throw new Error("Failed to fetch notifications");
       }
 
       const data = await response.json();
-      console.log("Fetched Notifications Data:", data);
+      // console.log("Fetched Notifications Data:", data);
       if (data.unverified && Array.isArray(data.unverified)) {
         const notifications = data.unverified.map((user) => ({
           id: user._id, 

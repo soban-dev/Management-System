@@ -48,7 +48,7 @@ const calculateDifference = () => {
       return;
     }
 
-console.log(inventory)
+// console.log(inventory)
     try {
       const response = await axios.patch(`${BASE_URL}/inventory/updatereceipt`,
         {

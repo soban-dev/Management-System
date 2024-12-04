@@ -35,7 +35,7 @@ export default function Overview() {
     
         fetchData(); 
       }, []);
-      console.log(cardData);
+      // console.log(cardData);
       
 
   return (

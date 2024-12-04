@@ -47,7 +47,7 @@ const CreateInvoice = ({ onClose }) => {
         withCredentials: true, 
       }
     );
-    console.log("Server Response:", response.data);
+    // console.log("Server Response:", response.data);
     alert("Items updated successfully!");
   } catch (error) {
     console.error("Error updating items:", error);
@@ -92,7 +92,7 @@ const CreateInvoice = ({ onClose }) => {
       withCredentials : true
     });
   
-      console.log("Fetched Item Details:", response.data);
+      // console.log("Fetched Item Details:", response.data);
       setInvoiceItems((prevItems) => [...prevItems, response.data]);
     } catch (error) {
       console.error("Error fetching item details:", error);

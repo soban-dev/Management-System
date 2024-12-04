@@ -127,7 +127,7 @@ export default function EmployRegistration() {
 
     try {
       const response = await axios.post(`${BASE_URL}/auth/signup`, formData);
-      console.log("Server Response:", response.data); 
+      // console.log("Server Response:", response.data); 
 
       if (response.data.success) {
        

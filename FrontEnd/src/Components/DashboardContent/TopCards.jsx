@@ -17,14 +17,14 @@ export default function TopCards({datevalue,datevalue2}) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("startdate ",datevalue);
-      console.log("enddate ",datevalue2);
+      // console.log("startdate ",datevalue);
+      // console.log("enddate ",datevalue2);
       if (datevalue && datevalue2) {
         try {
           const response = await axios.get(
             `${BASE_URL}/admin/dashboard?startDate=${datevalue}&endDate=${datevalue2}`
           );
-          console.log("Backend Response:", response.data);
+          // console.log("Backend Response:", response.data);
 
           setCardData({
             totalProfit: response.data?.totalProfit || 0,
@@ -44,10 +44,10 @@ export default function TopCards({datevalue,datevalue2}) {
     fetchData(); // Trigger fetch when dates change
   }, [datevalue, datevalue2]);
   const defaultCards = [
-    { title: "Total Profit", value: cardData.totalProfit || "$281", percent: "+55%", description: "than last week", color: "#1E90FF" },
-    { title: "Item Sold", value: cardData.itemSold || "360", percent: "+3%", description: "than last month", color: "#36A2EB" },
-    { title: "No. of Products", value: cardData.numberOfProducts || "+34", percent: "+1%", description: "than yesterday", color: "#4CAF50" },
-    { title: "Total Stock", value: cardData.totalStock || "+91", description: "Just updated", color: "#E91E63" },
+    { title: "Total Profit", value: cardData.totalProfit || "$0", percent: "+55%", description: "than last week", color: "#1E90FF" },
+    { title: "Item Sold", value: cardData.itemSold || "0", percent: "+3%", description: "than last month", color: "#36A2EB" },
+    { title: "No. of Products", value: cardData.numberOfProducts || "+0", percent: "+1%", description: "than yesterday", color: "#4CAF50" },
+    { title: "Total Stock", value: cardData.totalStock || "+0", description: "Just updated", color: "#E91E63" },
   ];
 
   return (

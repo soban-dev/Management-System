@@ -42,6 +42,7 @@ function Invoices() {
       });
       
       const data = response.data;
+      
       // Update invoiceData with the correct structure
       setInvoiceData({
         receipts: data.result || [],  // Assuming the API returns the data in `result`
@@ -97,7 +98,8 @@ function Invoices() {
       </Box>
 
       {/* Invoices List */}
-      <List>
+      <List sx={{maxHeight:'440px',
+              overflow:'auto',}}>
         {invoices.map((invoice, index) => (
           <ListItem
             key={index}
@@ -106,7 +108,9 @@ function Invoices() {
               justifyContent: "space-between",
               alignItems: "center",
               padding: "8px 0",
+              
               borderBottom: index !== invoices.length - 1 ? "1px solid rgba(255, 255, 255, 0.1)" : "none",
+              
             }}
           >
             {/* Invoice Info */}

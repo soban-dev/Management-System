@@ -322,7 +322,7 @@ const CreateInvoice = ({ onClose }) => {
     if (event.key === "Enter") {
       event.preventDefault(); 
       event.target.blur(); 
-      console.log("Discount value updated:", discount); 
+      // console.log("Discount value updated:", discount); 
     }
   }}
   sx={{

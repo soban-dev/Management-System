@@ -45,7 +45,7 @@ const CreateProduct = () => {
       {
         withCredentials: true, 
       });
-      console.log("Backend Response:", response.data);
+      // console.log("Backend Response:", response.data);
     } catch (error) {
       console.error("Error sending data:", error);
     }

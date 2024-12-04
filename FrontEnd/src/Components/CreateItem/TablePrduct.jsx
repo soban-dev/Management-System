@@ -66,7 +66,7 @@ const TableProduct = () => {
         const response = await axios.get(`${BASE_URL}/inventory/read`, {
           withCredentials: true,
         });
-        console.log("Backend Response mera:", response.data);
+        // console.log("Backend Response mera:", response.data);
         setCardData({
          result: response.data.result
         });

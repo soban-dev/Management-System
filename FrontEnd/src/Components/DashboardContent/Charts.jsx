@@ -44,14 +44,14 @@ export default function Charts() {
           },
         });
 
-        console.log("Backend Response:", response.data);
+        // console.log("Backend Response:", response.data);
         if (response.data?.sevendaysStats?.length > 0) {
           const array = response.data.sevendaysStats;
-            console.log(array);
+            // console.log(array);
           const salesData = array.map(item => item.perdaySales || 0);
           const revenueData = array.map(item => item.perdayRevenue || 0);
           const itemsSoldData = array.map(item => item.perdaySaleAmount || 0);
-         console.log(salesData);
+        //  console.log(salesData);
          
           setCardData({
             sales: salesData,

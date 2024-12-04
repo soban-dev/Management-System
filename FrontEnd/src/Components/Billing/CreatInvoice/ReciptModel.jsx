@@ -54,7 +54,7 @@ const token = localStorage.getItem("token")
         }
       );
 
-      console.log("Backend Response:", response.data);
+      // console.log("Backend Response:", response.data);
       setMessage("Receipt generated successfully!");
     } catch (error) {
       console.error("Error generating receipt:", error);

@@ -85,7 +85,7 @@ const CreateInvoice = ({ onClose }) => {
       }
     }
   };
-  console.log(oldtotal)
+  // console.log(oldtotal)
   
   
   
@@ -210,9 +210,9 @@ const CreateInvoice = ({ onClose }) => {
     updatedItems.splice(index, 1); 
     setInvoiceItems(updatedItems);
   };
-  console.log(invoiceItems)
+  // console.log(invoiceItems)
 
-  console.log(invoiceId)
+  // console.log(invoiceId)
 
   return (
     <Box
@@ -430,7 +430,7 @@ const CreateInvoice = ({ onClose }) => {
     if (event.key === "Enter") {
       event.preventDefault(); // Prevent default Enter behavior
       event.target.blur(); // Remove focus from the TextField
-      console.log("Discount value updated:", discount); // Debug or handle value
+      // console.log("Discount value updated:", discount); // Debug or handle value
     }
   }}
   sx={{

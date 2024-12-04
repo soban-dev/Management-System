@@ -41,7 +41,7 @@ const ProfileComponent = () => {
 
     fetchProfileData();
   }, []);
- console.log(profileData)
+//  console.log(profileData)
   const handleEditClick = () => {
     setIsEditing(true);
   };

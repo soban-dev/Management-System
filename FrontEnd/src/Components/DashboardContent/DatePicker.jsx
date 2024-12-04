@@ -28,7 +28,7 @@ export default function CustomDateRangePicker({dateValue,setDateValue,setDateVal
   setDateValue(startDateFormatted);
   setDateValue2(endDateFormatted);
   
-  console.log("Date Range:", dateRange);  
+  // console.log("Date Range:", dateRange);  
   
   
 

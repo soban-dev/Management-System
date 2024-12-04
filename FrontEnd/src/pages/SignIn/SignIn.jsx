@@ -88,7 +88,7 @@ export default function SignIn() {
     e.preventDefault();
     const usersArray = [];
     usersArray.push({ username: formData.username, password: formData.password });
-    console.log("Saved User:", usersArray);
+    // console.log("Saved User:", usersArray);
     try {
       const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
@@ -101,7 +101,7 @@ export default function SignIn() {
       );
   
       const result = await response.json();
-      console.log("Response from backend213:", result);
+      // console.log("Response from backend213:", result);
       localStorage.setItem("token", result.token) 
       if (result.success === true) {
         // Store the role in localStorage or sessionStorage
@@ -114,7 +114,7 @@ export default function SignIn() {
             // result.role='admin'
         if (result.role === "admin") {
           navigate("/dashboard");
-          console.log(result.role)
+          // console.log(result.role)
         } else if(result.role === "employee"){
           navigate("/billing");
         }
