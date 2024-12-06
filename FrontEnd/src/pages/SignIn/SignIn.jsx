@@ -77,6 +77,7 @@ const FormBox = styled(Box)({
 
 export default function SignIn() {
   const [formData, setFormData] = useState({ username: "", password: "" }); 
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -101,7 +102,7 @@ export default function SignIn() {
       );
   
       const result = await response.json();
-      // console.log("Response from backend213:", result);
+      console.log("Response from backend213:", result);
       localStorage.setItem("token", result.token) 
       if (result.success === true) {
         // Store the role in localStorage or sessionStorage
@@ -120,6 +121,7 @@ export default function SignIn() {
         }
       } else {
         console.log("Login failed", result.message);
+        setErrorMessage(result.message);
       }
     } catch (error) {
       console.error("Error:", error); 
@@ -188,7 +190,18 @@ export default function SignIn() {
               }}
             >
               SIGN IN
-            </Button>
+            </Button>      
+              <Typography
+                variant="body2"
+                align="center"
+                sx={{
+                  color: "red", 
+                  marginBottom: 2,
+                }}
+              >
+                {errorMessage}
+              </Typography>
+            
             <Typography
               variant="body2"
               align="center"

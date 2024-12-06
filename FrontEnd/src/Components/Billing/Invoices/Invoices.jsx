@@ -8,6 +8,7 @@ import { BASE_URL } from "../../../config";
 
 function Invoices() {
   const [invoiceData, setInvoiceData] = useState({});
+  const [showAllInvoices, setShowAllInvoices] = useState({});
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -37,15 +38,13 @@ function Invoices() {
   const viewAll = async () => {
     console.log("View All button clicked");
     try {
-      const response = await axios.get(`${BASE_URL}/inventory/read`, {
+      const response = await axios.get(`${BASE_URL}/inventory/allinvoice`, {
         withCredentials: true,
-      });
-      
-      const data = response.data;
+      });      
       
       // Update invoiceData with the correct structure
       setInvoiceData({
-        receipts: data.result || [],  // Assuming the API returns the data in `result`
+        receipts: response.data.formattedReceipts || [],  // Assuming the API returns the data in `result`
       });
       setShowAllInvoices(true); // Show all invoices
     } catch (error) {
@@ -91,7 +90,7 @@ function Invoices() {
               borderColor: "#1E90FF",
             },
           }}
-          // onClick={viewAll} // onClick event added here
+          onClick={viewAll} // onClick event added here
         >
           View All
         </Button>

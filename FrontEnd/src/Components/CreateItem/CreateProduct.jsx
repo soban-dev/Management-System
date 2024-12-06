@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Box, TextField, Typography, Button } from "@mui/material";
 import axios from "axios"; 
 import { BASE_URL } from "../../config";
-const token = localStorage.getItem("token")
+
 const CreateProduct = () => {
   const [clientName, setClientName] = useState("");
   const [price, setPrice] = useState(""); 
@@ -10,6 +10,8 @@ const CreateProduct = () => {
   const [buyingPrice, setBuyingPrice] = useState(""); 
   const [requiredQuantity, setRequiredQuantity] = useState(""); 
   const [productData, setProductData] = useState([]); 
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const priceInput = useRef(null);
   const quantityInput = useRef(null);
@@ -34,20 +36,31 @@ const CreateProduct = () => {
     setProductData((prevData) => [...prevData, newProduct]);
 
     try {
-      const response = await axios.post(`${BASE_URL}/inventory/createitem`,{ name :newProduct.name, 
-
-        quantity :newProduct.quantity,
-        required_quantity :newProduct.required_quantity,
-        buying_price_per_unit:newProduct.buying_price_per_unit,
-        selling_price_per_unit :newProduct.selling_price_per_unit,
-
-      },
-      {
+      const response = await axios.post(`${BASE_URL}/inventory/createitem`, { 
+        name: newProduct.name,
+        quantity: newProduct.quantity,
+        required_quantity: newProduct.required_quantity,
+        buying_price_per_unit: newProduct.buying_price_per_unit,
+        selling_price_per_unit: newProduct.selling_price_per_unit,
+      }, {
         withCredentials: true, 
       });
-      // console.log("Backend Response:", response.data);
+      console.log("Backend Response: ", response.data.message);
+      setSuccessMessage(response.data.message);
+      setErrorMessage(""); // Clear any previous error message
+
+      // Clear input fields on successful submission
+      setClientName("");
+      setPrice("");
+      setQuantity("");
+      setBuyingPrice("");
+      setRequiredQuantity("");
+
     } catch (error) {
-      console.error("Error sending data:", error);
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred.";
+      console.error("Error sending data:", errorMessage);
+      setErrorMessage(errorMessage);
+      setSuccessMessage(""); // Clear any previous success message
     }
   };
 
@@ -195,11 +208,40 @@ const CreateProduct = () => {
             padding: "10px 20px",
             width: "70%",
             mt: 3,
-            maxWidth:'340px',
+            maxWidth: '340px',
           }}
         >
           Add Product
         </Button>
+
+        {/* Error and Success Message */}
+        {errorMessage && (
+          <Typography
+            variant="body2"
+            align="center"
+            sx={{
+              color: "red",
+              marginBottom: 2,
+              marginTop: 2,
+            }}
+          >
+            {errorMessage}
+          </Typography>
+        )}
+
+        {successMessage && (
+          <Typography
+            variant="body2"
+            align="center"
+            sx={{
+              color: "green",
+              marginBottom: 2,
+              marginTop: 2,
+            }}
+          >
+            {successMessage}
+          </Typography>
+        )}
       </Box>
     </Box>
   );

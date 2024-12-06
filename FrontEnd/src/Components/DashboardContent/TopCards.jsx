@@ -7,10 +7,10 @@ import { BASE_URL } from "../../config";
 
 export default function TopCards({datevalue,datevalue2}) {
   const [cardData, setCardData] = useState({
-    totalProfit: null,
-    itemSold: null,
-    numberOfProducts: null,
-    totalStock: null,
+    Sales: null,
+    Profit: null,
+    Revenue: null,
+    ItemSold: null,
   });
  
   
@@ -27,10 +27,10 @@ export default function TopCards({datevalue,datevalue2}) {
           // console.log("Backend Response:", response.data);
 
           setCardData({
-            totalProfit: response.data?.totalProfit || 0,
-            itemSold: response.data?.totalSoldQuantity || 0,
-            numberOfProducts: response.data?.ItemsinStock || 0,
-            totalStock: response.data?.ItemsQuantity || 0,
+            Sales: response.data?.totalSales || 0,
+            Profit: response.data?.totalProfit || 0,
+            Revenue: response.data?.totalRevenuePotential || 0,
+            ItemSold: response.data?.totalSoldQuantity || 0,
           });
           
         } catch (error) {
@@ -44,10 +44,10 @@ export default function TopCards({datevalue,datevalue2}) {
     fetchData(); // Trigger fetch when dates change
   }, [datevalue, datevalue2]);
   const defaultCards = [
-    { title: "Total Profit", value: cardData.totalProfit || "$0", percent: "+55%", description: "than last week", color: "#1E90FF" },
-    { title: "Item Sold", value: cardData.itemSold || "0", percent: "+3%", description: "than last month", color: "#36A2EB" },
-    { title: "No. of Products", value: cardData.numberOfProducts || "+0", percent: "+1%", description: "than yesterday", color: "#4CAF50" },
-    { title: "Total Stock", value: cardData.totalStock || "+0", description: "Just updated", color: "#E91E63" },
+    { title: "TotalSales", value:`Rs: ${cardData.Sales}`   || "$0",  description: `from ${datevalue} \n to ${datevalue2}`, color: "#1E90FF" },
+    { title: "Profit", value: `Rs: ${cardData.Profit}` || "0", description: `from ${datevalue} \n to ${datevalue2}`, color: "#36A2EB" },
+    { title: "Revenue Potential", value: `Rs: ${cardData.Revenue}` || "+0",  description: `Potential of Revenue on all Items.`, color: "#4CAF50" },
+    { title: "ItemSold", value: ` ${cardData.ItemSold}` || "+0", description: `from ${datevalue} \n to ${datevalue2}`, color: "#E91E63" },
   ];
 
   return (
@@ -65,13 +65,13 @@ export default function TopCards({datevalue,datevalue2}) {
           >
             <Box display="flex" justifyContent="space-between">
               <Box>
-                <Typography variant="h6" sx={{ fontSize: "16px" }}>
+                <Typography variant="h6" sx={{ fontSize: "13px" }}>
                   {item.title}
                 </Typography>
-                <Typography variant="h4" sx={{ fontSize: "24px", fontWeight: "bold" }}>
+                <Typography variant="h4" sx={{ fontSize: "16px", fontWeight: "bold" }}>
                   {item.value}
                 </Typography>
-                <Typography variant="body2" sx={{ color: "#4CAF50" }}>
+                <Typography variant="body2" sx={{ fontSize: "11px", color: "#4CAF50" }}>
                   {item.percent} {item.description}
                 </Typography>
               </Box>

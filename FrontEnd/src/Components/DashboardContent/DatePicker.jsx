@@ -1,14 +1,16 @@
-import * as React from 'react';
+import React from 'react';
 import dayjs from 'dayjs';
-import { Box, TextField } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Box, TextField } from '@mui/material';
 
-export default function CustomDateRangePicker({dateValue,setDateValue,setDateValue2}) {
-  const [startDate, setStartDate] = React.useState(dayjs()); 
-  const [endDate, setEndDate] = React.useState(dayjs().add(1, 'day')); 
+export default function CustomDateRangePicker({ dateValue, setDateValue, setDateValue2 }) {
+  // State for Start Date and End Date
+  const [startDate, setStartDate] = React.useState(dayjs().startOf('year').add(1, 'day')); 
+  const [endDate, setEndDate] = React.useState(dayjs()); 
 
+  
   // Start Date change handler
   const handleStartDateChange = (newValue) => {
     setStartDate(newValue);

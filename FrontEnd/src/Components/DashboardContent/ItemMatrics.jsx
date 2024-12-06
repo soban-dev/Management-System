@@ -80,10 +80,10 @@ const token = localStorage.getItem("token");
       </Typography>
       <Box>
         {[
-          { name: "Items Quantity",budget:`$${cardData.ItemsQuantity}` ||"$14,000", completion: 80 },
-          { name: "Items In Stock",budget:cardData.ItemsinStock || "$3,000", completion: 50 },
-          { name: "Items in High Quantity", budget:cardData.inHighStock || "Not set", completion: 100 },
-          { name: "Items in Low Quantity", budget: cardData.inLowStock ||"$20,500", completion: 100 },
+          { name: "Items Quantity",budget:`${cardData.ItemsQuantity}` ||"$14,000", completion: 100 },
+          { name: "Items In Stock",budget:cardData.ItemsinStock || "$3,000", completion: 100},
+          { name: "Items in High Quantity", budget:cardData.inHighStock || "Not set", completion: cardData.inHighStock / cardData.ItemsinStock * 100},
+          { name: "Items in Low Quantity", budget: cardData.inLowStock ||"0", completion: cardData.inHighStock / cardData.ItemsQuantity * 100 || 0 },
           { name: "Total Purchase of Items",budget:cardData.TotalPurchaseonItems || "$500", completion: 40 },
           { name: "Total Revenue Potential",budget:cardData.totalRevenuePotential || "$500", completion: 40 },
         ].map((project, index) => (
