@@ -9,14 +9,15 @@ import {
   FormControlLabel,
   CssBaseline,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Book";
 import GitHubIcon from "@mui/icons-material/Badge";
 import GoogleIcon from "@mui/icons-material/Person";
 import { styled } from "@mui/system";
-import { Link, useNavigate } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom";
 import backgroundImage from "../../assets/bg-sign-up-cover.jpeg";
-import axios from "axios"; 
+import axios from "axios";
 import { BASE_URL } from "../../config";
 
 const BackgroundBox = styled(Box)({
@@ -41,7 +42,7 @@ const StyledContainer = styled(Box)({
   position: "relative",
 });
 
-const HeaderBox = styled(Box)(({ theme }) => ({
+const HeaderBox = styled(Box)({
   position: "absolute",
   top: "-47px",
   left: "50%",
@@ -55,32 +56,15 @@ const HeaderBox = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  padding: "13px 75px", 
+  padding: "13px 75px",
+});
 
-  [theme.breakpoints.down("lg")]: {
-    padding: "36px 62px",
-  },
-
-  [theme.breakpoints.down("sm")]: {
-    padding: "36px 20px",
-  },
-}));
-
-const SocialButtonsBox = styled(Box)(({ theme }) => ({
+const SocialButtonsBox = styled(Box)({
   display: "flex",
   justifyContent: "center",
   gap: "16px",
   marginTop: "10px",
-
- 
-  [theme.breakpoints.up("lg")]: { 
-    display: "flex",
-  },
-  [theme.breakpoints.down("lg")]: {
-    display: "none",
-  },
-}));
-
+});
 
 const SocialButton = styled(Avatar)({
   backgroundColor: "white",
@@ -109,10 +93,30 @@ export default function EmployRegistration() {
     password: "",
     phone: "",
     address: "",
-    cnic: "",
   });
+  const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); 
+  const validate = () => {
+    let tempErrors = {};
+    tempErrors.name = formData.name ? "" : "Name is required.";
+    tempErrors.username = formData.username ? "" : "Username is required.";
+    tempErrors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+      ? ""
+      : "Invalid email format.";
+    tempErrors.password =
+      formData.password.length >= 8
+        ? ""
+        : "Password must be at least 8 characters.";
+        tempErrors.phone = /^[0-9]{11}$/.test(formData.phone)
+        ? ""
+        : "Phone must be an 11-digit number.";
+    tempErrors.address = formData.address ? "" : "Address is required.";
+    setErrors(tempErrors);
+    return Object.values(tempErrors).every((error) => error === "");
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -124,20 +128,22 @@ export default function EmployRegistration() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
 
+    setLoading(true);
+    setServerError(""); // Reset server error before submitting
     try {
       const response = await axios.post(`${BASE_URL}/auth/signup`, formData);
-      // console.log("Server Response:", response.data); 
-
       if (response.data.success) {
-       
+        setLoading(false);
         navigate("/sign-in");
       } else {
-        alert("Signup failed. Please try again.");
+        setLoading(false);
+        setServerError("Signup failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("An error occurred. Please try again.");
+      setLoading(false);
+      setServerError(error.response?.data?.message || "An error occurred. Please try again.");
     }
   };
 
@@ -176,6 +182,8 @@ export default function EmployRegistration() {
                     autoComplete="name"
                     value={formData.name}
                     onChange={handleChange}
+                    error={Boolean(errors.name)}
+                    helperText={errors.name}
                     autoFocus
                   />
                   <TextField
@@ -187,7 +195,8 @@ export default function EmployRegistration() {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    autoComplete="username"
+                    error={Boolean(errors.username)}
+                    helperText={errors.username}
                   />
                   <TextField
                     margin="normal"
@@ -198,7 +207,8 @@ export default function EmployRegistration() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    autoComplete="email"
+                    error={Boolean(errors.email)}
+                    helperText={errors.email}
                   />
                   <TextField
                     margin="normal"
@@ -210,7 +220,8 @@ export default function EmployRegistration() {
                     id="password"
                     value={formData.password}
                     onChange={handleChange}
-                    autoComplete="current-password"
+                    error={Boolean(errors.password)}
+                    helperText={errors.password}
                   />
                 </Grid>
 
@@ -224,7 +235,8 @@ export default function EmployRegistration() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    autoComplete="phone"
+                    error={Boolean(errors.phone)}
+                    helperText={errors.phone}
                   />
                   <TextField
                     margin="normal"
@@ -235,18 +247,8 @@ export default function EmployRegistration() {
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    autoComplete="address"
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="cnic"
-                    label="CNIC"
-                    name="cnic"
-                    value={formData.cnic}
-                    onChange={handleChange}
-                    autoComplete="cnic"
+                    error={Boolean(errors.address)}
+                    helperText={errors.address}
                   />
                   <FormControlLabel
                     control={<Switch color="primary" />}
@@ -263,15 +265,31 @@ export default function EmployRegistration() {
               variant="contained"
               sx={{
                 marginTop: 2,
-                marginBottom: 2,
                 padding: "10px",
                 backgroundColor: "#1976d2",
                 fontWeight: "bold",
                 borderRadius: "10px",
               }}
+              disabled={loading}
             >
-              REGISTER
+              {loading ? <CircularProgress size={24} color="inherit" /> : "REGISTER"}
             </Button>
+
+            {/* Backend Error Below Button */}
+            {serverError && (
+              <Typography
+                variant="body2"
+                color="error"
+                sx={{
+                  marginTop: 1,
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                {serverError}
+              </Typography>
+            )}
+
             <Typography
               variant="body2"
               align="center"

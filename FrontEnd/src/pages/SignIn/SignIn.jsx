@@ -8,6 +8,7 @@ import {
   Switch,
   FormControlLabel,
   CssBaseline,
+  CircularProgress,
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Book";
 import GitHubIcon from "@mui/icons-material/Badge";
@@ -76,20 +77,43 @@ const FormBox = styled(Box)({
 });
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({ username: "", password: "" }); 
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
+  const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = useState(false); // Loader state
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value }); 
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const usersArray = [];
-    usersArray.push({ username: formData.username, password: formData.password });
-    // console.log("Saved User:", usersArray);
+
+    // Reset errors
+    let tempErrors = {};
+
+    // Validate Username (Length Check)
+    if (formData.username.length < 3) {
+      tempErrors.username = "Username must be at least 3 characters.";
+    }
+
+    // Validate Password (Regex Check)
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      tempErrors.password =
+        "Password must be at least 8 characters, including uppercase, lowercase, a number, and a symbol.";
+    }
+
+    // If there are any validation errors, return early
+    if (Object.keys(tempErrors).length > 0) {
+      setFormErrors(tempErrors);
+      return;
+    }
+
+    setLoading(true); // Start loading when the form is submitted
+
     try {
       const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
@@ -98,35 +122,32 @@ export default function SignIn() {
         },
         body: JSON.stringify(formData),
         credentials: 'include',
-      },
-      );
-  
+      });
+
       const result = await response.json();
-      console.log("Response from backend213:", result);
-      localStorage.setItem("token", result.token) 
+      console.log("Response from backend:", result);
+      localStorage.setItem("token", result.token);
       if (result.success === true) {
-        // Store the role in localStorage or sessionStorage
-        // Role set karna localStorage mein condition ke sath
-          if (result.role === "employee") {
-            localStorage.setItem("role", "user");  // Agar role "employee" hai toh "user" store karo
-            } else {
-             localStorage.setItem("role", result.role);  // Agar "employee" nahi hai toh original role store karo
-                 } // Store the role
-            // result.role='admin'
+        if (result.role === "employee") {
+          localStorage.setItem("role", "user");  
+          } else {
+           localStorage.setItem("role", result.role);  
+               } 
         if (result.role === "admin") {
           navigate("/dashboard");
-          // console.log(result.role)
-        } else if(result.role === "employee"){
+        } else if (result.role === "employee") {
           navigate("/billing");
         }
       } else {
-        console.log("Login failed", result.message);
         setErrorMessage(result.message);
       }
     } catch (error) {
-      console.error("Error:", error); 
+      console.error("Error:", error);
+    } finally {
+      setLoading(false); // Stop loading once the request is done
     }
   };
+
   return (
     <BackgroundBox>
       <CssBaseline />
@@ -159,7 +180,9 @@ export default function SignIn() {
               autoComplete="username"
               autoFocus
               value={formData.username}
-              onChange={handleChange} 
+              onChange={handleChange}
+              error={Boolean(formErrors.username)}
+              helperText={formErrors.username}
             />
             <TextField
               margin="normal"
@@ -171,14 +194,17 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
               value={formData.password}
-              onChange={handleChange} 
+              onChange={handleChange}
+              error={Boolean(formErrors.password)}
+              helperText={formErrors.password}
             />
             <FormControlLabel
               control={<Switch color="primary" />}
               label="Remember me"
               sx={{ marginTop: 2 }}
             />
-            <Button className="rounded-[10px]"  
+            <Button
+              className="rounded-[10px]"
               type="submit"
               fullWidth
               variant="contained"
@@ -187,26 +213,31 @@ export default function SignIn() {
                 marginBottom: 2,
                 backgroundColor: "#1976d2",
                 fontWeight: "bold",
+                position: "relative",
+              }}
+              disabled={loading} // Disable the button while loading
+            >
+             {loading ? (
+    <CircularProgress size={24} color="inherit" />
+  ) : (
+    "SIGN IN"
+  )}
+</Button>
+            <Typography
+              variant="body2"
+              align="center"
+              sx={{
+                color: "red",
+                marginBottom: 2,
               }}
             >
-              SIGN IN
-            </Button>      
-              <Typography
-                variant="body2"
-                align="center"
-                sx={{
-                  color: "red", 
-                  marginBottom: 2,
-                }}
-              >
-                {errorMessage}
-              </Typography>
-            
+              {errorMessage}
+            </Typography>
             <Typography
               variant="body2"
               align="center"
               sx={{ color: "#1976d2", cursor: "pointer" }}
-              onClick={() => navigate("/sign-up")} 
+              onClick={() => navigate("/sign-up")}
             >
               Don’t have an account? Sign up
             </Typography>

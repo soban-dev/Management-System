@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, CssBaseline } from "@mui/material";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,Navigate  } from "react-router-dom";
 import Header from "../Components/header";
 import Sidebar from "../Components/sidebar";
 import DashboardContent from "../pages/Dashboard/DashboardContent";
@@ -8,6 +8,15 @@ import Invoices from "../pages/Billing/BillingContent";
 import ProfileComponent from "../pages/Profile/ProfileContent";
 import NotificationComponent from "../pages/Notification/NotificationContent";
 import CreateItem from "../pages/CreateItem/CreateItem";
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const userRole = localStorage.getItem("role");  // Get role from localStorage
+  
+  if (!userRole || !allowedRoles.includes(userRole)) {
+    return <Navigate to="/sign-in" />;
+  }
+  
+  return children;
+};
 
 function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
@@ -16,6 +25,7 @@ function DashboardLayout() {
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
+
 
   return (
     <Box
@@ -67,12 +77,50 @@ function DashboardLayout() {
           }}
         >
           <Routes>
-             <Route path="/dashboard" element={<DashboardContent />} />
-            <Route path="/billing" element={<Invoices />} />
-            <Route path="/tables" element={<CreateItem />} /> 
-            <Route path="/profile" element={<ProfileComponent />} />
-            <Route path="/notifications" element={<NotificationComponent />} />
-          </Routes>
+          <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <DashboardContent />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/billing" 
+        element={
+          <ProtectedRoute allowedRoles={['admin', 'user']}>
+            <Invoices />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/createitem" 
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <CreateItem />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/profile" 
+        element={
+          <ProtectedRoute allowedRoles={['admin', 'user']}>
+            <ProfileComponent />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/notifications" 
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <NotificationComponent />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Redirect any invalid routes to sign-in */}
+      <Route path="*" element={<Navigate to="/signin" />} />
+    </Routes>
         </Box>
       </Box>
 

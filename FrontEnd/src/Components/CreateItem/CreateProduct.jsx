@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Box, TextField, Typography, Button } from "@mui/material";
+import { Box, TextField, Typography, Button, CircularProgress } from "@mui/material";
 import axios from "axios"; 
 import { BASE_URL } from "../../config";
 
@@ -12,6 +12,7 @@ const CreateProduct = () => {
   const [productData, setProductData] = useState([]); 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false); // Loader state
 
   const priceInput = useRef(null);
   const quantityInput = useRef(null);
@@ -34,6 +35,8 @@ const CreateProduct = () => {
     };
 
     setProductData((prevData) => [...prevData, newProduct]);
+
+    setLoading(true); // Start loading when the request is made
 
     try {
       const response = await axios.post(`${BASE_URL}/inventory/createitem`, { 
@@ -61,6 +64,8 @@ const CreateProduct = () => {
       console.error("Error sending data:", errorMessage);
       setErrorMessage(errorMessage);
       setSuccessMessage(""); // Clear any previous success message
+    } finally {
+      setLoading(false); // Stop loading once the request is done
     }
   };
 
@@ -210,8 +215,13 @@ const CreateProduct = () => {
             mt: 3,
             maxWidth: '340px',
           }}
+          disabled={loading} // Disable button while loading
         >
-          Add Product
+          {loading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Add Product"
+          )}
         </Button>
 
         {/* Error and Success Message */}
