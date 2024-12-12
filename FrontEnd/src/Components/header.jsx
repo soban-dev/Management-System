@@ -152,14 +152,7 @@ function Header({ toggleSidebar }) {
         >
           {/* Icons */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
-      {/* Person Icon */}
-      <IconButton
-        sx={{ color: "#AAA" }}
-        onClick={() => navigate("/profile")} 
-      >
-        <PersonIcon />
-      </IconButton>
-
+      
       {/* Settings Icon */}
       <IconButton
         sx={{ color: "#AAA" }}

@@ -15,8 +15,6 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { useTheme } from "@mui/material/styles";
-import { BASE_URL } from "../../config";
-import axios from "axios";
 
 // Styled components
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
@@ -39,48 +37,28 @@ const StyledTableHead = styled(TableRow)(({ theme }) => ({
   backgroundColor: "rgba(255, 255, 255, 0.15)",
 }));
 
-const ProgressBar = styled(Box)(({ progress }) => ({
-  position: "relative",
-  width: "100%",
-  height: "8px",
-  backgroundColor: "#444",
-  borderRadius: "4px",
-  "&::after": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: `${progress}%`,
-    height: "100%",
-    backgroundColor:
-      progress > 99 ? "#4caf50" : progress > 50 ? "#2196f3" : "#f44336",
-    borderRadius: "4px",
-    transition: "width 0.4s ease",
-  },
-}));
-
-const TableProduct = ({ data }) => {
+const HighStockProduct = (data) => {
   const theme = useTheme();
   const [cardData, setCardData] = useState({ result: [] });
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Data received:", data);
-    setLoading(true); 
-    if (data?.available && Array.isArray(data.available)) {
+    // Simulating data fetch and validation
+    setLoading(true); // Show loader while processing
+    if (data?.data?.available && Array.isArray(data.data.available)) {
       setTimeout(() => {
         setCardData({
-          result: data.available, 
+          result: data.data.available, // Use available products
         });
-        setLoading(false); 
-        // console.log("Data processed successfully:", data.available);
-      }, 1000); 
+        setLoading(false); // Data successfully processed
+      }, 1000); // Simulated delay for loading
     } else {
       console.error("Invalid data format or missing:", data);
-      setCardData({ result: [] }); 
-      setLoading(false); 
+      setCardData({ result: [] }); // Set empty result on error
+      setLoading(false); // Stop loader even if data is invalid
     }
   }, [data]);
+
 
   const rows = [];
   if (cardData.result.length > 0) {
@@ -99,7 +77,6 @@ const TableProduct = ({ data }) => {
     2: <StorefrontIcon sx={{ color: "#9c27b0" }} />,
     3: <ShoppingCartIcon sx={{ color: "#3f51b5" }} />,
     4: <StorefrontIcon sx={{ color: "#f44336" }} />,
-    "Gaming Console": <MonetizationOnIcon sx={{ color: "#4caf50" }} />,
   };
 
   return (
@@ -127,12 +104,19 @@ const TableProduct = ({ data }) => {
             letterSpacing: "2px",
           }}
         >
-          Product Details
+          High Stock Products
         </Typography>
 
         {/* Show loader while data is being fetched */}
         {loading ? (
-          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "60vh" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "60vh",
+            }}
+          >
             <CircularProgress size={60} color="primary" />
           </Box>
         ) : (
@@ -140,17 +124,20 @@ const TableProduct = ({ data }) => {
             <Table>
               <TableHead>
                 <StyledTableHead>
-                  <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
+                  <TableCell
+                    sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}
+                  >
                     Product
                   </TableCell>
-                  <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
-                    Price
-                  </TableCell>
-                  <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
+                  <TableCell
+                    sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}
+                  >
                     Available Quantity
                   </TableCell>
-                  <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
-                    Sold
+                  <TableCell
+                    sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}
+                  >
+                    Required Quantity
                   </TableCell>
                 </StyledTableHead>
               </TableHead>
@@ -160,19 +147,24 @@ const TableProduct = ({ data }) => {
                   <StyledTableRow key={index}>
                     <TableCell>
                       <Box display="flex" alignItems="center">
-                        { icons[index % 5]|| null}
-                        <Typography variant="body1" sx={{ marginLeft: 2, color: "#ffffff", fontWeight: 500 }}>
+                        {icons[index % 5] || null}
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            marginLeft: 2,
+                            color: "#ffffff",
+                            fontWeight: 500,
+                          }}
+                        >
                           {row.product}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell sx={{ color: "#ffffff" }}>{row.revenue}</TableCell>
-                    <TableCell sx={{ color: "#ffffff" }}>{row.status}</TableCell>
-                    <TableCell>
-                      <ProgressBar progress={row.progress} />
-                      <Typography variant="body2" color="white" align="center" sx={{ marginTop: "4px" }}>
-                        {row.progress}%
-                      </Typography>
+                    <TableCell sx={{ color: "#ffffff" }}>
+                      {row.available_quantity}
+                    </TableCell>
+                    <TableCell sx={{ color: "#ffffff" }}>
+                      {row.required_quantity}
                     </TableCell>
                   </StyledTableRow>
                 ))}
@@ -185,4 +177,4 @@ const TableProduct = ({ data }) => {
   );
 };
 
-export default TableProduct;
+export default HighStockProduct;

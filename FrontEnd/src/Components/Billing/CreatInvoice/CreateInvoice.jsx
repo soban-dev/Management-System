@@ -60,13 +60,28 @@ const CreateInvoice = ({ onClose }) => {
     setSearchValue(event.target.value);
     fetchSuggestions(event.target.value);
   };
+  const handleKeyDown = (e) => {
+    if (suggestions.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev + 1) % suggestions.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (activeIndex >= 0 && activeIndex < suggestions.length) {
+        handleSuggestionClick(suggestions[activeIndex]);
+      }
+    }
+  };
+
   const handleSuggestionClick = (suggestion) => {
     setSearchValue(suggestion.name);
-    setSelectedItem(suggestion);
     setSuggestions([]);
     fetchItemDetails(suggestion.name);
   };
-
   // Fetch item details
   const fetchItemDetails = async (itemName) => {
     try {
@@ -191,6 +206,10 @@ const CreateInvoice = ({ onClose }) => {
           value={searchValue}
           onChange={handleSearchChange}
           placeholder="Search for an item"
+          autoFocus
+          
+          ref={inputRef}
+          onKeyDown={handleKeyDown}
           InputProps={{ style: { color: "white", background: "#424242" } }}
         />
         {suggestions.length > 0 && (
@@ -260,8 +279,8 @@ const CreateInvoice = ({ onClose }) => {
       backgroundColor: "#424242",
       input: { color: "white" },
     }}
-    autoFocus
-    ref={inputRef}
+    // autoFocus
+    // ref={inputRef}
   />
   {/* <Box sx={{ mt: 1 }}>
     <Typography variant="body2" sx={{ color: "white" }}>

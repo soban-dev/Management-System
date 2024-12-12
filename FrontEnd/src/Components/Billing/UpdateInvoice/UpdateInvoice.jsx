@@ -47,14 +47,14 @@ const CreateInvoice = ({ onClose }) => {
   
       if (invoiceId && invoiceId.trim() !== "") {
         try {
-          // Backend se GET request
+         
           const response = await fetch(`${BASE_URL}/inventory/invoiceid/${invoiceId}`);
-          const data = await response.json();  // JSON response ko parse karna
-          // Invoice items ko access karna
-          const fetchedItems = data.invoice.items;  // Correct path
+          const data = await response.json();  
+      
+          const fetchedItems = data.invoice.items;  
           setOldTotal(data.invoice.total);
           const updatedInvoiceItems = [...items];
-          // Loop through the fetched items and update/add them in invoiceItems
+        
           fetchedItems.forEach((fetchedItem) => {
             const existingItemIndex = updatedInvoiceItems.findIndex(
               (item) => item.name === fetchedItem.name
@@ -67,16 +67,16 @@ const CreateInvoice = ({ onClose }) => {
                 updatedInvoiceItems[existingItemIndex].price;
             } else {
               const newItem = {
-                name: fetchedItem.name,  // Item ka naam
-                price: fetchedItem.price / fetchedItem.quantity,  // Backend response ka price field
-                quantity: fetchedItem.quantity,  // Quantity of the item
-                totalAmount:  fetchedItem.price,  // Total amount
+                name: fetchedItem.name,  
+                price: fetchedItem.price / fetchedItem.quantity,  
+                quantity: fetchedItem.quantity,  
+                totalAmount:  fetchedItem.price,  
               };
-              updatedInvoiceItems.push(newItem);  // Naye item ko list mein add karna
+              updatedInvoiceItems.push(newItem);  
             }
           });
   
-          setInvoiceItems(updatedInvoiceItems);  // Invoice items list ko update karna
+          setInvoiceItems(updatedInvoiceItems);  
         } catch (error) {
           console.error("Error fetching invoice data:", error);
         }
@@ -210,6 +210,12 @@ const CreateInvoice = ({ onClose }) => {
     updatedItems.splice(index, 1); 
     setInvoiceItems(updatedItems);
   };
+  const handleQuantityChange = (index, newValue) => {
+    const updatedItems = [...invoiceItems];
+    updatedItems[index].quantity = newValue;
+    setInvoiceItems(updatedItems);
+  };
+  
   // console.log(invoiceItems)
 
   // console.log(invoiceId)
@@ -266,6 +272,8 @@ const CreateInvoice = ({ onClose }) => {
         placeholder="Old Invoice#ID"
         size="small"
         value={invoiceId}
+        autoFocus
+        ref={inputRef}
         onChange={(e) => setInvoiceId(e.target.value)}
         onKeyPress={handleKeyPress1} 
         sx={{
@@ -367,8 +375,7 @@ const CreateInvoice = ({ onClose }) => {
       backgroundColor: "#424242",
       input: { color: "white" },
     }}
-    autoFocus
-    ref={inputRef}
+    
   />
   {/* <Box sx={{ mt: 1 }}>
     <Typography variant="body2" sx={{ color: "white" }}>
@@ -381,40 +388,57 @@ const CreateInvoice = ({ onClose }) => {
 
       {/* Invoice Table */}
       <Table sx={{ backgroundColor: "#424242", borderRadius: 2, overflow: "hidden" }}>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>Item</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>Price</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Qty</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Amount</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {invoiceItems.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ color: "white" }}>
-                No items available
-              </TableCell>
-            </TableRow>
-          ) : (
-            invoiceItems.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell sx={{ color: "white" }}>{item.name}</TableCell>
-                <TableCell sx={{ color: "white" }}>{item.price}</TableCell>
-                <TableCell sx={{ color: "white" }}>{item.quantity}</TableCell>
-                <TableCell sx={{ color: "white" }}>{item.totalAmount}<IconButton onClick={() => handleDelete(index)} color="error"><DeleteIcon />
-                </IconButton></TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+  <TableHead>
+    <TableRow>
+      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Item</TableCell>
+      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Price</TableCell>
+      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Qty</TableCell>
+      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Amount</TableCell>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    {invoiceItems.length === 0 ? (
+      <TableRow>
+        <TableCell colSpan={4} align="center" sx={{ color: "white" }}>
+          No items available
+        </TableCell>
+      </TableRow>
+    ) : (
+      invoiceItems.map((item, index) => (
+        <TableRow key={index}>
+          <TableCell sx={{ color: "white" }}>{item.name}</TableCell>
+          <TableCell sx={{ color: "white" }}>{item.price}</TableCell>
+          <TableCell>
+            <input
+              type="text"
+              value={item.quantity}
+              placeholder="Total Qty"
+              onChange={(e) => handleQuantityChange(index, e.target.value)}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault(); 
+                  event.target.blur(); 
+                  // console.log("Discount value updated:", discount); // Debug or handle value
+                }
+              }}
+              style={{ color: "white", backgroundColor: "transparent", border: "none", outline: "none", width: "100px", textAlign: "center" }}
+            />
+          </TableCell>
+          <TableCell sx={{ color: "white" }}>{item.totalAmount}  <IconButton onClick={() => handleDelete(index)} color="error">
+              <DeleteIcon />
+            </IconButton></TableCell>
+        </TableRow>
+      ))
+    )}
+  </TableBody>
+</Table>
+
 
       {/* Discount and Generate Receipt */}
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end", // Centering the elements horizontally
+          justifyContent: "flex-end", 
           alignItems: "center",
           mt: 3,
           gap: 2,
@@ -422,27 +446,27 @@ const CreateInvoice = ({ onClose }) => {
       >
         <TextField
   variant="outlined"
-  label="Discount:" // Label for the input
+  label="Discount:" 
   placeholder="Enter Discount"
-  value={discount} // Bind discount state
-  onChange={(e) => setDiscount(e.target.value)} // Update discount state on change
+  value={discount} 
+  onChange={(e) => setDiscount(e.target.value)} 
   onKeyPress={(event) => {
     if (event.key === "Enter") {
-      event.preventDefault(); // Prevent default Enter behavior
-      event.target.blur(); // Remove focus from the TextField
+      event.preventDefault(); 
+      event.target.blur(); 
       // console.log("Discount value updated:", discount); // Debug or handle value
     }
   }}
   sx={{
-    backgroundColor: "#424242", // Dark background for the field
-    borderRadius: "4px", // Optional rounded edges for the input
+    backgroundColor: "#424242", 
+    borderRadius: "4px", 
     input: {
-      color: "white", // Text color inside the field
-      padding: "13.5px 14px", // Padding to match your button height
+      color: "white", 
+      padding: "13.5px 14px", 
     },
-    label: { color: "white" }, // Optional: Adjust label color
-    width: 180, // Consistent width
-    height: "50px", // Matching height with buttons
+    label: { color: "white" }, 
+    width: 180, 
+    height: "50px", 
   }}
 />
 

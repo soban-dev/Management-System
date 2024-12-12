@@ -76,7 +76,6 @@ const CreateInvoiceButton = () => {
 >
   <CreateInvoice onClose={handleClose} />
 </Box>
-
       </Modal>
     </Box>
   );

@@ -59,26 +59,27 @@ const ProgressBar = styled(Box)(({ progress }) => ({
   },
 }));
 
-const TableProduct = ({ data }) => {
+const LowStockProduct = (data) => {
   const theme = useTheme();
   const [cardData, setCardData] = useState({ result: [] });
   const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    console.log("Data received:", data);
-    setLoading(true); 
-    if (data?.available && Array.isArray(data.available)) {
+
+
+    // Simulating data fetch and validation
+    setLoading(true); // Show loader while processing
+    if (data?.data?.low && Array.isArray(data.data.low)) {
       setTimeout(() => {
         setCardData({
-          result: data.available, 
+          result: data.data.low, // Use available products
         });
-        setLoading(false); 
-        // console.log("Data processed successfully:", data.available);
-      }, 1000); 
+        setLoading(false); // Data successfully processed
+      }, 1000); // Simulated delay for loading
     } else {
       console.error("Invalid data format or missing:", data);
-      setCardData({ result: [] }); 
-      setLoading(false); 
+      setCardData({ result: [] }); // Set empty result on error
+      setLoading(false); // Stop loader even if data is invalid
     }
   }, [data]);
 
@@ -86,9 +87,10 @@ const TableProduct = ({ data }) => {
   if (cardData.result.length > 0) {
     for (const item of cardData.result) {
       rows.push({
-        product: item.name || "N/A",
-        available_quantity: item.quantity || 0,
-        required_quantity: item.required_quantity || 0,
+        product: item.name || "Smartphone",
+        available_quantity: item.quantity || "434",
+        require_quantity:item.required_quantity
+          
       });
     }
   }
@@ -127,7 +129,7 @@ const TableProduct = ({ data }) => {
             letterSpacing: "2px",
           }}
         >
-          Product Details
+          Low Stock Products
         </Typography>
 
         {/* Show loader while data is being fetched */}
@@ -144,13 +146,10 @@ const TableProduct = ({ data }) => {
                     Product
                   </TableCell>
                   <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
-                    Price
-                  </TableCell>
-                  <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
                     Available Quantity
                   </TableCell>
                   <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
-                    Sold
+                    Required Quantity
                   </TableCell>
                 </StyledTableHead>
               </TableHead>
@@ -166,14 +165,8 @@ const TableProduct = ({ data }) => {
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell sx={{ color: "#ffffff" }}>{row.revenue}</TableCell>
-                    <TableCell sx={{ color: "#ffffff" }}>{row.status}</TableCell>
-                    <TableCell>
-                      <ProgressBar progress={row.progress} />
-                      <Typography variant="body2" color="white" align="center" sx={{ marginTop: "4px" }}>
-                        {row.progress}%
-                      </Typography>
-                    </TableCell>
+                    <TableCell sx={{ color: "#ffffff" }}>{row.available_quantity}</TableCell>
+                    <TableCell sx={{ color: "#ffffff" }}>{row.require_quantity}</TableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
@@ -185,4 +178,4 @@ const TableProduct = ({ data }) => {
   );
 };
 
-export default TableProduct;
+export default LowStockProduct;

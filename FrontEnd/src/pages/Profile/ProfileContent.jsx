@@ -19,7 +19,7 @@ import { BASE_URL } from "../../config";
 const ProfileComponent = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileText, setProfileText] = useState(
-    "Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
+    "Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
   );
   const [profileData, setProfileData] = useState({});
 
