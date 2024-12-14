@@ -63,6 +63,52 @@ const token = localStorage.getItem("token")
     }
   };
 
+  // for download Pdf 
+  // const handleGenerateReceipt = async () => {
+  //   if (!clientName) {
+  //     setMessage("Please fill in the 'Client Name' field.");
+  //     return;
+  //   }
+  //   try {
+  //     const response = await axios.post(`${BASE_URL}/inventory/invoice`,
+  //       {
+  //         percentdiscount: discount,
+  //         customername: clientName,
+  //         items: inventory,
+  //         total: calculateTotalAmount(),
+  //       },
+  //       {
+  //         withCredentials: true,
+  //         responseType: "blob", 
+  //       }
+  //     );
+
+  //     // If the response is successful, handle the PDF
+  //     if (response.status === 200) {
+  //       const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+
+  //       // Generate a URL for the Blob
+  //       const pdfUrl = URL.createObjectURL(pdfBlob);
+
+  //       // Automatically open and print the PDF (if supported by the browser)
+  //       const pdfWindow = window.open(pdfUrl, "_blank"); 
+  //       if (pdfWindow) {
+  //         pdfWindow.addEventListener("load", () => {
+  //           pdfWindow.print(); // Trigger the print dialog
+  //         });
+  //       } else {
+  //         console.error("Failed to open PDF in a new tab.");
+  //       }
+  //     }
+
+  //     setMessage("Receipt generated successfully!");
+  //   } catch (error) {
+  //     console.error("Error generating receipt:", error);
+  //     setMessage("Failed to generate receipt. Please try again.");
+  //   }
+  // };
+
+
   return (
     <Modal
       open={open}

@@ -125,15 +125,15 @@ export default function EmployRegistration() {
       [name]: value,
     }));
   };
-
+  const role = localStorage.getItem('role');
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     setLoading(true);
-    setServerError(""); // Reset server error before submitting
+    setServerError(""); 
     try {
-      const response = await axios.post(`${BASE_URL}/auth/signup`, formData);
+      const response = await axios.post(`${BASE_URL}/auth/signup`, formData, role);
       if (response.data.success) {
         setLoading(false);
         navigate("/sign-in");

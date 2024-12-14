@@ -59,36 +59,41 @@ const ProgressBar = styled(Box)(({ progress }) => ({
   },
 }));
 
-const TableProduct = ({ data }) => {
+const TableProduct = () => {
   const theme = useTheme();
   const [cardData, setCardData] = useState({ result: [] });
   const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    console.log("Data received:", data);
-    setLoading(true); 
-    if (data?.available && Array.isArray(data.available)) {
-      setTimeout(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/inventory/read`, {
+          withCredentials: true,
+        });
+        console.log(response.data.result);
+        
         setCardData({
-          result: data.available, 
+          result: response.data.result,
         });
         setLoading(false); 
-        // console.log("Data processed successfully:", data.available);
-      }, 1000); 
-    } else {
-      console.error("Invalid data format or missing:", data);
-      setCardData({ result: [] }); 
-      setLoading(false); 
-    }
-  }, [data]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const rows = [];
   if (cardData.result.length > 0) {
     for (const item of cardData.result) {
       rows.push({
-        product: item.name || "N/A",
-        available_quantity: item.quantity || 0,
-        required_quantity: item.required_quantity || 0,
+        product: item.name || "Smartphone",
+        revenue: item.selling_price_per_unit || "$12,500",
+        status: item.quantity || "434",
+        progress:
+          item.sold_percentage ? parseFloat(item.sold_percentage).toFixed(0) : 0 || 100,
       });
     }
   }

@@ -53,7 +53,23 @@ function Invoices() {
     }
   };
 
-  // Slice invoices to show only the first 5 invoices if not showing all
+  const downloadInvoicePDF = async (id) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/inventory/invoice/${id}`, {
+        responseType: 'blob', 
+        withCredentials: true,
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Invoice-${id}.pdf`); 
+      document.body.appendChild(link);
+      link.click(); 
+      document.body.removeChild(link); 
+    } catch (error) {
+      console.error("Error downloading the PDF:", error);
+    }
+  };
   const displayedInvoices = showAllInvoices ? invoices : invoices.slice(0, 5);
 
   return (
@@ -141,6 +157,7 @@ function Invoices() {
                     fontSize: "14px",
                     textTransform: "none",
                   }}
+                  onClick={() => downloadInvoicePDF(invoice.id)} // Trigger download
                 >
                   PDF
                 </Button>

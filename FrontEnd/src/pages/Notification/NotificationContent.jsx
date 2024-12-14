@@ -16,9 +16,9 @@ const NotificationComponent = () => {
   };
 
   const handleVerify = async (id, username) => {
-    setVerifyingId(id); // Start loader for this button
+    setVerifyingId(id); 
     try {
-      const response = await axios.post("http://localhost:3000/api/admin/verify", { employeeId: id });
+      const response = await axios.post(`${BASE_URL}/admin/verify`, { employeeId: id });
       if (response.status === 200) {
         alert(`Verification Successful for ${username}`);
       } else {
@@ -28,7 +28,7 @@ const NotificationComponent = () => {
       console.error("Error verifying user:", error);
       alert("An error occurred while verifying the user.");
     } finally {
-      setVerifyingId(null); // Stop loader for this button
+      setVerifyingId(null); 
     }
   };
 
@@ -39,7 +39,7 @@ const NotificationComponent = () => {
   }, [location]);
 
   const fetchNotifications = async () => {
-    setLoading(true); // Show loader while fetching data
+    setLoading(true);
     try {
       const response = await fetch(`${BASE_URL}/admin/employees`);
 

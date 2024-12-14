@@ -20,13 +20,13 @@ export default function Top2ndCards({ datevalue, datevalue2 }) {
       if (datevalue && datevalue2) {
         try {
           const response = await axios.get(
-            `${BASE_URL}/admin/dashboard?startDate=${datevalue}&endDate=${datevalue2}`
+            `${BASE_URL}/admin/dashboardcard`
           );
           setCardData({
-            Sales: response.data?.totalSales || 0,
-            Profit: response.data?.totalProfit || 0,
-            Revenue: response.data?.totalRevenuePotential || 0,
-            ItemSold: response.data?.totalSoldQuantity || 0,
+            Sales: response.data?.totalStock || 0,
+            Profit: response.data?.highStock || 0,
+            Revenue: response.data?.lowStock || 0,
+            ItemSold: response.data?.totalSoldStock || 0,
           });
         } catch (error) {
           console.error("Error fetching data:", error);
