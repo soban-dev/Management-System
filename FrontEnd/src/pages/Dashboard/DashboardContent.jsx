@@ -2,6 +2,7 @@ import React, { useState, useRef,useEffect } from "react";
 import { Box, Grid,} from "@mui/material";
 
 import TopCards from "../../Components/DashboardContent/TopCards";
+import Top2ndCards from "../../Components/DashboardContent/Top2ndCards";
 import Charts from "../../Components/DashboardContent/Charts";
 import ItemMatrics from "../../Components/DashboardContent/ItemMatrics";
 import Overview from "../../Components/DashboardContent/Overview";
@@ -25,6 +26,8 @@ function DashboardContent() {
       <TopCards
       datevalue={datevalue}
       datevalue2={datevalue2}
+      />
+      <Top2ndCards
       />
        {/* Charts */}
        <Charts/>

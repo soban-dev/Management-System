@@ -11,33 +11,33 @@ import {
   TableRow,
   MenuItem,
   List,
+  IconButton ,
   Paper,
 } from "@mui/material";
 import axios from "axios";
 import ReceiptModal from "./ReciptModel";
 import backgroundImage from "../../../assets/background.jpg";
 import { BASE_URL } from "../../../config";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const CreateInvoice = ({ onClose }) => {
   const [searchValue, setSearchValue] = useState(""); 
   const [suggestions, setSuggestions] = useState([]); 
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null); 
   const [itemData, setItemData] = useState(null); 
   const [quantity, setQuantity] = useState(""); 
   const [enteredQuantity, setEnteredQuantity] = useState(""); 
-  const [invoiceItems, setInvoiceItems] = useState([]); 
+  const [invoiceItems, setInvoiceItems] = useState([]);
   const [discount, setDiscount] = useState(0); 
   const inputRef = useRef(null); 
   const [clientName, setClientName] = useState(""); 
-  const [openReceiptModal, setOpenReceiptModal] = useState(false);
+  const [openReceiptModal, setOpenReceiptModal] = useState(false); 
+  const [invoiceId, setInvoiceId] = useState("");
+  const [oldtotal, setOldTotal] = useState("");
+  const [invoiceData, setInvoiceData] = useState(null);
 
-  const token = localStorage.getItem("token")
-  
   const fetchSuggestions = async (query) => {
-
-
-    
     try {
       if (query.length === 0) {
         setSuggestions([]);
@@ -47,8 +47,7 @@ const CreateInvoice = ({ onClose }) => {
         },
         {
           withCredentials: true, 
-        }
-      );
+        });
         setSuggestions(response.data);
       }
     } catch (error) {
@@ -60,36 +59,24 @@ const CreateInvoice = ({ onClose }) => {
     setSearchValue(event.target.value);
     fetchSuggestions(event.target.value);
   };
-  const handleKeyDown = (e) => {
-    if (suggestions.length === 0) return;
 
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((prev) => (prev + 1) % suggestions.length);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      if (activeIndex >= 0 && activeIndex < suggestions.length) {
-        handleSuggestionClick(suggestions[activeIndex]);
-      }
-    }
-  };
-
+  // Handle suggestion click
   const handleSuggestionClick = (suggestion) => {
     setSearchValue(suggestion.name);
+    setSelectedItem(suggestion);
     setSuggestions([]);
     fetchItemDetails(suggestion.name);
   };
+
   // Fetch item details
   const fetchItemDetails = async (itemName) => {
     try {
       const response = await axios.post(`${BASE_URL}/inventory/fetchitem`, {
-        name: itemName, 
+        name: itemName,
+        // Authorization:token
       },
       {
-        withCredentials: true, 
+        withCredentials: true, // Ensure cookies are sent
       });
       setItemData(response.data);
     } catch (error) {
@@ -97,11 +84,15 @@ const CreateInvoice = ({ onClose }) => {
     }
   };
 
+  // Toggle visibility of input field to enter quantity
   const [isInputVisible, setIsInputVisible] = useState(false);
 
+  // Handle button click to toggle input visibility
   const handleButtonClick = () => {
     setIsInputVisible(true);
   };
+
+  // Handle quantity entry on "Enter" key press
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       if (quantity && selectedItem) {
@@ -110,6 +101,7 @@ const CreateInvoice = ({ onClose }) => {
         );
   
         if (existingItemIndex !== -1) {
+          // If item exists, replace its quantity and totalAmount
           const updatedInvoiceItems = [...invoiceItems];
           updatedInvoiceItems[existingItemIndex].quantity = parseInt(quantity);
           updatedInvoiceItems[existingItemIndex].totalAmount =
@@ -117,6 +109,7 @@ const CreateInvoice = ({ onClose }) => {
   
           setInvoiceItems(updatedInvoiceItems);
         } else {
+          // If item does not exist, add it to the list
           const newItem = {
             name: selectedItem.name,
             price: itemData.selling_price_per_unit,
@@ -133,17 +126,20 @@ const CreateInvoice = ({ onClose }) => {
     }
   };
   
+  // Handle discount change
   const handleDiscountChange = (event) => {
-    const discountValue = Math.max(0, Math.min(100, event.target.value)); 
+    const discountValue = Math.max(0, Math.min(100, event.target.value)); // Ensure between 0 and 100
     setDiscount(discountValue);
   };
 
+  // Calculate total with discount
   const calculateTotalWithDiscount = () => {
     const total = invoiceItems.reduce((acc, item) => acc + item.totalAmount, 0);
     return total - (total * discount) / 100;
   };
 
   useEffect(() => {
+    // Add event listener for outside click to hide input
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -155,6 +151,20 @@ const CreateInvoice = ({ onClose }) => {
       setIsInputVisible(false);
     }
   };
+  const handleDelete = (index) => {
+    const updatedItems = [...invoiceItems];
+    updatedItems.splice(index, 1); 
+    setInvoiceItems(updatedItems);
+  };
+  const handleQuantityChange = (index, newValue) => {
+    const updatedItems = [...invoiceItems];
+    updatedItems[index].quantity = newValue;
+    setInvoiceItems(updatedItems);
+  };
+  
+  // console.log(invoiceItems)
+
+  // console.log(invoiceId)
 
   return (
     <Box
@@ -194,9 +204,28 @@ const CreateInvoice = ({ onClose }) => {
       &times; {/* Cross icon */}
     </Button>
     
-      <Typography variant="h4" textAlign="center" gutterBottom>
-        Create Invoice
-      </Typography>
+    <Box 
+  sx={{
+    display: "flex",
+    justifyContent: "space-between", 
+    alignItems: "center", 
+    mb: 3, 
+  }}
+>
+ {/* Centered Heading */}
+  <Typography 
+    variant="h4" 
+    textAlign="center" 
+    sx={{
+      flex: 1, 
+      color: "white",
+    
+    }}
+  >
+    Create Invoice
+  </Typography>
+</Box>
+
 
       {/* Search Field */}
       <Box sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}>
@@ -206,10 +235,6 @@ const CreateInvoice = ({ onClose }) => {
           value={searchValue}
           onChange={handleSearchChange}
           placeholder="Search for an item"
-          autoFocus
-          
-          ref={inputRef}
-          onKeyDown={handleKeyDown}
           InputProps={{ style: { color: "white", background: "#424242" } }}
         />
         {suggestions.length > 0 && (
@@ -233,8 +258,8 @@ const CreateInvoice = ({ onClose }) => {
       </Box>
 
       {/* Buttons Row */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "flex-start", justifyContent: "space-between",marginRight:'13px', }}>
-        <Box sx={{ textAlign: "center", width: "150px", }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "flex-start", justifyContent: "space-between",marginRight:'13px',}}>
+        <Box sx={{ textAlign: "center", width: "150px" }}>
           <Button
             variant="contained"
             sx={{
@@ -279,8 +304,7 @@ const CreateInvoice = ({ onClose }) => {
       backgroundColor: "#424242",
       input: { color: "white" },
     }}
-    // autoFocus
-    // ref={inputRef}
+    
   />
   {/* <Box sx={{ mt: 1 }}>
     <Typography variant="body2" sx={{ color: "white" }}>
@@ -293,33 +317,51 @@ const CreateInvoice = ({ onClose }) => {
 
       {/* Invoice Table */}
       <Table sx={{ backgroundColor: "#424242", borderRadius: 2, overflow: "hidden" }}>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>Item</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>Price</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Qty</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Amount</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {invoiceItems.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ color: "white" }}>
-                No items available
-              </TableCell>
-            </TableRow>
-          ) : (
-            invoiceItems.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell sx={{ color: "white" }}>{item.name}</TableCell>
-                <TableCell sx={{ color: "white" }}>{item.price}</TableCell>
-                <TableCell sx={{ color: "white" }}>{item.quantity}</TableCell>
-                <TableCell sx={{ color: "white" }}>{item.totalAmount}</TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+  <TableHead>
+    <TableRow>
+      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Item</TableCell>
+      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Price</TableCell>
+      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Qty</TableCell>
+      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Amount</TableCell>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    {invoiceItems.length === 0 ? (
+      <TableRow>
+        <TableCell colSpan={4} align="center" sx={{ color: "white" }}>
+          No items available
+        </TableCell>
+      </TableRow>
+    ) : (
+      invoiceItems.map((item, index) => (
+        <TableRow key={index}>
+          <TableCell sx={{ color: "white" }}>{item.name}</TableCell>
+          <TableCell sx={{ color: "white" }}>{item.price}</TableCell>
+          <TableCell>
+            <input
+              type="text"
+              value={item.quantity}
+              placeholder="Total Qty"
+              onChange={(e) => handleQuantityChange(index, e.target.value)}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault(); 
+                  event.target.blur(); 
+                  // console.log("Discount value updated:", discount); // Debug or handle value
+                }
+              }}
+              style={{ color: "white", backgroundColor: "transparent", border: "none", outline: "none", width: "100px", textAlign: "center" }}
+            />
+          </TableCell>
+          <TableCell sx={{ color: "white" }}>{item.totalAmount}  <IconButton onClick={() => handleDelete(index)} color="error">
+              <DeleteIcon />
+            </IconButton></TableCell>
+        </TableRow>
+      ))
+    )}
+  </TableBody>
+</Table>
+
 
       {/* Discount and Generate Receipt */}
       <Box
@@ -341,7 +383,7 @@ const CreateInvoice = ({ onClose }) => {
     if (event.key === "Enter") {
       event.preventDefault(); 
       event.target.blur(); 
-      // console.log("Discount value updated:", discount); 
+      // console.log("Discount value updated:", discount); // Debug or handle value
     }
   }}
   sx={{
@@ -362,13 +404,13 @@ const CreateInvoice = ({ onClose }) => {
           sx={{
             backgroundColor: "#1976d2",
             ":hover": { backgroundColor: "#115293" },
-            height: "50px",
+            height: "50px", // Matching height with discount field
           }}
-          onClick={() => setOpenReceiptModal(true)} 
+          onClick={() => setOpenReceiptModal(true)} // Open modal on click
         >
           Generate Receipt
         </Button>
-        {/* Receipt Modal */}
+         {/* Receipt Modal */}
       <ReceiptModal
         open={openReceiptModal}
         onClose={() => setOpenReceiptModal(false)} 

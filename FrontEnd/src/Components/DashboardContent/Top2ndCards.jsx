@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Box, Grid, Card, Typography } from "@mui/material";
 import axios from "axios";
 import { BASE_URL } from "../../config";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import { TrendingDown } from "@mui/icons-material";
 
-export default function TopCards({ datevalue, datevalue2 }) {
+export default function Top2ndCards({ datevalue, datevalue2 }) {
   const [cardData, setCardData] = useState({
     Sales: null,
     Profit: null,
@@ -41,32 +41,32 @@ export default function TopCards({ datevalue, datevalue2 }) {
 
   const defaultCards = [
     {
-      title: "Total Sales",
-      value: `Rs: ${cardData.Sales}` || "$0",
-      description: `from ${datevalue} \n to ${datevalue2}`,
+      title: "Total Stock",
+      value: `+${cardData.Sales}` || "+11",
+      description: `Total Stocks Available.`,
       color: "#1E90FF",
-      icon: <AttachMoneyIcon sx={{ color: "#FFF", fontSize: 30 }} />,
+      icon: <InventoryIcon sx={{ color: "#FFF", fontSize: 30 }} />,
     },
     {
-      title: "Profit",
-      value: `Rs: ${cardData.Profit}` || "0",
-      description: `from ${datevalue} \n to ${datevalue2}`,
+      title: "High Stock",
+      value: `+${cardData.Profit}` || "+4",
+      description: `Total Number of High Stocks.`,
       color: "#4CAF50",
       icon: <TrendingUpIcon sx={{ color: "#FFF", fontSize: 30 }} />,
     },
     {
-      title: "Revenue Potential",
-      value: `Rs: ${cardData.Revenue}` || "+0",
-      description: `Potential of Revenue on all Items.`,
-      color: "#9c27b0",
-      icon: <MonetizationOnIcon sx={{ color: "#FFF", fontSize: 30 }} />,
+      title: "Low Stock",
+      value: `+${cardData.Revenue}` || "+0",
+      description: `Total Number of Low Stocks.`,
+      color: "#E91E63",
+      icon: <TrendingDown sx={{ color: "#FFF", fontSize: 30 }} />,
     },
     {
-      title: "Items Sold",
-      value: `${cardData.ItemSold}` || "+0",
-      description: `from ${datevalue} \n to ${datevalue2}`,
+      title: "Total Sold Stocks",
+      value: `+${cardData.ItemSold}` || "+0",
+      description: `Total Number of Sold Stocks`,
       color: "#E91E63",
-      icon: <ShoppingCartIcon sx={{ color: "#FFF", fontSize: 30 }} />,
+      icon: <AttachMoneyIcon sx={{ color: "#FFF", fontSize: 30 }} />,
     },
   ];
 
@@ -92,7 +92,7 @@ export default function TopCards({ datevalue, datevalue2 }) {
                   {item.value}
                 </Typography>
                 <Typography variant="body2" sx={{ fontSize: "11px", color: "#4CAF50" }}>
-                  {item.percent} {item.description}
+                  {item.description}
                 </Typography>
               </Box>
               <Box

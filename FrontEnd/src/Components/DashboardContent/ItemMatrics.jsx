@@ -63,61 +63,119 @@ const token = localStorage.getItem("token");
 
    return (
     <Grid item xs={12} md={8}>
-    <Card
+  <Card
+    sx={{
+      backgroundColor: "rgb(30, 39, 60)", 
+      color: "#FFF",
+      padding: 3,
+      borderRadius: 3,
+      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2)", 
+    }}
+  >
+    <Typography variant="h5" mb={3} sx={{ fontWeight: "bold", color: "#90CAF9" }}>
+      Item Metrics
+    </Typography>
+    <Typography
+      variant="body2"
       sx={{
-        backgroundColor: "rgb(32 41 64)",
-        color: "#FFF",
-        padding: 2,
-        borderRadius: 3,
-        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+        color: "#4CAF50",
+        fontSize: "1rem",
+        fontWeight: 500,
+        marginBottom: 3,
       }}
     >
-      <Typography variant="h6" mb={2}>
-        Item Matrics
-      </Typography>
-      <Typography variant="body2" sx={{ color: "#4CAF50" }} mb={2}>
-        <span style={{ fontWeight: "bold" }}>30 done</span> this month
-      </Typography>
-      <Box>
-        {[
-          { name: "Items Quantity",budget:`${cardData.ItemsQuantity}` ||"$14,000", completion: 100 },
-          { name: "Items In Stock",budget:cardData.ItemsinStock || "$3,000", completion: 100},
-          { name: "Items in High Quantity", budget:cardData.inHighStock || "Not set", completion: cardData.inHighStock / cardData.ItemsinStock * 100},
-          { name: "Items in Low Quantity", budget: cardData.inLowStock ||"0", completion: cardData.inHighStock / cardData.ItemsQuantity * 100 || 0 },
-          { name: "Total Purchase of Items",budget:cardData.TotalPurchaseonItems || "$500", completion: 40 },
-          { name: "Total Revenue Potential",budget:cardData.totalRevenuePotential || "$500", completion: 40 },
-        ].map((project, index) => (
-          <Box
-            key={index}
+      <span style={{ fontWeight: "bold" }}>Total Item details</span> of this Month.
+    </Typography>
+    <Box>
+      {[
+        {
+          name: "Total Quantity",
+          budget: `${cardData.ItemsQuantity}` || "$14,000",
+          completion: 100,
+        },
+        {
+          name: "Items In Stock",
+          budget: cardData.ItemsinStock || "$3,000",
+          completion: 100,
+        },
+        {
+          name: "Total High Quantity",
+          budget: cardData.inHighStock || "Not set",
+          completion: (cardData.inHighStock / cardData.ItemsinStock) * 100,
+        },
+        {
+          name: "Total Low Quantity",
+          budget: cardData.inLowStock || "0",
+          completion: (cardData.inLowStock / cardData.ItemsQuantity) * 100 || 0,
+        },
+        {
+          name: "Total Purchase of Items",
+          budget: cardData.TotalPurchaseonItems || "$500",
+          completion: 40,
+        },
+        {
+          name: "Total Revenue Potential",
+          budget: cardData.totalRevenuePotential || "$500",
+          completion: 40,
+        },
+      ].map((project, index) => (
+        <Box
+          key={index}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "8px 0",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)", 
+          }}
+        >
+          <Typography
+            variant="body1"
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 2,
+              fontWeight: 500,
+              color: "#E3F2FD", 
             }}
           >
-            <Typography variant="body1">{project.name}</Typography>
-            <Box sx={{ flex: 1, textAlign: "right",paddingRight:'100px', }}> {/* Left aligned */}
-               <Typography variant="body2">{project.budget}</Typography>
-              </Box>
-            <Box sx={{ width: "30%", ml: 2 }}>
-              <LinearProgress
-                variant="determinate"
-                value={project.completion}
-                sx={{
-                  "& .MuiLinearProgress-bar": {
-                    backgroundColor:
-                      project.completion === 100 ? "#4CAF50" : "#36A2EB",
-                  },
-                }}
-              />
-            </Box>
+            {project.name}
+          </Typography>
+          <Box
+            sx={{
+              flex: 1,
+              textAlign: "right",
+              paddingRight: "80px",
+            }}
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                fontWeight: 400,
+                fontSize: "0.9rem",
+                color: "#B3E5FC", 
+              }}
+            >
+              {project.budget}
+            </Typography>
           </Box>
-        ))}
-      </Box>
-    </Card>
-  </Grid>
-
+          <Box sx={{ width: "35%", ml: 2 }}>
+            <LinearProgress
+              variant="determinate"
+              value={project.completion}
+              sx={{
+                height: 8, 
+                borderRadius: 5,
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor:
+                    project.completion === 100 ? "#66BB6A" : "#42A5F5",
+                },
+                backgroundColor: "rgba(255, 255, 255, 0.1)", 
+              }}
+            />
+          </Box>
+        </Box>
+      ))}
+    </Box>
+  </Card>
+</Grid>
    )
  }
  

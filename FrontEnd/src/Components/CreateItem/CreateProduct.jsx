@@ -50,9 +50,7 @@ const CreateProduct = () => {
       });
       console.log("Backend Response: ", response.data.message);
       setSuccessMessage(response.data.message);
-      setErrorMessage(""); // Clear any previous error message
-
-      // Clear input fields on successful submission
+      setErrorMessage(""); 
       setClientName("");
       setPrice("");
       setQuantity("");
@@ -63,9 +61,9 @@ const CreateProduct = () => {
       const errorMessage = error.response?.data?.message || "An unexpected error occurred.";
       console.error("Error sending data:", errorMessage);
       setErrorMessage(errorMessage);
-      setSuccessMessage(""); // Clear any previous success message
+      setSuccessMessage(""); 
     } finally {
-      setLoading(false); // Stop loading once the request is done
+      setLoading(false); 
     }
   };
 
