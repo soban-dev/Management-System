@@ -15,10 +15,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { useTheme } from "@mui/material/styles";
-import { BASE_URL } from "../../config";
-import axios from "axios";
 
-// Styled components
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   maxWidth: "100%",
   overflowX: "auto",
@@ -62,24 +59,20 @@ const ProgressBar = styled(Box)(({ progress }) => ({
 const LowStockProduct = (data) => {
   const theme = useTheme();
   const [cardData, setCardData] = useState({ result: [] });
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
-
-    // Simulating data fetch and validation
-    setLoading(true); // Show loader while processing
+    setLoading(true);
     if (data?.data?.low && Array.isArray(data.data.low)) {
       setTimeout(() => {
         setCardData({
-          result: data.data.low, // Use available products
+          result: data.data.low,
         });
-        setLoading(false); // Data successfully processed
-      }, 1000); // Simulated delay for loading
+        setLoading(false);
+      }, 1000);
     } else {
-      console.error("Invalid data format or missing:", data);
-      setCardData({ result: [] }); // Set empty result on error
-      setLoading(false); // Stop loader even if data is invalid
+      setCardData({ result: [] });
+      setLoading(false);
     }
   }, [data]);
 
@@ -89,8 +82,7 @@ const LowStockProduct = (data) => {
       rows.push({
         product: item.name || "Smartphone",
         available_quantity: item.quantity || "434",
-        require_quantity:item.required_quantity
-          
+        require_quantity: item.required_quantity,
       });
     }
   }
@@ -107,13 +99,14 @@ const LowStockProduct = (data) => {
   return (
     <Box
       sx={{
-        padding: "40px",
+        padding: { xs: "20px", sm: "40px" },
         background: "rgb(32 41 64)",
         display: "flex",
-        justifyContent: "flex-start",
+        justifyContent: "center",
         alignItems: "center",
         marginTop: "40px",
         borderRadius: "22px",
+        flexDirection: "column",
       }}
     >
       <Box sx={{ width: "100%" }}>
@@ -127,14 +120,21 @@ const LowStockProduct = (data) => {
             marginBottom: "20px",
             textTransform: "uppercase",
             letterSpacing: "2px",
+            fontSize: { xs: "1.5rem", sm: "2rem" },
           }}
         >
           Low Stock Products
         </Typography>
 
-        {/* Show loader while data is being fetched */}
         {loading ? (
-          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "60vh" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "60vh",
+            }}
+          >
             <CircularProgress size={60} color="primary" />
           </Box>
         ) : (
@@ -142,13 +142,31 @@ const LowStockProduct = (data) => {
             <Table>
               <TableHead>
                 <StyledTableHead>
-                  <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
+                  <TableCell
+                    sx={{
+                      color: "#ffffff",
+                      fontWeight: "bold",
+                      fontSize: { xs: "14px", sm: "16px" },
+                    }}
+                  >
                     Product
                   </TableCell>
-                  <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
+                  <TableCell
+                    sx={{
+                      color: "#ffffff",
+                      fontWeight: "bold",
+                      fontSize: { xs: "14px", sm: "16px" },
+                    }}
+                  >
                     Available Quantity
                   </TableCell>
-                  <TableCell sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "16px" }}>
+                  <TableCell
+                    sx={{
+                      color: "#ffffff",
+                      fontWeight: "bold",
+                      fontSize: { xs: "14px", sm: "16px" },
+                    }}
+                  >
                     Required Quantity
                   </TableCell>
                 </StyledTableHead>
@@ -159,14 +177,26 @@ const LowStockProduct = (data) => {
                   <StyledTableRow key={index}>
                     <TableCell>
                       <Box display="flex" alignItems="center">
-                        { icons[index % 5]|| null}
-                        <Typography variant="body1" sx={{ marginLeft: 2, color: "#ffffff", fontWeight: 500 }}>
+                        {icons[index % 5] || null}
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            marginLeft: 2,
+                            color: "#ffffff",
+                            fontWeight: 500,
+                            fontSize: { xs: "14px", sm: "16px" },
+                          }}
+                        >
                           {row.product}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell sx={{ color: "#ffffff" }}>{row.available_quantity}</TableCell>
-                    <TableCell sx={{ color: "#ffffff" }}>{row.require_quantity}</TableCell>
+                    <TableCell sx={{ color: "#ffffff", fontSize: { xs: "14px", sm: "16px" } }}>
+                      {row.available_quantity}
+                    </TableCell>
+                    <TableCell sx={{ color: "#ffffff", fontSize: { xs: "14px", sm: "16px" } }}>
+                      {row.require_quantity}
+                    </TableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>

@@ -120,6 +120,7 @@ const CreateInvoice = ({ onClose }) => {
         borderRadius: "10px",
         color: "white",
         position: "relative",
+        backgroundColor:'black',
       }}
     >
       <Button

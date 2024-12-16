@@ -229,10 +229,6 @@ const CreateInvoice = ({ onClose }) => {
     setInvoiceItems(updatedItems);
   };
   
-  // console.log(invoiceItems)
-
-  // console.log(invoiceId)
-
   return (
     <Box
     sx={{
@@ -249,6 +245,7 @@ const CreateInvoice = ({ onClose }) => {
       borderRadius:'10px',
       color: "white",
       position: "relative", 
+      backgroundColor:'black',
     }}
   >
     {/* Close Button */}

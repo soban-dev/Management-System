@@ -74,99 +74,162 @@ function Invoices() {
 
   return (
     <Box
+  sx={{
+    backgroundColor: "rgb(32 41 64)",
+    borderRadius: "10px",
+    padding: 3,
+    color: "#FFF",
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+    width: "100%",
+    margin: "auto",
+    height: { xs: "auto", sm: "573px" },
+    display: "flex",
+    flexDirection: "column",
+  }}
+>
+  {/* Top Section: Invoices Heading and Button */}
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 2,
+      flexDirection: { xs: "column", sm: "row" },
+      textAlign: "center",
+      gap: { xs: 1.5, sm: 0 },
+    }}
+  >
+    <Typography
+      variant="h6"
+      fontWeight="bold"
+      sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" }, marginBottom: { xs: 1, sm: 0 } }}
+    >
+      Invoices
+    </Typography>
+    <Button
+      variant="outlined"
+      size="small"
       sx={{
-        backgroundColor: "rgb(32 41 64)",
-        borderRadius: "10px",
-        padding: 3,
-        color: "#FFF",
-        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-        Width: '100%',
-        margin: "auto",
-        height: '573px',
+        color: "#1E90FF",
+        borderColor: "#1E90FF",
+        textTransform: "none",
+        "&:hover": {
+          backgroundColor: "rgba(30, 144, 255, 0.1)",
+          borderColor: "#1E90FF",
+        },
+      }}
+      onClick={viewAll}
+    >
+      {showAllInvoices ? "Show Less" : "View All"}
+    </Button>
+  </Box>
+
+  {/* Content Section */}
+  {loading ? (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "60vh",
       }}
     >
-      {/* Header */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 2,
-        }}
-      >
-        <Typography variant="h6" fontWeight="bold">
-          Invoices
-        </Typography>
-        <Button
-          variant="outlined"
-          size="small"
+      <CircularProgress sx={{ color: "#1E90FF" }} />
+    </Box>
+  ) : (
+    <List
+      sx={{
+        maxHeight: "440px",
+        overflowY: "auto",
+        marginTop: { xs: 2, sm: 0 },
+        gap: 1,
+      }}
+    >
+      {displayedInvoices.map((invoice, index) => (
+        <ListItem
+          key={index}
           sx={{
-            color: "#1E90FF",
-            borderColor: "#1E90FF",
-            textTransform: "none",
-            "&:hover": {
-              backgroundColor: "rgba(30, 144, 255, 0.1)",
-              borderColor: "#1E90FF",
-            },
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: "space-between",
+            alignItems: { xs: "flex-start", sm: "center" },
+            padding: "12px 0",
+            gap: { xs: 1, sm: 2 },
+            borderBottom:
+              index !== displayedInvoices.length - 1
+                ? "1px solid rgba(255, 255, 255, 0.1)"
+                : "none",
           }}
-          onClick={viewAll} // onClick event added here
         >
-          {showAllInvoices ? "Show Less" : "View All"} {/* Toggle button text */}
-        </Button>
-      </Box>
+          {/* Date and ID */}
+          <Box
+            sx={{
+              textAlign: { xs: "center", sm: "left" },
+              width: "100%",
+              marginBottom: { xs: 1, sm: 0 },
+            }}
+          >
+            <Typography
+              variant="body1"
+              fontWeight="bold"
+              sx={{ fontSize: { xs: "1rem", sm: "1.1rem" } }}
+            >
+              {invoice.date}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="gray"
+              sx={{ fontSize: { xs: "0.8rem", sm: "0.9rem" }, marginTop: "4px" }}
+            >
+              {invoice.id}
+            </Typography>
+          </Box>
 
-      {/* Loader */}
-      {loading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-          <CircularProgress sx={{ color: "#1E90FF" }} />
-        </Box>
-      ) : (
-        // Invoices List
-        <List sx={{ maxHeight: '440px', overflow: 'auto' }}>
-          {displayedInvoices.map((invoice, index) => (
-            <ListItem
-              key={index}
+          {/* Amount and Button */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: { xs: "center", sm: "flex-end" },
+              gap: 1,
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant="body1"
+              fontWeight="bold"
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "8px 0",
-                borderBottom: index !== displayedInvoices.length - 1 ? "1px solid rgba(255, 255, 255, 0.1)" : "none",
+                fontSize: { xs: "1rem", sm: "1.1rem" },
+                textAlign: "center",
               }}
             >
-              {/* Invoice Info */}
-              <Box>
-                <Typography variant="body1" fontWeight="bold">
-                  {invoice.date}
-                </Typography>
-                <Typography variant="body2" color="gray">
-                  {invoice.id}
-                </Typography>
-              </Box>
+              ${invoice.amount}
+            </Typography>
+            <Button
+              startIcon={<PictureAsPdfIcon />}
+              sx={{
+                color: "#1E90FF",
+                fontWeight: "bold",
+                fontSize: { xs: "12px", sm: "14px" },
+                textTransform: "none",
+                padding: "4px 8px",
+                minWidth: "auto",
+              }}
+              onClick={() => downloadInvoicePDF(invoice.id)}
+            >
+              PDF
+            </Button>
+          </Box>
+        </ListItem>
+      ))}
+    </List>
+  )}
+</Box>
 
-              {/* Amount and PDF */}
-              <ListItemSecondaryAction sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Typography variant="body1" fontWeight="bold">
-                  ${invoice.amount}
-                </Typography>
-                <Button
-                  startIcon={<PictureAsPdfIcon />}
-                  sx={{
-                    color: "#1E90FF",
-                    fontWeight: "bold",
-                    fontSize: "14px",
-                    textTransform: "none",
-                  }}
-                  onClick={() => downloadInvoicePDF(invoice.id)} // Trigger download
-                >
-                  PDF
-                </Button>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      )}
-    </Box>
+
+
+
+
   );
 }
 

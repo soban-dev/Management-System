@@ -228,6 +228,7 @@ const CreateProduct = () => {
       variant="contained"
       sx={{
         backgroundColor: "#1976d2",
+        mb: 3,
         ":hover": {
           backgroundColor: "#1565c0",
         },

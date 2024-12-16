@@ -33,7 +33,7 @@ const CreateInvoice = ({ onClose }) => {
   const inputRef = useRef(null); 
   const [clientName, setClientName] = useState(""); 
   const [openReceiptModal, setOpenReceiptModal] = useState(false); 
-  const [invoiceId, setInvoiceId] = useState("");
+
   const [oldtotal, setOldTotal] = useState("");
   const [invoiceData, setInvoiceData] = useState(null);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -180,10 +180,6 @@ const CreateInvoice = ({ onClose }) => {
     updatedItems[index].quantity = newValue;
     setInvoiceItems(updatedItems);
   };
-  
-  // console.log(invoiceItems)
-
-  // console.log(invoiceId)
 
   return (
     <Box
@@ -192,15 +188,16 @@ const CreateInvoice = ({ onClose }) => {
       backgroundSize: "cover", 
       backgroundPosition: "center", 
       backgroundRepeat: "no-repeat", 
-      width: "800px",
+      width: { xs: "100%", sm: "80%" },
       margin: "auto",
-      mt: 5,
+      mt: { xs: "-1px", sm: "20px" },
       p: 3,
       boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
       border:'2px solid #444',
       borderRadius:'10px',
       color: "white",
       position: "relative", 
+      backgroundColor:'black',
     }}
   >
     {/* Close Button */}
@@ -209,11 +206,11 @@ const CreateInvoice = ({ onClose }) => {
       sx={{
         position: "absolute", 
         top: "10px", 
-        right: "10px", 
+        right: { xs: "5px", sm: "10px" }, 
         backgroundColor: "red", 
         color: "white", 
-        minWidth: "40px", 
-        minHeight: "40px",
+        minWidth: { xs: "35px", sm: "40px" }, 
+        minHeight:{ xs: "20px", sm: "40px" },
         borderRadius: "50%", 
         ':hover': {
           backgroundColor: "darkred", 
@@ -292,109 +289,150 @@ const CreateInvoice = ({ onClose }) => {
 
 
       {/* Buttons Row */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "flex-start", justifyContent: "space-between",marginRight:'13px',}}>
-        <Box sx={{ textAlign: "center", width: "150px" }}>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#1976d2",
-              ":hover": { backgroundColor: "#115293" },
-              height: "50px",
-              width: "100%",
-            }}
-          >
-            Price
-          </Button>
-          <Typography variant="body2" sx={{ color: "white", marginTop: 1 }}>
-            {itemData ? itemData.selling_price_per_unit : "0"}
-          </Typography>
-        </Box>
-
-        <Box sx={{ textAlign: "center", width: "150px" }}>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#1976d2",
-              ":hover": { backgroundColor: "#115293" },
-              height: "50px",
-              width: "100%",
-            }}
-          >
-            Available Qty
-          </Button>
-          <Typography variant="body2" sx={{ color: "white", marginTop: 1 }}>
-            {itemData ? itemData.quantity : "0"}
-          </Typography>
-        </Box>
-
-        <Box sx={{ textAlign: "center", width: "150px" }}>
-  <TextField
-    value={quantity}
-    onChange={(e) => setQuantity(e.target.value)}
-    onKeyPress={handleKeyPress}
-    placeholder="Enter Quantity"
+      <Box
+  sx={{
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 2,
+    mb: 3,
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: { xs: "column", sm: "row" }, // Stack vertically on mobile, row on larger screens
+  }}
+>
+  {/* First Button */}
+  <Box
     sx={{
-      width: "100%",
-      backgroundColor: "#424242",
-      input: { color: "white" },
+      textAlign: "center",
+      width: { xs: "100%", sm: "150px" },
     }}
-    
-  />
-  {/* <Box sx={{ mt: 1 }}>
-    <Typography variant="body2" sx={{ color: "white" }}>
-      {enteredQuantity || "Enter a value"}
+  >
+    <Button
+      variant="contained"
+      sx={{
+        backgroundColor: "#1976d2",
+        ":hover": { backgroundColor: "#115293" },
+        height: "50px",
+        width: "100%",
+      }}
+    >
+      Price
+    </Button>
+    <Typography variant="body2" sx={{ color: "white", marginTop: 1 }}>
+      {itemData ? itemData.selling_price_per_unit : "0"}
     </Typography>
-  </Box> */}
+  </Box>
+
+  {/* Second Button */}
+  <Box
+    sx={{
+      textAlign: "center",
+      width: { xs: "100%", sm: "150px" },
+    }}
+  >
+    <Button
+      variant="contained"
+      sx={{
+        backgroundColor: "#1976d2",
+        ":hover": { backgroundColor: "#115293" },
+        height: "50px",
+        width: "100%",
+      }}
+    >
+      Available Qty
+    </Button>
+    <Typography variant="body2" sx={{ color: "white", marginTop: 1 }}>
+      {itemData ? itemData.quantity : "0"}
+    </Typography>
+  </Box>
+
+  {/* Text Field: Shown Below Buttons Only on Mobile */}
+  <Box
+    sx={{
+      textAlign: "center",
+      width: { xs: "100%", sm: "150px" },
+      order: { xs: 3, sm: 0 }, // Move text field below on mobile
+    }}
+  >
+    <TextField
+      value={quantity}
+      onChange={(e) => setQuantity(e.target.value)}
+      onKeyPress={handleKeyPress}
+      placeholder="Enter Quantity"
+      sx={{
+        width: "100%",
+        backgroundColor: "#424242",
+        input: { color: "white" },
+      }}
+    />
+  </Box>
 </Box>
 
-      </Box>
 
       {/* Invoice Table */}
-      <Table sx={{ backgroundColor: "#424242", borderRadius: 2, overflow: "hidden" }}>
-  <TableHead>
-    <TableRow>
-      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Item</TableCell>
-      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Price</TableCell>
-      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Qty</TableCell>
-      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Amount</TableCell>
-    </TableRow>
-  </TableHead>
-  <TableBody>
-    {invoiceItems.length === 0 ? (
+      <Box sx={{ width: "100%", overflowX: "auto" }}>
+  <Table
+    sx={{
+      backgroundColor: "#424242",
+      borderRadius: 2,
+      minWidth: "600px", // Ensure minimum table width for scrolling
+    }}
+  >
+    <TableHead>
       <TableRow>
-        <TableCell colSpan={4} align="center" sx={{ color: "white" }}>
-          No items available
-        </TableCell>
+        <TableCell sx={{ color: "white", fontWeight: "bold" }}>Item</TableCell>
+        <TableCell sx={{ color: "white", fontWeight: "bold" }}>Price</TableCell>
+        <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Qty</TableCell>
+        <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Amount</TableCell>
       </TableRow>
-    ) : (
-      invoiceItems.map((item, index) => (
-        <TableRow key={index}>
-          <TableCell sx={{ color: "white" }}>{item.name}</TableCell>
-          <TableCell sx={{ color: "white" }}>{item.price}</TableCell>
-          <TableCell>
-            <input
-              type="text"
-              value={item.quantity}
-              placeholder="Total Qty"
-              onChange={(e) => handleQuantityChange(index, e.target.value)}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  event.preventDefault(); 
-                  event.target.blur(); 
-                  // console.log("Discount value updated:", discount); // Debug or handle value
-                }
-              }}
-              style={{ color: "white", backgroundColor: "transparent", border: "none", outline: "none", width: "100px", textAlign: "center" }}
-            />
+    </TableHead>
+    <TableBody>
+      {invoiceItems.length === 0 ? (
+        <TableRow>
+          <TableCell colSpan={4} align="center" sx={{ color: "white" }}>
+            No items available
           </TableCell>
-          <TableCell sx={{ color: "white" }}>{item.totalAmount}  <IconButton onClick={() => handleDelete(index)} color="error">
-              <DeleteIcon />
-            </IconButton></TableCell>
         </TableRow>
-      ))
-    )}
-  </TableBody>
-</Table>
+      ) : (
+        invoiceItems.map((item, index) => (
+          <TableRow key={index}>
+            <TableCell sx={{ color: "white" }}>{item.name}</TableCell>
+            <TableCell sx={{ color: "white" }}>{item.price}</TableCell>
+            <TableCell>
+              <input
+                type="text"
+                value={item.quantity}
+                placeholder="Total Qty"
+                onChange={(e) => handleQuantityChange(index, e.target.value)}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    event.target.blur();
+                  }
+                }}
+                style={{
+                  color: "white",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  outline: "none",
+                  width: "100px",
+                  textAlign: "center",
+                }}
+              />
+            </TableCell>
+            <TableCell sx={{ color: "white" }}>
+              {item.totalAmount}
+              <IconButton onClick={() => handleDelete(index)} color="error">
+                <DeleteIcon />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        ))
+      )}
+    </TableBody>
+  </Table>
+</Box>
+
 
 
       {/* Discount and Generate Receipt */}
