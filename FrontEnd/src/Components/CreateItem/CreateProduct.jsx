@@ -12,8 +12,7 @@ const CreateProduct = () => {
   const [productData, setProductData] = useState([]); 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [loading, setLoading] = useState(false); // Loader state
-
+  const [loading, setLoading] = useState(false); 
   const priceInput = useRef(null);
   const quantityInput = useRef(null);
   const buyingPriceInput = useRef(null);
@@ -36,7 +35,7 @@ const CreateProduct = () => {
 
     setProductData((prevData) => [...prevData, newProduct]);
 
-    setLoading(true); // Start loading when the request is made
+    setLoading(true); 
 
     try {
       const response = await axios.post(`${BASE_URL}/inventory/createitem`, { 
@@ -76,7 +75,7 @@ const CreateProduct = () => {
     justifyContent: "center",
     alignItems: "center",
     borderRadius: "22px",
-    padding: "25px 0px",
+    padding: { xs: "15px 10px", sm: "25px 0px" },
     marginBottom: "20px",
   }}
 >
@@ -88,6 +87,7 @@ const CreateProduct = () => {
       color: "white",
       fontFamily: "Poppins, sans-serif",
       fontWeight: 600,
+      fontSize: { xs: "1.5rem", sm: "2rem" },
     }}
   >
     Add a New Product
@@ -98,12 +98,12 @@ const CreateProduct = () => {
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
-      width: "70%",
-      height: "55vh",  
+      width: { xs: "100%", sm: "70%" },
+      height: { xs: "auto", sm: "55vh" },
       display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gridTemplateRows: "auto auto auto",  
-      gap: 4,  
+      gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+      gridTemplateRows: "auto auto auto",
+      gap: 2,
       justifyContent: "center",
       alignItems: "center",
       padding: 3,
@@ -111,10 +111,9 @@ const CreateProduct = () => {
       boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
       borderRadius: "10px",
       backgroundColor: "rgb(29 35 52 / 90%)",
-      border:'2px solid #444444'
+      border: "2px solid #444444",
     }}
   >
-    {/* Client Name Input */}
     <TextField
       variant="outlined"
       placeholder="Enter Name"
@@ -128,10 +127,14 @@ const CreateProduct = () => {
         },
       }}
       onKeyDown={(e) => handleKeyPress(e, priceInput)}
-      sx={{ mb: 3, width: "100%", maxWidth: "350px", textAlign: "center" }}
+      sx={{
+        mb: 3,
+        width: "100%",
+        maxWidth: "350px",
+        textAlign: "center",
+      }}
     />
 
-    {/* Selling Price Input */}
     <TextField
       variant="outlined"
       placeholder="Enter Selling Price"
@@ -146,10 +149,14 @@ const CreateProduct = () => {
       }}
       onKeyDown={(e) => handleKeyPress(e, buyingPriceInput)}
       inputRef={priceInput}
-      sx={{ mb: 3, width: "100%", maxWidth: "350px", textAlign: "center" }}
+      sx={{
+        mb: 3,
+        width: "100%",
+        maxWidth: "350px",
+        textAlign: "center",
+      }}
     />
 
-    {/* Buying Price Input */}
     <TextField
       variant="outlined"
       placeholder="Enter Buying Price"
@@ -164,10 +171,14 @@ const CreateProduct = () => {
       }}
       onKeyDown={(e) => handleKeyPress(e, requiredQuantityInput)}
       inputRef={buyingPriceInput}
-      sx={{ mb: 3, width: "100%", maxWidth: "350px", textAlign: "center" }}
+      sx={{
+        mb: 3,
+        width: "100%",
+        maxWidth: "350px",
+        textAlign: "center",
+      }}
     />
 
-    {/* Required Quantity Input */}
     <TextField
       variant="outlined"
       placeholder="Enter Required Quantity"
@@ -182,10 +193,14 @@ const CreateProduct = () => {
       }}
       onKeyDown={(e) => handleKeyPress(e, quantityInput)}
       inputRef={requiredQuantityInput}
-      sx={{ mb: 3, width: "100%", maxWidth: "350px", textAlign: "center" }}
+      sx={{
+        mb: 3,
+        width: "100%",
+        maxWidth: "350px",
+        textAlign: "center",
+      }}
     />
 
-    {/* Available Quantity Input */}
     <TextField
       variant="outlined"
       placeholder="Enter Available Quantity"
@@ -200,10 +215,14 @@ const CreateProduct = () => {
       }}
       onKeyDown={(e) => handleKeyPress(e, null)}
       inputRef={quantityInput}
-      sx={{ mb: 3, width: "100%", maxWidth: "350px", textAlign: "center" }}
+      sx={{
+        mb: 3,
+        width: "100%",
+        maxWidth: "350px",
+        textAlign: "center",
+      }}
     />
 
-    {/* Add Product Button */}
     <Button
       onClick={handleSubmit}
       variant="contained"
@@ -213,14 +232,12 @@ const CreateProduct = () => {
           backgroundColor: "#1565c0",
         },
         fontSize: "16px",
-        padding: "10px 20px",
+        padding: { xs: "8px 16px", sm: "10px 20px" },
         width: "100%",
-        mt: 3,
-        maxWidth: '350px',
-        marginTop: '-20px',
+        maxWidth: "350px",
         textAlign: "center",
       }}
-      disabled={loading} // Disable button while loading
+      disabled={loading}
     >
       {loading ? (
         <CircularProgress size={24} color="inherit" />
@@ -229,7 +246,6 @@ const CreateProduct = () => {
       )}
     </Button>
 
-    {/* Error and Success Message */}
     {errorMessage && (
       <Typography
         variant="body2"
@@ -237,8 +253,8 @@ const CreateProduct = () => {
         sx={{
           color: "red",
           marginBottom: 2,
-          marginTop: '-35px',
-          marginRight:'-90px',
+          marginTop: "-20px",
+          marginRight: { xs: "0", sm: "-90px" },
         }}
       >
         {errorMessage}
@@ -252,8 +268,8 @@ const CreateProduct = () => {
         sx={{
           color: "green",
           marginBottom: 2,
-          marginTop: '-35px',
-          marginRight:'-90px',
+          marginTop: "-20px",
+          marginRight: { xs: "0", sm: "-90px" },
         }}
       >
         {successMessage}
@@ -261,6 +277,7 @@ const CreateProduct = () => {
     )}
   </Box>
 </Box>
+
 
   );
 };

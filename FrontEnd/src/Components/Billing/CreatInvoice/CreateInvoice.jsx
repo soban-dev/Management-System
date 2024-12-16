@@ -36,6 +36,7 @@ const CreateInvoice = ({ onClose }) => {
   const [invoiceId, setInvoiceId] = useState("");
   const [oldtotal, setOldTotal] = useState("");
   const [invoiceData, setInvoiceData] = useState(null);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
 
   const fetchSuggestions = async (query) => {
     try {
@@ -52,6 +53,24 @@ const CreateInvoice = ({ onClose }) => {
       }
     } catch (error) {
       console.error("Error fetching suggestions:", error);
+    }
+  };
+  const handleKeyDown = (event) => {
+    if (suggestions.length > 0) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setFocusedIndex((prev) =>
+          prev < suggestions.length - 1 ? prev + 1 : 0
+        );
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setFocusedIndex((prev) =>
+          prev > 0 ? prev - 1 : suggestions.length - 1
+        );
+      } else if (event.key === "Enter" && focusedIndex >= 0) {
+        event.preventDefault();
+        handleSuggestionClick(suggestions[focusedIndex]);
+      }
     }
   };
 
@@ -228,34 +247,49 @@ const CreateInvoice = ({ onClose }) => {
 
 
       {/* Search Field */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}>
-        <TextField
-          variant="outlined"
-          fullWidth
-          value={searchValue}
-          onChange={handleSearchChange}
-          placeholder="Search for an item"
-          InputProps={{ style: { color: "white", background: "#424242" } }}
-        />
-        {suggestions.length > 0 && (
-          <Paper sx={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,color: "white", background: "#424242" }}>
-            <List>
-              {suggestions.map((suggestion, index) => (
-                <MenuItem
-                  key={suggestion.id}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  sx={{
-                    backgroundColor: "#616161",
-                    ":hover": { backgroundColor: "#303030" },
-                  }}
-                >
-                  {suggestion.name}
-                </MenuItem>
-              ))}
-            </List>
-          </Paper>
-        )}
-      </Box>
+      <Box
+  sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}
+  onKeyDown={handleKeyDown}
+>
+  <TextField
+    variant="outlined"
+    fullWidth
+    value={searchValue}
+    onChange={handleSearchChange}
+    placeholder="Search for an item"
+    InputProps={{ style: { color: "white", background: "#424242" } }}
+  />
+  {searchValue.trim().length > 0 && suggestions.length > 0 && (
+    <Paper
+      sx={{
+        position: "absolute",
+        top: "100%",
+        left: 0,
+        right: 0,
+        zIndex: 10,
+        color: "white",
+        background: "#424242",
+      }}
+    >
+      <List>
+        {suggestions.map((suggestion, index) => (
+          <MenuItem
+            key={suggestion.id}
+            onClick={() => handleSuggestionClick(suggestion)}
+            sx={{
+              backgroundColor:
+                focusedIndex === index ? "#303030" : "#616161",
+              ":hover": { backgroundColor: "#303030" },
+            }}
+          >
+            {suggestion.name}
+          </MenuItem>
+        ))}
+      </List>
+    </Paper>
+  )}
+</Box>
+
 
       {/* Buttons Row */}
       <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "flex-start", justifyContent: "space-between",marginRight:'13px',}}>

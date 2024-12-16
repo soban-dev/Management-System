@@ -21,6 +21,28 @@ const CreateInvoice = ({ onClose }) => {
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [invoiceItems, setInvoiceItems] = useState([]);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  
+  
+  const handleKeyDown = (event) => {
+    if (suggestions.length > 0) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setFocusedIndex((prev) =>
+          prev < suggestions.length - 1 ? prev + 1 : 0
+        ); // Loop to the start
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setFocusedIndex((prev) =>
+          prev > 0 ? prev - 1 : suggestions.length - 1
+        ); // Loop to the end
+      } else if (event.key === "Enter" && focusedIndex >= 0) {
+        event.preventDefault();
+        handleSuggestionClick(suggestions[focusedIndex]); // Use focusedIndex to handle selection
+      }
+    }
+  };
+  
 
   const fetchSuggestions = async (query) => {
     try {
@@ -62,6 +84,7 @@ const CreateInvoice = ({ onClose }) => {
       console.error("Error fetching item details:", error);
     }
   };
+  console.log(invoiceItems)
 
   const handleUpdateItems = async () => {
     const updateData = invoiceItems.map((item) => ({
@@ -81,7 +104,7 @@ const CreateInvoice = ({ onClose }) => {
       alert("Failed to update items. Please try again.");
     }
   };
-
+   
   return (
     <Box
       sx={{
@@ -120,7 +143,8 @@ const CreateInvoice = ({ onClose }) => {
         Update Item
       </Typography>
 
-      <Box sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}
+      onKeyDown={handleKeyDown}>
         <TextField
           variant="outlined"
           fullWidth
@@ -129,7 +153,7 @@ const CreateInvoice = ({ onClose }) => {
           placeholder="Search for an item"
           InputProps={{ style: { color: "white", background: "#424242" } }}
         />
-        {suggestions.length > 0 && (
+        {searchValue.trim().length > 0 && suggestions.length > 0 && (
           <Paper
             sx={{
               position: "absolute",
@@ -142,12 +166,13 @@ const CreateInvoice = ({ onClose }) => {
             }}
           >
             <List>
-              {suggestions.map((suggestion) => (
+              {suggestions.map((suggestion, index) => (
                 <MenuItem
                   key={suggestion.id}
                   onClick={() => handleSuggestionClick(suggestion)}
                   sx={{
-                    backgroundColor: "#616161",
+                    backgroundColor:
+                      focusedIndex === index ? "#303030" : "#616161",
                     ":hover": { backgroundColor: "#303030" },
                   }}
                 >

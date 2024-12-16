@@ -33,11 +33,13 @@ export default function CustomDateRangePicker({ dateValue, setDateValue, setDate
   // console.log("Date Range:", dateRange);  
   
   
-
+ 
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box sx={{ marginBottom: '30px', display: 'flex', justifyContent: 'flex-end' }}>
+      <Box sx={{ marginBottom: '30px', display: 'flex', justifyContent: 'flex-end', "@media (max-width: 768px)": { 
+    marginTop: '20px', 
+  }, }}>
         {/* Start Date Picker */}
         <DatePicker
         sx={{

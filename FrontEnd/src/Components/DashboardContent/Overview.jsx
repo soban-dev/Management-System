@@ -49,7 +49,7 @@ export default function Overview() {
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
             }}
           >
-            <Typography variant="h6" mb={2}>
+            <Typography variant="h6" mb={2}sx={{color:'#90CAF9'}}>
               Overview
             </Typography>
             <Typography variant="body2" sx={{ color: "#4CAF50" }} mb={2}>

@@ -36,8 +36,26 @@ const CreateInvoice = ({ onClose }) => {
   const [invoiceId, setInvoiceId] = useState("");
   const [oldtotal, setOldTotal] = useState("");
   const [invoiceData, setInvoiceData] = useState(null);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
 
-
+  const handleKeyDown = (event) => {
+    if (suggestions.length > 0) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setFocusedIndex((prev) =>
+          prev < suggestions.length - 1 ? prev + 1 : 0
+        );
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setFocusedIndex((prev) =>
+          prev > 0 ? prev - 1 : suggestions.length - 1
+        );
+      } else if (event.key === "Enter" && focusedIndex >= 0) {
+        event.preventDefault();
+        handleSuggestionClick(suggestions[focusedIndex]);
+      }
+    }
+  };
   const handleKeyPress1 = async (event, invoiceItems) => {
     if (event.key === "Enter") {
       event.preventDefault(); 
@@ -85,12 +103,7 @@ const CreateInvoice = ({ onClose }) => {
       }
     }
   };
-  // console.log(oldtotal)
-  
-  
-  
-
-
+ 
   const fetchSuggestions = async (query) => {
     try {
       if (query.length === 0) {
@@ -299,7 +312,8 @@ const CreateInvoice = ({ onClose }) => {
 
 
       {/* Search Field */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}
+      onKeyDown={handleKeyDown}>
         <TextField
           variant="outlined"
           fullWidth
@@ -308,7 +322,7 @@ const CreateInvoice = ({ onClose }) => {
           placeholder="Search for an item"
           InputProps={{ style: { color: "white", background: "#424242" } }}
         />
-        {suggestions.length > 0 && (
+        {searchValue.trim().length > 0 && suggestions.length > 0 && (
           <Paper sx={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,color: "white", background: "#424242" }}>
             <List>
               {suggestions.map((suggestion, index) => (
@@ -316,7 +330,8 @@ const CreateInvoice = ({ onClose }) => {
                   key={suggestion.id}
                   onClick={() => handleSuggestionClick(suggestion)}
                   sx={{
-                    backgroundColor: "#616161",
+                    backgroundColor:
+                      focusedIndex === index ? "#303030" : "#616161",
                     ":hover": { backgroundColor: "#303030" },
                   }}
                 >

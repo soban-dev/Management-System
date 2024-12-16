@@ -9,7 +9,7 @@ import ProfileComponent from "../pages/Profile/ProfileContent";
 import NotificationComponent from "../pages/Notification/NotificationContent";
 import CreateItem from "../pages/CreateItem/CreateItem";
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const userRole = localStorage.getItem("role");  // Get role from localStorage
+  const userRole = localStorage.getItem("role"); 
   
   if (!userRole || !allowedRoles.includes(userRole)) {
     return <Navigate to="/sign-in" />;
@@ -49,7 +49,11 @@ function DashboardLayout() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          width:'calc(100% - 250px)'
+          width:'calc(100% - 250px)',
+          "@media (max-width: 900px)": { 
+            width: "100%",
+  },
+          
         }}
       >
         {/* Header */}

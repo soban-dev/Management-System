@@ -55,6 +55,9 @@ const HeaderBox = styled(Box)({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
+  "@media (max-width: 600px)": {
+    padding: "13px 30px", 
+  },
 });
 
 const SocialButtonsBox = styled(Box)({
