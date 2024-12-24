@@ -2,14 +2,16 @@ import React, { useState, useRef,useEffect } from "react";
 import axios from "axios";
 import {
   Box,
-  Typography,
   Avatar,
-  Stack,
-  Switch,
-  Divider,
-  IconButton,
   Paper,
+  Typography,
+  Divider,
+  Stack,
   TextField,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import backgroundImage from "../../assets/bg-reset-cover.jpeg"; 
@@ -73,9 +75,10 @@ const ProfileComponent = () => {
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "22px",
+        fontFamily: "'Roboto', sans-serif",
       }}
     >
-      {/* Background Image with Light Overlay */}
+      {/* Background Image */}
       <Box
         sx={{
           width: "100%",
@@ -94,12 +97,13 @@ const ProfileComponent = () => {
           width: "85%",
           maxWidth: "900px",
           backgroundColor: "#2D3748",
-          borderRadius: "22px", 
+          borderRadius: "22px",
           p: 5,
           mt: -10,
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           gap: 4,
+          fontFamily: "'Roboto', sans-serif",
         }}
       >
         {/* Left Section */}
@@ -117,59 +121,90 @@ const ProfileComponent = () => {
                 objectFit: "cover",
               }}
               src={avatarImage}
-              alt="Richard Davis"
+              alt="Profile Avatar"
             />
             <Typography variant="h5" mt={2} sx={{ color: "white", fontWeight: "bold" }}>
-            {profileData?.data?.name || "Richard Davis"}
+              {profileData?.data?.name || "Richard Davis"}
             </Typography>
             <Typography variant="body2" sx={{ color: "#A0AEC0", mb: 4 }}>
-            {profileData?.data?.role || "CEO / Co-Founder"}
+              {profileData?.data?.role || "CEO / Co-Founder"}
             </Typography>
           </Stack>
 
-          <Typography variant="h6" sx={{ mb: 2, color: "white", fontWeight: "bold" }}>
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 2,
+              color: "white",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+            }}
+          >
             Platform Settings
           </Typography>
 
-          <Typography variant="body2" sx={{ color: "#A0AEC0", mb: 1 }}>
-            ACCOUNT
+          {/* Rules and Regulations */}
+          <Typography
+            variant="body2"
+            sx={{
+              color: "#A0AEC0",
+              mb: 1,
+              fontSize: "14px",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+            }}
+          >
+            Rules and Regulations
           </Typography>
-          <Stack direction="row" justifyContent="space-between" mb={2}>
-            <Typography variant="body2" sx={{ color: "white" }}>
-              Email me when someone follows me
-            </Typography>
-            <Switch color="primary" />
-          </Stack>
-
-          <Stack direction="row" justifyContent="space-between" mb={2}>
-            <Typography variant="body2" sx={{ color: "white" }}>
-              Email me when someone answers on my post
-            </Typography>
-            <Switch color="primary" />
-          </Stack>
-
-          <Stack direction="row" justifyContent="space-between" mb={2}>
-            <Typography variant="body2" sx={{ color: "white" }}>
-              Email me when someone mentions me
-            </Typography>
-            <Switch color="primary" />
-          </Stack>
-
-          <Typography variant="body2" sx={{ color: "#A0AEC0", mt: 3, mb: 1 }}>
-            APPLICATION
-          </Typography>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" sx={{ color: "white" }}>
-              New launches and projects
-            </Typography>
-            <Switch color="primary" />
-          </Stack>
+          <List sx={{ paddingLeft: 2 }}>
+            <ListItem disableGutters>
+              <ListItemText
+                primary="Your account must comply with all applicable laws and regulations."
+                primaryTypographyProps={{
+                  sx: { color: "white", fontSize: "14px", lineHeight: "1.8" },
+                }}
+              />
+            </ListItem>
+            <ListItem disableGutters>
+              <ListItemText
+                primary="Ensure the security of your account by safeguarding your password."
+                primaryTypographyProps={{
+                  sx: { color: "white", fontSize: "14px", lineHeight: "1.8" },
+                }}
+              />
+            </ListItem>
+            <ListItem disableGutters>
+              <ListItemText
+                primary="Avoid sharing sensitive or private information in public spaces."
+                primaryTypographyProps={{
+                  sx: { color: "white", fontSize: "14px", lineHeight: "1.8" },
+                }}
+              />
+            </ListItem>
+            <ListItem disableGutters>
+              <ListItemText
+                primary="Respect other members and maintain a professional demeanor."
+                primaryTypographyProps={{
+                  sx: { color: "white", fontSize: "14px", lineHeight: "1.8" },
+                }}
+              />
+            </ListItem>
+          </List>
         </Box>
 
         {/* Right Section */}
         <Box sx={{ flex: 1 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
+            <Typography
+              variant="h6"
+              sx={{
+                color: "white",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+              }}
+            >
               Profile Information
             </Typography>
             <IconButton sx={{ color: "white" }} onClick={handleEditClick}>
@@ -181,7 +216,6 @@ const ProfileComponent = () => {
           <Box sx={{ position: "relative" }}>
             {isEditing ? (
               <TextField
-                ref={textFieldRef}
                 value={profileText}
                 onChange={(e) => setProfileText(e.target.value)}
                 sx={{
@@ -189,11 +223,12 @@ const ProfileComponent = () => {
                   borderRadius: "5px",
                   width: "100%",
                   mb: 2,
+                  fontFamily: "'Roboto', sans-serif",
                 }}
                 variant="filled"
                 multiline
                 rows={4}
-                onKeyPress={handleKeyPress} 
+                onKeyPress={handleKeyPress}
               />
             ) : (
               <Typography variant="body2" sx={{ color: "white" }}>
@@ -211,7 +246,7 @@ const ProfileComponent = () => {
                 Full Name:
               </Typography>
               <Typography variant="body2" sx={{ color: "white" }}>
-              {profileData?.data?.name || "Richard Davis"}
+                {profileData?.data?.name || "Richard Davis"}
               </Typography>
             </Stack>
 
@@ -220,7 +255,7 @@ const ProfileComponent = () => {
                 Mobile:
               </Typography>
               <Typography variant="body2" sx={{ color: "white" }}>
-              {profileData?.data?.phone || "(44) 123 1234 123"}
+                {profileData?.data?.phone || "(44) 123 1234 123"}
               </Typography>
             </Stack>
 
@@ -229,7 +264,7 @@ const ProfileComponent = () => {
                 Email:
               </Typography>
               <Typography variant="body2" sx={{ color: "white" }}>
-              {profileData?.data?.email || "alec.thompson@mail.com"}
+                {profileData?.data?.email || "alec.thompson@mail.com"}
               </Typography>
             </Stack>
 
@@ -238,7 +273,7 @@ const ProfileComponent = () => {
                 Location:
               </Typography>
               <Typography variant="body2" sx={{ color: "white" }}>
-              {profileData?.data?.address || "Okara"}
+                {profileData?.data?.address || "Okara"}
               </Typography>
             </Stack>
           </Box>

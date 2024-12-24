@@ -37,12 +37,14 @@ const token = localStorage.getItem("token")
     const discountedTotal = total - (total * discount) / 100; 
     return discountedTotal.toFixed(2); 
   };
+  
 
   const handleGenerateReceipt = async () => {
     if (!clientName) {
       setMessage("Please fill in the 'Client Name' field.");
       return;
     }
+    
     try {
       const response = await axios.post(`${BASE_URL}/inventory/invoice`,
         {
@@ -50,11 +52,12 @@ const token = localStorage.getItem("token")
           customername: clientName,
           items: inventory,
           total: calculateTotalAmount(),
+          
         },{
           withCredentials: true, 
         }
+        
       );
-
       // console.log("Backend Response:", response.data);
       setMessage("Receipt generated successfully!");
     } catch (error) {
@@ -62,6 +65,7 @@ const token = localStorage.getItem("token")
       setMessage("Failed to generate receipt. Please try again.");
     }
   };
+  
 
   // for download Pdf 
   // const handleGenerateReceipt = async () => {

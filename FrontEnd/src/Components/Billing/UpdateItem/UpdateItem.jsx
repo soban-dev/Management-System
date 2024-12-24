@@ -12,7 +12,9 @@ import {
   MenuItem,
   List,
   Paper,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import backgroundImage from "../../../assets/background.jpg";
 import { BASE_URL } from "../../../config";
@@ -22,27 +24,18 @@ const CreateInvoice = ({ onClose }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [invoiceItems, setInvoiceItems] = useState([]);
   const [focusedIndex, setFocusedIndex] = useState(-1);
-  
-  
+
   const handleKeyDown = (event) => {
     if (suggestions.length > 0) {
       if (event.key === "ArrowDown") {
-        event.preventDefault();
-        setFocusedIndex((prev) =>
-          prev < suggestions.length - 1 ? prev + 1 : 0
-        ); // Loop to the start
+        setFocusedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
       } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        setFocusedIndex((prev) =>
-          prev > 0 ? prev - 1 : suggestions.length - 1
-        ); // Loop to the end
+        setFocusedIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
       } else if (event.key === "Enter" && focusedIndex >= 0) {
-        event.preventDefault();
-        handleSuggestionClick(suggestions[focusedIndex]); // Use focusedIndex to handle selection
+        handleSuggestionClick(suggestions[focusedIndex]);
       }
     }
   };
-  
 
   const fetchSuggestions = async (query) => {
     try {
@@ -74,6 +67,14 @@ const CreateInvoice = ({ onClose }) => {
 
   const fetchItemDetails = async (itemName) => {
     try {
+      // Check if the item already exists in the invoiceItems
+      const itemExists = invoiceItems.some((item) => item.name === itemName);
+      if (itemExists) {
+        alert("Item already exists in the table.");
+        return; // Exit the function to prevent duplicate entry
+      }
+  
+      // Fetch item details if not already in the table
       const response = await axios.post(
         `${BASE_URL}/inventory/fetchitem`,
         { name: itemName },
@@ -84,7 +85,11 @@ const CreateInvoice = ({ onClose }) => {
       console.error("Error fetching item details:", error);
     }
   };
-  console.log(invoiceItems)
+  
+
+  const handleDeleteRow = (index) => {
+    setInvoiceItems((prevItems) => prevItems.filter((_, i) => i !== index));
+  };
 
   const handleUpdateItems = async () => {
     const updateData = invoiceItems.map((item) => ({
@@ -99,12 +104,14 @@ const CreateInvoice = ({ onClose }) => {
         { withCredentials: true }
       );
       alert("Items updated successfully!");
+      setInvoiceItems([]);
+      setSearchValue("");
     } catch (error) {
       console.error("Error updating items:", error);
       alert("Failed to update items. Please try again.");
     }
   };
-   
+
   return (
     <Box
       sx={{
@@ -120,7 +127,7 @@ const CreateInvoice = ({ onClose }) => {
         borderRadius: "10px",
         color: "white",
         position: "relative",
-        backgroundColor:'black',
+        backgroundColor: "black",
       }}
     >
       <Button
@@ -144,8 +151,7 @@ const CreateInvoice = ({ onClose }) => {
         Update Item
       </Typography>
 
-      <Box sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}
-      onKeyDown={handleKeyDown}>
+      <Box sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }} onKeyDown={handleKeyDown}>
         <TextField
           variant="outlined"
           fullWidth
@@ -172,8 +178,7 @@ const CreateInvoice = ({ onClose }) => {
                   key={suggestion.id}
                   onClick={() => handleSuggestionClick(suggestion)}
                   sx={{
-                    backgroundColor:
-                      focusedIndex === index ? "#303030" : "#616161",
+                    backgroundColor: focusedIndex === index ? "#303030" : "#616161",
                     ":hover": { backgroundColor: "#303030" },
                   }}
                 >
@@ -221,7 +226,15 @@ const CreateInvoice = ({ onClose }) => {
               <TableRow key={index}>
                 <TableCell sx={{ color: "white", textAlign: "center" }}>{item.name}</TableCell>
                 <TableCell sx={{ color: "white", textAlign: "center" }}>{item.selling_price_per_unit}</TableCell>
-                <TableCell sx={{ color: "white", textAlign: "center" }}>{item.quantity}</TableCell>
+                <TableCell sx={{ color: "white", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {item.quantity}
+                  <IconButton
+                    onClick={() => handleDeleteRow(index)}
+                    sx={{ color: "red", ml: 1 }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
                 <TableCell sx={{ color: "white", textAlign: "center" }}>
                   <TextField
                     value={item.addition || ""}
@@ -235,10 +248,7 @@ const CreateInvoice = ({ onClose }) => {
                     sx={{
                       width: "50%",
                       ".MuiOutlinedInput-root": {
-                        input: {
-                          color: "white",
-                          textAlign: "center",
-                        },
+                        input: { color: "white", textAlign: "center" },
                         "& fieldset": { borderColor: "gray" },
                         "&:hover fieldset": { borderColor: "white" },
                         "&.Mui-focused fieldset": { borderColor: "#757575" },

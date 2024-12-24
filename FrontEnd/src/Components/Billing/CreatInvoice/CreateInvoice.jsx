@@ -175,12 +175,19 @@ const CreateInvoice = ({ onClose }) => {
     updatedItems.splice(index, 1); 
     setInvoiceItems(updatedItems);
   };
+  // const handleQuantityChange = (index, newValue) => {
+  //   const updatedItems = [...invoiceItems];
+  //   updatedItems[index].quantity = newValue;
+  //   setInvoiceItems(updatedItems);
+  // };
   const handleQuantityChange = (index, newValue) => {
     const updatedItems = [...invoiceItems];
-    updatedItems[index].quantity = newValue;
+    const newQuantity = parseInt(newValue, 10) || 0; // Ensure the value is an integer or default to 0
+    updatedItems[index].quantity = newQuantity;
+    updatedItems[index].totalAmount = newQuantity * updatedItems[index].price; // Recalculate the total amount
     setInvoiceItems(updatedItems);
   };
-
+  
   return (
     <Box
     sx={{
@@ -375,7 +382,7 @@ const CreateInvoice = ({ onClose }) => {
     sx={{
       backgroundColor: "#424242",
       borderRadius: 2,
-      minWidth: "600px", // Ensure minimum table width for scrolling
+      minWidth: "600px", 
     }}
   >
     <TableHead>

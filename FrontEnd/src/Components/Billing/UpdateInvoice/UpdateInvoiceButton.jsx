@@ -66,13 +66,13 @@ const CreateInvoiceButton = () => {
         }}
       >
         <Box
-  sx={{
-    width: "100%",
-    maxWidth: 1000,
-    borderRadius: "10px", 
-    padding: { xs: 0, md: 0 }, 
-    height: { xs: "auto", sm: "90vh", md: "auto" }, 
-  }}
+ sx={{
+  width: "100%",
+  maxWidth: 1000,
+  borderRadius: "10px", 
+  padding: { xs: 0, md: 0 }, 
+  height: { xs: "auto", sm: "90vh", md: "auto" }, 
+}}
 >
   <CreateInvoice onClose={handleClose} />
 </Box>

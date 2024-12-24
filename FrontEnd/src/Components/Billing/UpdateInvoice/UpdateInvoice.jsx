@@ -231,184 +231,210 @@ const CreateInvoice = ({ onClose }) => {
   
   return (
     <Box
-    sx={{
-      backgroundImage: `url(${backgroundImage})`, 
-      backgroundSize: "cover", 
-      backgroundPosition: "center", 
-      backgroundRepeat: "no-repeat", 
-      width: "800px",
-      margin: "auto",
-      mt: 5,
-      p: 3,
-      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-      border:'2px solid #444',
-      borderRadius:'10px',
-      color: "white",
-      position: "relative", 
-      backgroundColor:'black',
-    }}
-  >
-    {/* Close Button */}
-    <Button
-      onClick={onClose} 
-      sx={{
-        position: "absolute", 
-        top: "10px", 
-        right: "10px", 
-        backgroundColor: "red", 
-        color: "white", 
-        minWidth: "40px", 
-        minHeight: "40px",
-        borderRadius: "50%", 
-        ':hover': {
-          backgroundColor: "darkred", 
-        },
-      }}
-    >
-      &times; {/* Cross icon */}
-    </Button>
-    
-    <Box 
   sx={{
-    display: "flex",
-    justifyContent: "space-between", 
-    alignItems: "center", 
-    mb: 3, 
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    width: { xs: "100%", sm: "80%" },
+    margin: "auto",
+    mt: { xs: "-1px", sm: "20px" },
+    p: 3,
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+    border: "2px solid #444",
+    borderRadius: "10px",
+    color: "white",
+    position: "relative",
+    backgroundColor: "black",
   }}
 >
-  {/* Left side TextField */}
-  <TextField
-        variant="outlined"
-        placeholder="Old Invoice#ID"
-        size="small"
-        value={invoiceId}
-        autoFocus
-        ref={inputRef}
-        onChange={(e) => setInvoiceId(e.target.value)}
-        onKeyPress={handleKeyPress1} 
-        sx={{
-          backgroundColor: "#424242",
-          input: { color: "white" },
-          width: "200px",
-        }}
-      />
-
-  {/* Centered Heading */}
-  <Typography 
-    variant="h4" 
-    textAlign="left" 
+  {/* Close Button */}
+  <Button
+    onClick={onClose}
     sx={{
-      flex: 1, 
+      position: "absolute",
+      top: "10px",
+      right: { xs: "5px", sm: "10px" },
+      backgroundColor: "red",
       color: "white",
-      paddingLeft:'120px',
+      minWidth: { xs: "35px", sm: "40px" },
+      minHeight: { xs: "20px", sm: "40px" },
+      borderRadius: "50%",
+      ":hover": {
+        backgroundColor: "darkred",
+      },
     }}
   >
-    Update Invoice
-  </Typography>
-</Box>
+    &times; {/* Cross icon */}
+  </Button>
 
-
-      {/* Search Field */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}
-      onKeyDown={handleKeyDown}>
-        <TextField
-          variant="outlined"
-          fullWidth
-          value={searchValue}
-          onChange={handleSearchChange}
-          placeholder="Search for an item"
-          InputProps={{ style: { color: "white", background: "#424242" } }}
-        />
-        {searchValue.trim().length > 0 && suggestions.length > 0 && (
-          <Paper sx={{ position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,color: "white", background: "#424242" }}>
-            <List>
-              {suggestions.map((suggestion, index) => (
-                <MenuItem
-                  key={suggestion.id}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  sx={{
-                    backgroundColor:
-                      focusedIndex === index ? "#303030" : "#616161",
-                    ":hover": { backgroundColor: "#303030" },
-                  }}
-                >
-                  {suggestion.name}
-                </MenuItem>
-              ))}
-            </List>
-          </Paper>
-        )}
-      </Box>
-
-      {/* Buttons Row */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "flex-start", justifyContent: "space-between",marginRight:'13px',}}>
-        <Box sx={{ textAlign: "center", width: "150px" }}>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#1976d2",
-              ":hover": { backgroundColor: "#115293" },
-              height: "50px",
-              width: "100%",
-            }}
-          >
-            Price
-          </Button>
-          <Typography variant="body2" sx={{ color: "white", marginTop: 1 }}>
-            {itemData ? itemData.selling_price_per_unit : "0"}
-          </Typography>
-        </Box>
-
-        <Box sx={{ textAlign: "center", width: "150px" }}>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#1976d2",
-              ":hover": { backgroundColor: "#115293" },
-              height: "50px",
-              width: "100%",
-            }}
-          >
-            Available Qty
-          </Button>
-          <Typography variant="body2" sx={{ color: "white", marginTop: 1 }}>
-            {itemData ? itemData.quantity : "0"}
-          </Typography>
-        </Box>
-
-        <Box sx={{ textAlign: "center", width: "150px" }}>
-  <TextField
-    value={quantity}
-    onChange={(e) => setQuantity(e.target.value)}
-    onKeyPress={handleKeyPress}
-    placeholder="Enter Quantity"
+  {/* Heading Section */}
+  <Box
     sx={{
-      width: "100%",
-      backgroundColor: "#424242",
-      input: { color: "white" },
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      mb: 3,
     }}
-    
-  />
-  {/* <Box sx={{ mt: 1 }}>
-    <Typography variant="body2" sx={{ color: "white" }}>
-      {enteredQuantity || "Enter a value"}
+  >
+    {/* Left side TextField */}
+    <TextField
+      variant="outlined"
+      placeholder="Old Invoice#ID"
+      size="small"
+      value={invoiceId}
+      autoFocus
+      ref={inputRef}
+      onChange={(e) => setInvoiceId(e.target.value)}
+      onKeyPress={handleKeyPress1}
+      sx={{
+        backgroundColor: "#424242",
+        input: { color: "white" },
+        width: { xs: "50%", sm: "200px" },
+      }}
+    />
+
+    {/* Centered Heading */}
+    <Typography
+      variant="h4"
+      textAlign="left"
+      sx={{
+        flex: 1,
+        color: "white",
+        paddingLeft: { xs: "10px", sm: "55px" },
+        display: { xs: "none", sm: "block" },
+      }}
+    >
+      Update Invoice
     </Typography>
-  </Box> */}
-</Box>
+  </Box>
 
-      </Box>
+  {/* Search Field */}
+  <Box
+    sx={{ display: "flex", gap: 2, mb: 3, position: "relative" }}
+    onKeyDown={handleKeyDown}
+  >
+    <TextField
+      variant="outlined"
+      fullWidth
+      value={searchValue}
+      onChange={handleSearchChange}
+      placeholder="Search for an item"
+      InputProps={{ style: { color: "white", background: "#424242" } }}
+    />
+    {searchValue.trim().length > 0 && suggestions.length > 0 && (
+      <Paper
+        sx={{
+          position: "absolute",
+          top: "100%",
+          left: 0,
+          right: 0,
+          zIndex: 10,
+          color: "white",
+          background: "#424242",
+        }}
+      >
+        <List>
+          {suggestions.map((suggestion, index) => (
+            <MenuItem
+              key={suggestion.id}
+              onClick={() => handleSuggestionClick(suggestion)}
+              sx={{
+                backgroundColor:
+                  focusedIndex === index ? "#303030" : "#616161",
+                ":hover": { backgroundColor: "#303030" },
+              }}
+            >
+              {suggestion.name}
+            </MenuItem>
+          ))}
+        </List>
+      </Paper>
+    )}
+  </Box>
 
-      {/* Invoice Table */}
-      <Table sx={{ backgroundColor: "#424242", borderRadius: 2, overflow: "hidden" }}>
-  <TableHead>
-    <TableRow>
-      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Item</TableCell>
-      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Price</TableCell>
-      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Qty</TableCell>
-      <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Amount</TableCell>
-    </TableRow>
-  </TableHead>
-  <TableBody>
+  {/* Buttons Row */}
+  <Box
+    sx={{
+      display: "flex",
+      gap: 2,
+      mb: 3,
+      alignItems: "flex-start",
+      justifyContent: "space-between",
+      flexDirection: { xs: "column", sm: "row" },
+    }}
+  >
+    <Box sx={{ textAlign: "center", width: { xs: "100%", sm: "150px" } }}>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#1976d2",
+          ":hover": { backgroundColor: "#115293" },
+          height: "50px",
+          width: "100%",
+        }}
+      >
+        Price
+      </Button>
+      <Typography variant="body2" sx={{ color: "white", marginTop: 1 }}>
+        {itemData ? itemData.selling_price_per_unit : "0"}
+      </Typography>
+    </Box>
+
+    <Box sx={{ textAlign: "center", width: { xs: "100%", sm: "150px" } }}>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#1976d2",
+          ":hover": { backgroundColor: "#115293" },
+          height: "50px",
+          width: "100%",
+        }}
+      >
+        Available Qty
+      </Button>
+      <Typography variant="body2" sx={{ color: "white", marginTop: 1 }}>
+        {itemData ? itemData.quantity : "0"}
+      </Typography>
+    </Box>
+
+    <Box sx={{ textAlign: "center", width: { xs: "100%", sm: "150px" } }}>
+      <TextField
+        value={quantity}
+        onChange={(e) => setQuantity(e.target.value)}
+        onKeyPress={handleKeyPress}
+        placeholder="Enter Quantity"
+        sx={{
+          width: "100%",
+          backgroundColor: "#424242",
+          input: { color: "white" },
+        }}
+      />
+    </Box>
+  </Box>
+
+  {/* Invoice Table */}
+  <Box sx={{ width: "100%", overflowX: "auto" }}>
+  <Table
+    sx={{
+      backgroundColor: "#424242",
+      borderRadius: 2,
+      minWidth: "570px",
+    }}
+  >
+    <TableHead>
+      <TableRow>
+        <TableCell sx={{ color: "white", fontWeight: "bold" }}>Item</TableCell>
+        <TableCell sx={{ color: "white", fontWeight: "bold" }}>Price</TableCell>
+        <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+          Total Qty
+        </TableCell>
+        <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+          Total Amount
+        </TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
     {invoiceItems.length === 0 ? (
       <TableRow>
         <TableCell colSpan={4} align="center" sx={{ color: "white" }}>
@@ -443,58 +469,46 @@ const CreateInvoice = ({ onClose }) => {
       ))
     )}
   </TableBody>
-</Table>
-
-
-      {/* Discount and Generate Receipt */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end", 
-          alignItems: "center",
-          mt: 3,
-          gap: 2,
-        }}
-      >
-        <TextField
-  variant="outlined"
-  label="Discount:" 
-  placeholder="Enter Discount"
-  value={discount} 
-  onChange={(e) => setDiscount(e.target.value)} 
-  onKeyPress={(event) => {
-    if (event.key === "Enter") {
-      event.preventDefault(); 
-      event.target.blur(); 
-      // console.log("Discount value updated:", discount); // Debug or handle value
-    }
-  }}
-  sx={{
-    backgroundColor: "#424242", 
-    borderRadius: "4px", 
-    input: {
-      color: "white", 
-      padding: "13.5px 14px", 
-    },
-    label: { color: "white" }, 
-    width: 180, 
-    height: "50px", 
-  }}
-/>
-
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "#1976d2",
-            ":hover": { backgroundColor: "#115293" },
-            height: "50px", // Matching height with discount field
-          }}
-          onClick={() => setOpenReceiptModal(true)} // Open modal on click
-        >
-          Generate Receipt
-        </Button>
-        {/* Receipt Modal */}
-      <ReceiptModal
+  </Table>
+  </Box>
+  {/* Discount and Generate Receipt */}
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "flex-end",
+      alignItems: "center",
+      mt: 3,
+      gap: 2,
+    }}
+  >
+    <TextField
+      variant="outlined"
+      label="Discount:"
+      placeholder="Enter Discount"
+      value={discount}
+      onChange={(e) => setDiscount(e.target.value)}
+      sx={{
+        backgroundColor: "#424242",
+        borderRadius: "4px",
+        input: { color: "white", padding: "13.5px 14px" },
+        label: { color: "white" },
+        width: { xs: "100%", sm: "180px" },
+      }}
+    />
+    <Button
+      variant="contained"
+      sx={{
+        backgroundColor: "#1976d2",
+        ":hover": { backgroundColor: "#115293" },
+        height: "50px",
+        width: { xs: "100%", sm: "auto" },
+      }}
+      onClick={() => setOpenReceiptModal(true)} // Open modal on click
+    >
+      Generate Receipt
+    </Button>
+    {/* Receipt Modal */}
+    <ReceiptModal
         open={openReceiptModal}
         onClose={() => setOpenReceiptModal(false)} // Close modal on close
         discount={discount}
@@ -504,8 +518,9 @@ const CreateInvoice = ({ onClose }) => {
         oldtotal={oldtotal}
         setClientName={setClientName}
       />
-      </Box>
-    </Box>
+  </Box>
+</Box>
+
   );
 };
 

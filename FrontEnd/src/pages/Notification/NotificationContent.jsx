@@ -21,6 +21,7 @@ const NotificationComponent = () => {
       const response = await axios.post(`${BASE_URL}/admin/verify`, { employeeId: id });
       if (response.status === 200) {
         alert(`Verification Successful for ${username}`);
+        fetchNotifications();
       } else {
         alert(`Verification Failed for ${username}`);
       }
