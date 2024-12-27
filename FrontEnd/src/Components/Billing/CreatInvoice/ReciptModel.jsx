@@ -28,7 +28,8 @@ const ReceiptModal = ({
   setClientName,
 }) => {
   const [message, setMessage] = useState(""); 
-const token = localStorage.getItem("token")
+// const token = localStorage.getItem("token")
+console.log(token)
   const calculateTotalAmount = () => {
     return inventory.reduce((total, row) => total + row.totalAmount, 0);
   };
@@ -54,7 +55,10 @@ const token = localStorage.getItem("token")
           total: calculateTotalAmount(),
           
         },{
-          withCredentials: true, 
+          headers: {
+            "Authorization": `Bearer ${token}`, 
+          },
+          withCredentials: true,  
         }
         
       );
