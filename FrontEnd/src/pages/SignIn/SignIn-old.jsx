@@ -115,43 +115,39 @@ export default function SignIn() {
       return;
     }
 
-    setLoading(true); // Start loading
+    setLoading(true); // Start loading when the form is submitted
 
     try {
-        const response = await fetch(`${BASE_URL}/auth/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-            credentials: 'include', // Include cookies in the request
-        });
+      const response = await fetch(`${BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+        credentials: 'include',
+      });
 
-        const result = await response.json();
-        console.log("Response from backend:", result);
-
-        if (result.success === true) {
-            // Optionally, you can store role in localStorage
-            if (result.role === "employee") {
-                localStorage.setItem("role", "user");  
-            } else {
-                localStorage.setItem("role", result.role);  
-            } 
-
-            // Navigate based on role
-            if (result.role === "admin") {
-                navigate("/dashboard");
-            } else if (result.role === "employee") {
-                navigate("/billing");
-            }
-        } else {
-            setErrorMessage(result.message);
+      const result = await response.json();
+      console.log("Response from backend:", result);
+      localStorage.setItem("token", result.token);
+      if (result.success === true) {
+        if (result.role === "employee") {
+          localStorage.setItem("role", "user");  
+          } else {
+           localStorage.setItem("role", result.role);  
+               } 
+        if (result.role === "admin") {
+          navigate("/dashboard");
+        } else if (result.role === "employee") {
+          navigate("/billing");
         }
+      } else {
+        setErrorMessage(result.message);
+      }
     } catch (error) {
-        console.error("Error:", error);
-        setErrorMessage("An error occurred during sign-in.");
+      console.error("Error:", error);
     } finally {
-        setLoading(false); // Stop loading once the request is done
+      setLoading(false); // Stop loading once the request is done
     }
   };
 

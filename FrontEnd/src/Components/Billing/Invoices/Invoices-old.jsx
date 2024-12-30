@@ -59,7 +59,6 @@ function Invoices() {
         responseType: 'blob', 
         withCredentials: true,
       });
-      console.log(response)
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -71,7 +70,7 @@ function Invoices() {
       console.error("Error downloading the PDF:", error);
     }
   };
-    const displayedInvoices = showAllInvoices ? invoices : invoices.slice(0, 5);
+  const displayedInvoices = showAllInvoices ? invoices : invoices.slice(0, 5);
 
   return (
     <Box
