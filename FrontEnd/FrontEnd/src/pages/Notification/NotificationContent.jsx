@@ -11,8 +11,8 @@ const NotificationComponent = () => {
   const [verifyingId, setVerifyingId] = useState(null); // State to track which button is loading
   const location = useLocation();
 
-  const handleClose = (index) => {
-    setNotifications((prev) => prev.filter((_, i) => i !== index));
+  const handleClose = (index,id, username ) => {
+    deleteVerify(id , username)
   };
 
   const handleVerify = async (id, username) => {
@@ -32,7 +32,24 @@ const NotificationComponent = () => {
       setVerifyingId(null); 
     }
   };
-
+  const deleteVerify = async (id, username) => {
+    setVerifyingId(id); 
+    try {
+      const response = await axios.post(`${BASE_URL}/admin/delete`, { employeeId: id });
+      if (response.status === 200) {
+        alert(`deletion Successful ${username}`);
+        fetchNotifications();
+      } else {
+        alert(`Deletion failed for ${username}`);
+      }
+    } catch (error) {
+      console.error("Error verifying user:", error);
+      alert("An error occurred while deleting the user.");
+    } 
+    finally {
+      setVerifyingId(null); 
+    }
+  };
   useEffect(() => {
     if (location.pathname === "/notifications") {
       fetchNotifications();
@@ -132,7 +149,7 @@ const NotificationComponent = () => {
                   size="small"
                   aria-label="close"
                   color="inherit"
-                  onClick={() => handleClose(index)}
+                  onClick={() => handleClose(index, notification.id, notification.username)}
                   sx={{
                     position: "absolute",
                     top: "8px",

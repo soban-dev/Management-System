@@ -93,6 +93,7 @@ export default function EmployRegistration() {
     password: "",
     phone: "",
     address: "",
+    role: "employee",
   });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
@@ -102,6 +103,7 @@ export default function EmployRegistration() {
   const validate = () => {
     let tempErrors = {};
     tempErrors.name = formData.name ? "" : "Name is required.";
+
     tempErrors.username = formData.username ? "" : "Username is required.";
     tempErrors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
       ? ""
@@ -122,10 +124,10 @@ export default function EmployRegistration() {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
+      role: localStorage.getItem('role'),
       [name]: value,
     }));
   };
-  const role = localStorage.getItem('role');
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -133,7 +135,7 @@ export default function EmployRegistration() {
     setLoading(true);
     setServerError(""); 
     try {
-      const response = await axios.post(`${BASE_URL}/auth/signup`, formData, role);
+      const response = await axios.post(`${BASE_URL}/auth/signup`, formData);
       if (response.data.success) {
         setLoading(false);
         navigate("/sign-in");

@@ -40,77 +40,100 @@ console.log(token)
   };
   
 
+  // const handleGenerateReceipt = async () => {
+  //   if (!clientName) {
+  //     setMessage("Please fill in the 'Client Name' field.");
+  //     return;
+  //   }
+    
+  //   try {
+  //     const response = await axios.post(
+  //       `${BASE_URL}/inventory/invoice`,
+  //       {
+  //         percentdiscount: discount,
+  //         customername: clientName,
+  //         items: inventory,
+  //         total: calculateTotalAmount(),
+  //         // Removed Authorization from the body
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`, // Added Authorization to headers
+  //           'Content-Type': 'application/json', // Ensure the content type is set
+  //         },
+  //         // Optionally, include withCredentials if your backend expects cookies
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     // console.log("Backend Response:", response.data);
+  //     setMessage("Receipt generated successfully!");
+  //   } catch (error) {
+  //     console.error("Error generating receipt:", error);
+  //     if (error.response && error.response.data && error.response.data.message) {
+  //       setMessage(error.response.data.message);
+  //     } else {
+  //       setMessage("Failed to generate receipt. Please try again.");
+  //     }
+  //   }
+  // };
+  
+  
+
+  // for download Pdf 
   const handleGenerateReceipt = async () => {
     if (!clientName) {
       setMessage("Please fill in the 'Client Name' field.");
       return;
     }
-    
     try {
-      const response = await axios.post(`${BASE_URL}/inventory/invoice`,
+      const response = await axios.post(
+        `${BASE_URL}/inventory/invoice`,
         {
-          percentdiscount: discount ,
+          percentdiscount: discount,
           customername: clientName,
           items: inventory,
           total: calculateTotalAmount(),
-          Authorization: `Bearer ${token}`
+        },
+        {
+          withCredentials: true,
+          responseType: "blob", 
         }
-        
       );
-      // console.log("Backend Response:", response.data);
-      setMessage("Receipt generated successfully!");
+  
+      if (response.status === 200) {
+        const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+  
+        const pdfWindow = window.open(pdfUrl, "_blank");
+        if (pdfWindow) {
+          pdfWindow.addEventListener("load", () => {
+            pdfWindow.print();
+          });
+        } else {
+          console.error("Failed to open PDF in a new tab.");
+          // Fallback: Trigger a download
+          const link = document.createElement('a');
+          link.href = pdfUrl;
+          link.download = `invoice_${Date.now()}.pdf`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+  
+        // Revoke the object URL after some time to ensure the PDF is loaded
+        setTimeout(() => URL.revokeObjectURL(pdfUrl), 10000);
+        setMessage("Receipt generated successfully!");
+        onClose()
+        inventory = [''];
+        } else {
+        setMessage("Failed to generate receipt. Please try again.");
+      }
     } catch (error) {
       console.error("Error generating receipt:", error);
       setMessage("Failed to generate receipt. Please try again.");
     }
   };
   
-
-  // for download Pdf 
-  // const handleGenerateReceipt = async () => {
-  //   if (!clientName) {
-  //     setMessage("Please fill in the 'Client Name' field.");
-  //     return;
-  //   }
-  //   try {
-  //     const response = await axios.post(`${BASE_URL}/inventory/invoice`,
-  //       {
-  //         percentdiscount: discount,
-  //         customername: clientName,
-  //         items: inventory,
-  //         total: calculateTotalAmount(),
-  //       },
-  //       {
-  //         withCredentials: true,
-  //         responseType: "blob", 
-  //       }
-  //     );
-
-  //     // If the response is successful, handle the PDF
-  //     if (response.status === 200) {
-  //       const pdfBlob = new Blob([response.data], { type: "application/pdf" });
-
-  //       // Generate a URL for the Blob
-  //       const pdfUrl = URL.createObjectURL(pdfBlob);
-
-  //       // Automatically open and print the PDF (if supported by the browser)
-  //       const pdfWindow = window.open(pdfUrl, "_blank"); 
-  //       if (pdfWindow) {
-  //         pdfWindow.addEventListener("load", () => {
-  //           pdfWindow.print(); // Trigger the print dialog
-  //         });
-  //       } else {
-  //         console.error("Failed to open PDF in a new tab.");
-  //       }
-  //     }
-
-  //     setMessage("Receipt generated successfully!");
-  //   } catch (error) {
-  //     console.error("Error generating receipt:", error);
-  //     setMessage("Failed to generate receipt. Please try again.");
-  //   }
-  // };
-
 
   return (
     <Modal

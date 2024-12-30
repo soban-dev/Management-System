@@ -237,10 +237,11 @@ const CreateInvoice = ({ onClose }) => {
                 </TableCell>
                 <TableCell sx={{ color: "white", textAlign: "center" }}>
                   <TextField
+                 type="number"
                     value={item.addition || ""}
                     onChange={(e) => {
                       const updatedItems = [...invoiceItems];
-                      updatedItems[index].addition = e.target.value;
+                      updatedItems[index].addition = parseFloat(e.target.value) || 0;
                       setInvoiceItems(updatedItems);
                     }}
                     size="small"
