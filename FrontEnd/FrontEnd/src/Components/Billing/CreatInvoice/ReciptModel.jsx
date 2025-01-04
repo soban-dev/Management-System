@@ -24,28 +24,28 @@ const ReceiptModal = ({
   onClose,
   discount,
   inventory = [],
+  setInvoiceItems,
   clientName,
   setClientName,
 }) => {
-  const [message, setMessage] = useState(""); 
-const token = localStorage.getItem("token")
-console.log(token)
+  const [message, setMessage] = useState("");
+  const token = localStorage.getItem("token");
+  console.log(token);
   const calculateTotalAmount = () => {
     return inventory.reduce((total, row) => total + row.totalAmount, 0);
   };
   const calculateTotalAmountWithDiscount = () => {
-    const total = inventory.reduce((total, row) => total + row.totalAmount, 0); 
-    const discountedTotal = total - (total * discount) / 100; 
-    return discountedTotal.toFixed(2); 
+    const total = inventory.reduce((total, row) => total + row.totalAmount, 0);
+    const discountedTotal = total - (total * discount) / 100;
+    return discountedTotal.toFixed(2);
   };
-  
 
   // const handleGenerateReceipt = async () => {
   //   if (!clientName) {
   //     setMessage("Please fill in the 'Client Name' field.");
   //     return;
   //   }
-    
+
   //   try {
   //     const response = await axios.post(
   //       `${BASE_URL}/inventory/invoice`,
@@ -76,10 +76,8 @@ console.log(token)
   //     }
   //   }
   // };
-  
-  
 
-  // for download Pdf 
+  // for download Pdf
   const handleGenerateReceipt = async () => {
     if (!clientName) {
       setMessage("Please fill in the 'Client Name' field.");
@@ -96,14 +94,14 @@ console.log(token)
         },
         {
           withCredentials: true,
-          responseType: "blob", 
+          responseType: "blob",
         }
       );
-  
+
       if (response.status === 200) {
         const pdfBlob = new Blob([response.data], { type: "application/pdf" });
         const pdfUrl = URL.createObjectURL(pdfBlob);
-  
+
         const pdfWindow = window.open(pdfUrl, "_blank");
         if (pdfWindow) {
           pdfWindow.addEventListener("load", () => {
@@ -111,21 +109,18 @@ console.log(token)
           });
         } else {
           console.error("Failed to open PDF in a new tab.");
-          // Fallback: Trigger a download
-          const link = document.createElement('a');
+          const link = document.createElement("a");
           link.href = pdfUrl;
           link.download = `invoice_${Date.now()}.pdf`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
         }
-  
-        // Revoke the object URL after some time to ensure the PDF is loaded
         setTimeout(() => URL.revokeObjectURL(pdfUrl), 10000);
         setMessage("Receipt generated successfully!");
-        onClose()
-        inventory = [''];
-        } else {
+        onClose();
+        setInvoiceItems([]);
+      } else {
         setMessage("Failed to generate receipt. Please try again.");
       }
     } catch (error) {
@@ -133,7 +128,6 @@ console.log(token)
       setMessage("Failed to generate receipt. Please try again.");
     }
   };
-  
 
   return (
     <Modal
@@ -150,17 +144,17 @@ console.log(token)
       <Box
         sx={{
           width: { xs: "90%", sm: "90%", md: "500px" },
-          marginTop:{ md: "40px" }, 
-          maxHeight: "90vh", 
+          marginTop: { md: "40px" },
+          maxHeight: "90vh",
           bgcolor: "#424242",
           boxShadow: 24,
           p: { xs: 2, md: 4 },
-          overflowY: "auto", 
+          overflowY: "auto",
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          border:'2px solid #ffffff44',
-          borderRadius:'10px',
+          border: "2px solid #ffffff44",
+          borderRadius: "10px",
         }}
       >
         <Typography
@@ -245,10 +239,10 @@ console.log(token)
 
         {/* Total Amount */}
         <Typography variant="h6" align="right" sx={{ mb: 2, color: "white" }}>
-          Total: ${calculateTotalAmount()}
+          Total: Rs {calculateTotalAmount()}
         </Typography>
         <Typography variant="h6" align="right" sx={{ mb: 2, color: "white" }}>
-          Total After Discount: ${calculateTotalAmountWithDiscount()}
+          Total After Discount: Rs {calculateTotalAmountWithDiscount()}
         </Typography>
 
         {/* Error/Success Message */}
@@ -269,7 +263,11 @@ console.log(token)
           <Button variant="contained" color="error" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="contained" color="primary" onClick={handleGenerateReceipt}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleGenerateReceipt}
+          >
             Confirm
           </Button>
         </Stack>

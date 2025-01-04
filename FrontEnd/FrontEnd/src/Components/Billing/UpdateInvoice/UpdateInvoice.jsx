@@ -516,6 +516,7 @@ const CreateInvoice = ({ onClose }) => {
         clientName={clientName}
         invoiceId={invoiceId}
         oldtotal={oldtotal}
+        setInvoiceItem={setInvoiceItems}
         setClientName={setClientName}
       />
   </Box>

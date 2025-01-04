@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import DashboardLayout from './Layout/DashboardLayout';
-import SignIn from './pages/SignIn/SignIn';
+import DashboardLayout from "./Layout/DashboardLayout";
+import SignIn from "./pages/SignIn/SignIn";
 import EmployRegistration from "./pages/EmployRegistration/EmployRegistration";
 
 function App() {
@@ -8,13 +8,12 @@ function App() {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<SignIn />} /> {/* Default route points to SignIn */}
+        <Route path="/" element={<SignIn />} />
         <Route path="/sign-up" element={<EmployRegistration />} />
         <Route path="/sign-in" element={<SignIn />} />
 
         {/* Private/Dashboard Routes */}
-        <Route path="/*" element={<DashboardLayout />}>
-        </Route>
+        <Route path="/*" element={<DashboardLayout />}></Route>
       </Routes>
     </Router>
   );

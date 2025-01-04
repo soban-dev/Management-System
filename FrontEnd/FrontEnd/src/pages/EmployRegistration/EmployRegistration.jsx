@@ -112,9 +112,9 @@ export default function EmployRegistration() {
       formData.password.length >= 8
         ? ""
         : "Password must be at least 8 characters.";
-        tempErrors.phone = /^[0-9]{11}$/.test(formData.phone)
-        ? ""
-        : "Phone must be an 11-digit number.";
+    tempErrors.phone = /^[0-9]{11}$/.test(formData.phone)
+      ? ""
+      : "Phone must be an 11-digit number.";
     tempErrors.address = formData.address ? "" : "Address is required.";
     setErrors(tempErrors);
     return Object.values(tempErrors).every((error) => error === "");
@@ -124,7 +124,7 @@ export default function EmployRegistration() {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      role: localStorage.getItem('role'),
+      role: localStorage.getItem("role"),
       [name]: value,
     }));
   };
@@ -133,7 +133,7 @@ export default function EmployRegistration() {
     if (!validate()) return;
 
     setLoading(true);
-    setServerError(""); 
+    setServerError("");
     try {
       const response = await axios.post(`${BASE_URL}/auth/signup`, formData);
       if (response.data.success) {
@@ -145,7 +145,9 @@ export default function EmployRegistration() {
       }
     } catch (error) {
       setLoading(false);
-      setServerError(error.response?.data?.message || "An error occurred. Please try again.");
+      setServerError(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
     }
   };
 
@@ -274,7 +276,11 @@ export default function EmployRegistration() {
               }}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : "REGISTER"}
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "REGISTER"
+              )}
             </Button>
 
             {/* Backend Error Below Button */}
@@ -298,9 +304,16 @@ export default function EmployRegistration() {
               sx={{
                 color: "#1976d2",
                 cursor: "pointer",
+                marginTop: "10px",
               }}
             >
-              <Link to="/sign-in" style={{ textDecoration: "none", color: "#1976d2" }}>
+              <Link
+                to="/sign-in"
+                style={{
+                  textDecoration: "none",
+                  color: "#1976d2",
+                }}
+              >
                 Already have an account? Sign in
               </Link>
             </Typography>

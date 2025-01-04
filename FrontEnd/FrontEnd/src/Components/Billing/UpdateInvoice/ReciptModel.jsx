@@ -23,48 +23,48 @@ const ReceiptModal = ({
   onClose,
   discount,
   inventory = [],
+  setInvoiceItems,
   clientName,
   setClientName,
   oldtotal,
   invoiceId,
 }) => {
-  const [message, setMessage] = useState(""); // To store error or success messages
-const token = localStorage.getItem("token")
-const calculateDifference = () => {
-  return   (calculateTotalAmountWithDiscount() - oldtotal).toFixed(2) ;
-};
+  const [message, setMessage] = useState("");
+  const token = localStorage.getItem("token");
+  const calculateDifference = () => {
+    return (calculateTotalAmountWithDiscount() - oldtotal).toFixed(2);
+  };
   const calculateTotalAmount = () => {
     return inventory.reduce((total, row) => total + row.totalAmount, 0);
   };
   const calculateTotalAmountWithDiscount = () => {
-    const total = inventory.reduce((total, row) => total + row.totalAmount, 0); // Sum up all totalAmount values
-    const discountedTotal = total - (total * discount) / 100; // Apply the discount
-    return discountedTotal.toFixed(2); // Round to two decimal places
+    const total = inventory.reduce((total, row) => total + row.totalAmount, 0);
+    const discountedTotal = total - (total * discount) / 100;
+    return discountedTotal.toFixed(2);
   };
-
   const handleGenerateReceipt = async () => {
     if (!clientName) {
       setMessage("Please fill in the 'Client Name' field.");
       return;
     }
-
-// console.log(inventory)
     try {
-      const response = await axios.patch(`${BASE_URL}/inventory/updatereceipt`,
+      const response = await axios.patch(
+        `${BASE_URL}/inventory/updatereceipt`,
         {
           oldinvoice_id: invoiceId,
-      percentdiscount: discount ,
-      customername: clientName,
-      items: inventory,
-      total: calculateTotalAmount()
+          percentdiscount: discount,
+          customername: clientName,
+          items: inventory,
+          total: calculateTotalAmount(),
         },
         {
-          withCredentials: true, 
+          withCredentials: true,
         }
       );
 
       console.log("Backend Response:", response.data);
       setMessage("Receipt generated successfully!");
+      setInvoiceItems([]);
     } catch (error) {
       console.error("Error generating receipt:", error);
       setMessage("Failed to generate receipt. Please try again.");
@@ -86,17 +86,17 @@ const calculateDifference = () => {
       <Box
         sx={{
           width: { xs: "90%", sm: "90%", md: "500px" },
-          marginTop:{ md: "40px" }, 
+          marginTop: { md: "40px" },
           maxHeight: "90vh",
           bgcolor: "#424242",
           boxShadow: 24,
           p: { xs: 2, md: 4 },
-          overflowY: "auto", 
+          overflowY: "auto",
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          border:'2px solid #ffffff44',
-          borderRadius:'10px',
+          border: "2px solid #ffffff44",
+          borderRadius: "10px",
         }}
       >
         <Typography
@@ -181,13 +181,13 @@ const calculateDifference = () => {
 
         {/* Total Amount */}
         <Typography variant="h6" align="right" sx={{ mb: 2, color: "white" }}>
-          Total: ${calculateTotalAmount()}
+          Total: Rs {calculateTotalAmount()}
         </Typography>
         <Typography variant="h6" align="right" sx={{ mb: 2, color: "white" }}>
-          Total After Discount: ${calculateTotalAmountWithDiscount()}
+          Total After Discount: Rs {calculateTotalAmountWithDiscount()}
         </Typography>
         <Typography variant="h6" align="right" sx={{ mb: 2, color: "white" }}>
-          Credit: ${calculateDifference()}
+          Credit: Rs {calculateDifference()}
         </Typography>
 
         {/* Error/Success Message */}
@@ -208,7 +208,11 @@ const calculateDifference = () => {
           <Button variant="contained" color="error" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="contained" color="primary" onClick={handleGenerateReceipt}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleGenerateReceipt}
+          >
             Confirm
           </Button>
         </Stack>
