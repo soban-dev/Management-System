@@ -121,6 +121,7 @@ function DashboardLayout() {
           </ProtectedRoute>
         } 
       />
+      
       {/* Redirect any invalid routes to sign-in */}
       <Route path="*" element={<Navigate to="/sign-in" />} />
     </Routes>

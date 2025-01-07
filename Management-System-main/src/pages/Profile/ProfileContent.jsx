@@ -12,21 +12,26 @@ import {
   List,
   ListItem,
   ListItemText,
+  Button,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 import backgroundImage from "../../assets/bg-reset-cover.jpeg";
 import avatarImage from "../../assets/team-4.jpg";
 import { BASE_URL } from "../../config";
-import ProfilePasswordChange from "../../Components/Notification/passwordchange";
+import ProfilePasswordChange from "../../Components/Profile/passwordchange";
 
 const ProfileComponent = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [profileText, setProfileText] = useState(
-    "Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
-  );
-  const [profileData, setProfileData] = useState({});
+  const [profileData, setProfileData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+  });
 
   const textFieldRef = useRef(null);
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -34,7 +39,7 @@ const ProfileComponent = () => {
           withCredentials: true,
         });
         const data = response.data;
-        setProfileData(data);
+        setProfileData(data?.data || {});
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -42,26 +47,30 @@ const ProfileComponent = () => {
 
     fetchProfileData();
   }, []);
-  //  console.log(profileData)
+
   const handleEditClick = () => {
     setIsEditing(true);
   };
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
+
+  const handleSaveClick = async () => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/profile/update`,
+        profileData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("Profile updated successfully:", response.data);
       setIsEditing(false);
+    } catch (error) {
+      console.error("Error updating profile data:", error);
     }
   };
-  const handleClickOutside = (event) => {
-    if (textFieldRef.current && !textFieldRef.current.contains(event.target)) {
-      setIsEditing(false);
-    }
+
+  const handleChange = (field, value) => {
+    setProfileData((prevState) => ({ ...prevState, [field]: value }));
   };
-  React.useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <Box
@@ -127,10 +136,10 @@ const ProfileComponent = () => {
               mt={2}
               sx={{ color: "white", fontWeight: "bold" }}
             >
-              {profileData?.data?.name || "Richard Davis"}
+              {profileData.name || "Richard Davis"}
             </Typography>
             <Typography variant="body2" sx={{ color: "#A0AEC0", mb: 4 }}>
-              {profileData?.data?.role || "CEO / Co-Founder"}
+              {profileData.role || "CEO / Co-Founder"}
             </Typography>
           </Stack>
 
@@ -214,75 +223,59 @@ const ProfileComponent = () => {
             >
               Profile Information
             </Typography>
-            <IconButton sx={{ color: "white" }} onClick={handleEditClick}>
-              <EditIcon />
-            </IconButton>
+            {isEditing ? (
+              <IconButton sx={{ color: "white" }} onClick={handleSaveClick}>
+                <SaveIcon />
+              </IconButton>
+            ) : (
+              <IconButton sx={{ color: "white" }} onClick={handleEditClick}>
+                <EditIcon />
+              </IconButton>
+            )}
           </Stack>
 
-          {/* Editable Profile Information Text */}
-          <Box sx={{ position: "relative" }}>
-            {isEditing ? (
-              <TextField
-                value={profileText}
-                onChange={(e) => setProfileText(e.target.value)}
-                sx={{
-                  backgroundColor: "#2D3748",
-                  borderRadius: "5px",
-                  width: "100%",
-                  mb: 2,
-                  fontFamily: "'Roboto', sans-serif",
-                }}
-                variant="filled"
-                multiline
-                rows={4}
-                onKeyPress={handleKeyPress}
-              />
-            ) : (
-              <Typography variant="body2" sx={{ color: "white" }}>
-                {profileText}
-              </Typography>
-            )}
-          </Box>
-
-          <Divider sx={{ my: 3, backgroundColor: "#4A5568" }} />
-
-          {/* Profile Details */}
-          <Box sx={{ maxHeight: "200px", overflowY: "auto" }}>
-            <Stack direction="row" justifyContent="space-between" mb={2}>
-              <Typography variant="body2" sx={{ color: "#A0AEC0" }}>
-                Full Name:
-              </Typography>
-              <Typography variant="body2" sx={{ color: "white" }}>
-                {profileData?.data?.name || "Richard Davis"}
-              </Typography>
-            </Stack>
-
-            <Stack direction="row" justifyContent="space-between" mb={2}>
-              <Typography variant="body2" sx={{ color: "#A0AEC0" }}>
-                Mobile:
-              </Typography>
-              <Typography variant="body2" sx={{ color: "white" }}>
-                {profileData?.data?.phone || "(44) 123 1234 123"}
-              </Typography>
-            </Stack>
-
-            <Stack direction="row" justifyContent="space-between" mb={2}>
-              <Typography variant="body2" sx={{ color: "#A0AEC0" }}>
-                Email:
-              </Typography>
-              <Typography variant="body2" sx={{ color: "white" }}>
-                {profileData?.data?.email || "alec.thompson@mail.com"}
-              </Typography>
-            </Stack>
-
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" sx={{ color: "#A0AEC0" }}>
-                Location:
-              </Typography>
-              <Typography variant="body2" sx={{ color: "white" }}>
-                {profileData?.data?.address || "Okara"}
-              </Typography>
-            </Stack>
+          {/* Editable Profile Information */}
+          <Box sx={{ mt: 2 }}>
+            {[
+              { label: "Full Name", value: profileData.name, field: "name" },
+              { label: "Mobile", value: profileData.phone, field: "phone" },
+              { label: "Email", value: profileData.email, field: "email" },
+              {
+                label: "Location",
+                value: profileData.address,
+                field: "address",
+              },
+            ].map(({ label, value, field }) => (
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                mb={2}
+                key={field}
+              >
+                <Typography variant="body2" sx={{ color: "#A0AEC0" }}>
+                  {label}:
+                </Typography>
+                {isEditing ? (
+                  <TextField
+                    variant="filled"
+                    value={value || ""}
+                    onChange={(e) => handleChange(field, e.target.value)}
+                    sx={{
+                      backgroundColor: "#2D3748",
+                      borderRadius: "5px",
+                      width: "60%",
+                    }}
+                    InputProps={{
+                      sx: { color: "white", fontSize: "14px" },
+                    }}
+                  />
+                ) : (
+                  <Typography variant="body2" sx={{ color: "white" }}>
+                    {value || "N/A"}
+                  </Typography>
+                )}
+              </Stack>
+            ))}
           </Box>
           <Divider sx={{ my: 3, backgroundColor: "#4A5568" }} />
           <ProfilePasswordChange />

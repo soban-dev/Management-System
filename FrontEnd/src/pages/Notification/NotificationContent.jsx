@@ -7,8 +7,8 @@ import { BASE_URL } from "../../config";
 
 const NotificationComponent = () => {
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(false); // State to manage loader visibility
-  const [verifyingId, setVerifyingId] = useState(null); // State to track which button is loading
+  const [loading, setLoading] = useState(false); 
+  const [verifyingId, setVerifyingId] = useState(null); 
   const location = useLocation();
 
   const handleClose = (index,id, username ) => {
@@ -80,7 +80,7 @@ const NotificationComponent = () => {
     } catch (error) {
       console.error("Error fetching notifications:", error);
     } finally {
-      setLoading(false); // Hide loader after data is fetched
+      setLoading(false); 
     }
   };
 
@@ -185,7 +185,7 @@ const NotificationComponent = () => {
                     marginLeft: "190px",
                   }}
                   onClick={() => handleVerify(notification.id, notification.username)}
-                  disabled={verifyingId === notification.id} // Disable button while loading
+                  disabled={verifyingId === notification.id} 
                 >
                   {verifyingId === notification.id ? (
                     <CircularProgress size={20} sx={{ color: "white" }} />
